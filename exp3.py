@@ -455,35 +455,43 @@ def figures(R, Pr):
     import matplotlib.pyplot as plt
     import analyze as A
     import bootstrap as BS
-    groups = [("probe, decoder", lambda b, t: [dict(per_shape=x["dec_per_body_rho"]) for x in Pr if (x["backbone"], x["task"]) == (b, t)]),
-              ("probe, encoder", lambda b, t: [dict(per_shape=x["enc_per_body_rho"]) for x in Pr if (x["backbone"], x["task"]) == (b, t)]),
-              ("R1 field", lambda b, t: [dict(per_shape=x["per_body_rho"], seed=x["seed"]) for x in R if (x["regime"], x["backbone"], x["task"]) == ("R1", b, t)]),
-              ("R3 KPI only", lambda b, t: [dict(per_shape=x["per_body_rho"], seed=x["seed"]) for x in R if (x["regime"], x["backbone"], x["task"]) == ("R3", b, t)])]
-    fig, axes = plt.subplots(1, 2, figsize=(12, 4.6), sharey=False)
-    for ax, t in zip(axes, "AB"):
-        A.style(ax)
-        bbs = [b for b in BACKBONES]
-        w = 0.8 / len(bbs)
-        for gi, (gname, get) in enumerate(groups):
-            for bi, b in enumerate(bbs):
-                rows = get(b, t)
-                if not rows:
-                    continue
-                m, lo, hi = BS.boot_mean(BS.per_body(rows))
-                x = gi + (bi - (len(bbs) - 1) / 2) * w
-                ax.errorbar([x], [m], yerr=[[m - lo], [hi - m]], marker=A.MRK[b], ms=7, color=A.COL[b], ls="none",
-                            capsize=2, markeredgecolor=A.SURF, label=A.NAME[b] if gi == 0 or b in ("S", "L", "LT") else None)
-        ax.set_xticks(range(len(groups)))
-        ax.set_xticklabels([g for g, _ in groups])
-        ax.set_ylabel("within-body Spearman rho, 100 test bodies x 36 actions")
-        ax.set_title(A.TASK[t], loc="left", fontsize=11)
+    def getter(regime, metric):
+        if regime == "probe":
+            f = {"rho": "dec_per_body_rho", "regret": "dec_per_body_regret"}[metric]
+            return lambda b, t: [dict(per_shape=x[f]) for x in Pr if (x["backbone"], x["task"]) == (b, t)]
+        f = "per_body_" + metric
+        return lambda b, t: [dict(per_shape=x[f], seed=x["seed"]) for x in R if (x["regime"], x["backbone"], x["task"]) == (regime, b, t)]
+    groups = [("linear probe\n(decoder features)", "probe"), ("R1: field\nregression", "R1"), ("R3: KPI only", "R3")]
+    fig, axes = plt.subplots(2, 2, figsize=(12, 7.6))
+    for c, t in enumerate("AB"):
+        for r_, (metric, ylab) in enumerate((("rho", "within-body Spearman rho (higher is better)"),
+                                             ("regret", "normalised regret (lower is better)"))):
+            ax = axes[r_, c]
+            A.style(ax)
+            w = 0.8 / len(BACKBONES)
+            for gi, (_, regime) in enumerate(groups):
+                for bi, b in enumerate(BACKBONES):
+                    rows = getter(regime, metric)(b, t)
+                    if not rows:
+                        continue
+                    m, lo, hi = BS.boot_mean(BS.per_body(rows))
+                    x = gi + (bi - (len(BACKBONES) - 1) / 2) * w
+                    ax.errorbar([x], [m], yerr=[[m - lo], [hi - m]], marker=A.MRK[b], ms=7, color=A.COL[b], ls="none",
+                                capsize=2, markeredgecolor=A.SURF, label=A.NAME[b])
+            ax.set_xticks(range(len(groups)))
+            ax.set_xticklabels([g for g, _ in groups])
+            ax.set_ylabel(ylab)
+            if r_ == 0:
+                ax.set_title(A.TASK[t], loc="left", fontsize=11)
     h, l = [], []
-    for hh, ll in zip(*axes[0].get_legend_handles_labels()):
+    for hh, ll in zip(*axes[0, 0].get_legend_handles_labels()):
         if ll not in l:
             h.append(hh)
             l.append(ll)
     fig.legend(h, l, frameon=False, fontsize=8.5, loc="lower center", ncol=7)
-    fig.tight_layout(rect=(0, 0.08, 1, 1))
+    fig.suptitle("Action ranking on 100 unseen bodies x 36 flow directions (mean over fine-tune seeds; 95% CI over bodies)",
+                 fontsize=10.5, color=A.INK, x=0.01, ha="left")
+    fig.tight_layout(rect=(0, 0.05, 1, 0.97))
     fig.savefig("figs/exp3_ranking.png", dpi=130)
     plt.close(fig)
     fig, axes = plt.subplots(1, 2, figsize=(10, 4.2))
@@ -499,7 +507,8 @@ def figures(R, Pr):
                     ms=11, ls="none", color=A.COL[b], markeredgecolor=A.SURF, label=f"{A.NAME[b]} (R1; small = single seeds)")
         ax.set_xlabel("field relative L2 error on the original single-action test set")
         ax.set_ylabel("within-body Spearman rho")
-        ax.set_title(A.TASK[t], loc="left", fontsize=11)
+        ax.set_title(A.TASK[t] + ("\n(test set has U in 0.5-1.5; R1 trained at U = 1 only)" if t == "B" else ""),
+                     loc="left", fontsize=10)
     h, l = axes[0].get_legend_handles_labels()
     fig.legend(h, l, frameon=False, fontsize=8.5, loc="lower center", ncol=3)
     fig.tight_layout(rect=(0, 0.08, 1, 1))

@@ -1,0 +1,13 @@
+results/exp1_finetune.jsonl: 36 jobs to run (0 of 36 already done)
+variant=LT task=B n=64 seed=1 shift=0 frozen=False rel_l2=0.1133 final_train_loss=0.0043 sec=111.1 ckpt=ckpt/exp1/LT_clean_s1.npz tag=clean pretrain_seed=1 ft_seed=1
+variant=LT task=B n=64 seed=0 shift=0 frozen=False rel_l2=0.1132 final_train_loss=0.0036 sec=112.0 ckpt=ckpt/exp1/LT_clean_s1.npz tag=clean pretrain_seed=1 ft_seed=0
+variant=LJ task=B n=64 seed=1 shift=0 frozen=False rel_l2=0.1247 final_train_loss=0.006 sec=109.2 ckpt=ckpt/exp1/LJ_lblfrz4_s0.npz tag=lblfrz4 pretrain_seed=0 ft_seed=1
+variant=LJ task=B n=64 seed=0 shift=0 frozen=False rel_l2=0.1176 final_train_loss=0.0045 sec=111.2 ckpt=ckpt/exp1/LJ_lblfrz4_s0.npz tag=lblfrz4 pretrain_seed=0 ft_seed=0
+variant=LJ task=B n=64 seed=0 shift=0 frozen=False rel_l2=0.1143 final_train_loss=0.0043 sec=110.1 ckpt=ckpt/exp1/LJ_lblfrz2_s0.npz tag=lblfrz2 pretrain_seed=0 ft_seed=0
+variant=LJ task=B n=64 seed=1 shift=0 frozen=False rel_l2=0.1177 final_train_loss=0.0049 sec=110.5 ckpt=ckpt/exp1/LJ_lblfrz2_s0.npz tag=lblfrz2 pretrain_seed=0 ft_seed=1
+variant=L task=B n=64 seed=1 shift=0 frozen=False rel_l2=0.1238 final_train_loss=0.0056 sec=109.5 ckpt=ckpt/exp1/L_lblfrz4_s0.npz tag=lblfrz4 pretrain_seed=0 ft_seed=1
+variant=L task=B n=64 seed=0 shift=0 frozen=False rel_l2=0.1202 final_train_loss=0.0044 sec=112.9 ckpt=ckpt/exp1/L_lblfrz4_s0.npz tag=lblfrz4 pretrain_seed=0 ft_seed=0
+variant=L task=B n=64 seed=0 shift=0 frozen=False rel_l2=0.1445 final_train_loss=0.0047 sec=96.8 ckpt=ckpt/exp1/L_lblfrz8_s0.npz tag=lblfrz8 pretrain_seed=0 ft_seed=0
+variant=L task=B n=64 seed=1 shift=0 frozen=False rel_l2=0.1408 final_train_loss=0.0064 sec=97.2 ckpt=ckpt/exp1/L_lblfrz8_s0.npz tag=lblfrz8 pretrain_seed=0 ft_seed=1
+variant=L task=B n=64 seed=0 shift=0 frozen=False rel_l2=0.1212 final_train_loss=0.0046 sec=80.7 ckpt=ckpt/exp1/L_lblfrs4_s0.npz tag=lblfrs4 pretrain_seed=0 ft_seed=0
+variant=L task=B n=64 seed=1 shift=0 frozen=False rel_l2=0.121 final_train_loss=0.0051 sec=82.0 ckpt=ckpt/exp1/L_lblfrs4_s0.npz tag=lblfrs4 pretrain_seed=0 ft_seed=1

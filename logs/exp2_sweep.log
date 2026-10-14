@@ -9,3 +9,61 @@ variant=S task=B n=256 seed=1 shift=180 frozen=False rel_l2=0.1786 final_train_l
 variant=S task=B n=256 seed=1 shift=0 frozen=False rel_l2=0.4744 final_train_loss=0.0292 sec=145.6 frame=absolute prompt_mode=zero data=canon30 freeze=
 variant=S task=B n=256 seed=2 shift=0 frozen=False rel_l2=0.1966 final_train_loss=0.0174 sec=123.1 frame=absolute data=canon30 prompt_mode=normal freeze=
 variant=S task=B n=256 seed=2 shift=90 frozen=False rel_l2=0.1626 final_train_loss=0.0126 sec=121.5 frame=absolute data=canon30 prompt_mode=normal freeze=
+variant=S task=B n=256 seed=2 shift=180 frozen=False rel_l2=0.1531 final_train_loss=0.0126 sec=105.8 frame=absolute data=canon30 prompt_mode=normal freeze=
+variant=S task=B n=256 seed=2 shift=0 frozen=False rel_l2=0.4589 final_train_loss=0.0233 sec=108.0 frame=absolute prompt_mode=zero data=canon30 freeze=
+variant=S task=A n=256 seed=0 shift=0 frozen=False rel_l2=0.1964 final_train_loss=0.0377 sec=61.6 frame=absolute data=canon30 prompt_mode=normal freeze=
+variant=S task=A n=256 seed=0 shift=90 frozen=False rel_l2=0.2165 final_train_loss=0.0396 sec=61.4 frame=absolute data=canon30 prompt_mode=normal freeze=
+variant=S task=A n=256 seed=0 shift=180 frozen=False rel_l2=0.1787 final_train_loss=0.0371 sec=64.5 frame=absolute data=canon30 prompt_mode=normal freeze=
+variant=S task=A n=256 seed=0 shift=0 frozen=False rel_l2=0.3634 final_train_loss=0.0589 sec=63.3 frame=absolute prompt_mode=zero data=canon30 freeze=
+variant=S task=A n=256 seed=1 shift=0 frozen=False rel_l2=0.1625 final_train_loss=0.0398 sec=64.2 frame=absolute data=canon30 prompt_mode=normal freeze=
+variant=S task=A n=256 seed=1 shift=90 frozen=False rel_l2=0.2337 final_train_loss=0.0525 sec=62.7 frame=absolute data=canon30 prompt_mode=normal freeze=
+variant=S task=A n=256 seed=1 shift=180 frozen=False rel_l2=0.1763 final_train_loss=0.0429 sec=63.8 frame=absolute data=canon30 prompt_mode=normal freeze=
+variant=S task=A n=256 seed=1 shift=0 frozen=False rel_l2=0.3539 final_train_loss=0.0587 sec=64.3 frame=absolute prompt_mode=zero data=canon30 freeze=
+variant=S task=A n=256 seed=2 shift=90 frozen=False rel_l2=0.1994 final_train_loss=0.0562 sec=65.7 frame=absolute data=canon30 prompt_mode=normal freeze=
+variant=S task=A n=256 seed=2 shift=0 frozen=False rel_l2=0.2012 final_train_loss=0.0565 sec=68.6 frame=absolute data=canon30 prompt_mode=normal freeze=
+variant=S task=A n=256 seed=2 shift=180 frozen=False rel_l2=0.2248 final_train_loss=0.0673 sec=65.7 frame=absolute data=canon30 prompt_mode=normal freeze=
+variant=S task=A n=256 seed=2 shift=0 frozen=False rel_l2=0.3623 final_train_loss=0.0844 sec=67.3 frame=absolute prompt_mode=zero data=canon30 freeze=
+variant=S task=B n=16 seed=1 shift=0 frozen=False rel_l2=0.5244 final_train_loss=0.0018 sec=103.6 frame=absolute prompt_mode=zero data=canon30 freeze=
+variant=S task=B n=16 seed=0 shift=0 frozen=False rel_l2=0.4688 final_train_loss=0.0027 sec=107.7 frame=absolute prompt_mode=zero data=canon30 freeze=
+variant=L task=B n=16 seed=0 shift=0 frozen=False rel_l2=0.4483 final_train_loss=0.0021 sec=105.9 frame=absolute prompt_mode=zero ckpt=ckpt/L.npz data=canon30 freeze=
+variant=S task=B n=16 seed=2 shift=0 frozen=False rel_l2=0.4935 final_train_loss=0.0027 sec=108.4 frame=absolute prompt_mode=zero data=canon30 freeze=
+variant=L task=B n=16 seed=1 shift=0 frozen=False rel_l2=0.4796 final_train_loss=0.0019 sec=106.2 frame=absolute prompt_mode=zero ckpt=ckpt/L.npz data=canon30 freeze=
+variant=L task=B n=16 seed=2 shift=0 frozen=False rel_l2=0.4544 final_train_loss=0.002 sec=107.3 frame=absolute prompt_mode=zero ckpt=ckpt/L.npz data=canon30 freeze=
+variant=Lc task=B n=16 seed=0 shift=0 frozen=False rel_l2=0.4416 final_train_loss=0.0015 sec=104.7 frame=absolute prompt_mode=zero ckpt=ckpt/exp2/Lc_s0.npz data=canon30 freeze=
+variant=Lc task=B n=16 seed=1 shift=0 frozen=False rel_l2=0.4907 final_train_loss=0.0017 sec=106.6 frame=absolute prompt_mode=zero ckpt=ckpt/exp2/Lc_s0.npz data=canon30 freeze=
+variant=S task=B n=64 seed=2 shift=0 frozen=False rel_l2=0.4648 final_train_loss=0.0069 sec=106.2 frame=absolute prompt_mode=zero data=canon30 freeze=
+variant=Lc task=B n=16 seed=2 shift=0 frozen=False rel_l2=0.448 final_train_loss=0.0018 sec=111.7 frame=absolute prompt_mode=zero ckpt=ckpt/exp2/Lc_s0.npz data=canon30 freeze=
+variant=L task=B n=64 seed=2 shift=0 frozen=False rel_l2=0.4431 final_train_loss=0.0047 sec=105.8 frame=absolute prompt_mode=zero ckpt=ckpt/L.npz data=canon30 freeze=
+variant=Lc task=B n=64 seed=2 shift=0 frozen=False rel_l2=0.4542 final_train_loss=0.0049 sec=113.2 frame=absolute prompt_mode=zero ckpt=ckpt/exp2/Lc_s0.npz data=canon30 freeze=
+variant=S task=A n=16 seed=0 shift=0 frozen=False rel_l2=0.3717 final_train_loss=0.0005 sec=64.9 frame=absolute prompt_mode=zero data=canon30 freeze=
+variant=S task=A n=16 seed=1 shift=0 frozen=False rel_l2=0.409 final_train_loss=0.0004 sec=71.4 frame=absolute prompt_mode=zero data=canon30 freeze=
+variant=S task=A n=16 seed=2 shift=0 frozen=False rel_l2=0.3973 final_train_loss=0.0004 sec=72.6 frame=absolute prompt_mode=zero data=canon30 freeze=
+variant=L task=A n=16 seed=0 shift=0 frozen=False rel_l2=0.3645 final_train_loss=0.001 sec=69.5 frame=absolute prompt_mode=zero ckpt=ckpt/L.npz data=canon30 freeze=
+variant=L task=A n=16 seed=1 shift=0 frozen=False rel_l2=0.4129 final_train_loss=0.0009 sec=70.5 frame=absolute prompt_mode=zero ckpt=ckpt/L.npz data=canon30 freeze=
+variant=L task=A n=16 seed=2 shift=0 frozen=False rel_l2=0.4052 final_train_loss=0.001 sec=67.1 frame=absolute prompt_mode=zero ckpt=ckpt/L.npz data=canon30 freeze=
+variant=Lc task=A n=16 seed=0 shift=0 frozen=False rel_l2=0.3709 final_train_loss=0.0009 sec=71.1 frame=absolute prompt_mode=zero ckpt=ckpt/exp2/Lc_s0.npz data=canon30 freeze=
+variant=Lc task=A n=16 seed=1 shift=0 frozen=False rel_l2=0.4019 final_train_loss=0.001 sec=67.1 frame=absolute prompt_mode=zero ckpt=ckpt/exp2/Lc_s0.npz data=canon30 freeze=
+variant=Lc task=A n=16 seed=2 shift=0 frozen=False rel_l2=0.4003 final_train_loss=0.0008 sec=68.6 frame=absolute prompt_mode=zero ckpt=ckpt/exp2/Lc_s0.npz data=canon30 freeze=
+variant=S task=A n=64 seed=2 shift=0 frozen=False rel_l2=0.3784 final_train_loss=0.0052 sec=69.3 frame=absolute prompt_mode=zero data=canon30 freeze=
+variant=L task=A n=64 seed=2 shift=0 frozen=False rel_l2=0.3671 final_train_loss=0.0077 sec=69.7 frame=absolute prompt_mode=zero ckpt=ckpt/L.npz data=canon30 freeze=
+variant=Lc task=A n=64 seed=2 shift=0 frozen=False rel_l2=0.3596 final_train_loss=0.0076 sec=68.5 frame=absolute prompt_mode=zero ckpt=ckpt/exp2/Lc_s0.npz data=canon30 freeze=
+variant=S task=B n=16 seed=0 shift=0 frozen=False rel_l2=0.4581 final_train_loss=0.0025 sec=112.5 frame=absolute data=canon30 prompt_mode=normal freeze=
+variant=S task=B n=16 seed=1 shift=0 frozen=False rel_l2=0.5169 final_train_loss=0.002 sec=110.0 frame=absolute data=canon30 prompt_mode=normal freeze=
+variant=S task=B n=16 seed=0 shift=20 frozen=False rel_l2=0.4592 final_train_loss=0.0025 sec=113.8 frame=absolute data=canon30 prompt_mode=normal freeze=
+variant=S task=B n=16 seed=2 shift=0 frozen=False rel_l2=0.4953 final_train_loss=0.0025 sec=118.1 frame=absolute data=canon30 prompt_mode=normal freeze=
+variant=S task=B n=16 seed=1 shift=20 frozen=False rel_l2=0.5178 final_train_loss=0.0021 sec=108.1 frame=absolute data=canon30 prompt_mode=normal freeze=
+variant=S task=B n=16 seed=2 shift=20 frozen=False rel_l2=0.4961 final_train_loss=0.0026 sec=106.2 frame=absolute data=canon30 prompt_mode=normal freeze=
+variant=S task=B n=16 seed=1 shift=45 frozen=False rel_l2=0.5164 final_train_loss=0.0021 sec=106.3 frame=absolute data=canon30 prompt_mode=normal freeze=
+variant=S task=B n=16 seed=0 shift=45 frozen=False rel_l2=0.462 final_train_loss=0.0025 sec=110.6 frame=absolute data=canon30 prompt_mode=normal freeze=
+variant=S task=B n=16 seed=2 shift=45 frozen=False rel_l2=0.4939 final_train_loss=0.0024 sec=108.0 frame=absolute data=canon30 prompt_mode=normal freeze=
+variant=S task=B n=16 seed=0 shift=90 frozen=False rel_l2=0.4618 final_train_loss=0.0028 sec=114.0 frame=absolute data=canon30 prompt_mode=normal freeze=
+variant=S task=B n=16 seed=1 shift=90 frozen=False rel_l2=0.5147 final_train_loss=0.0021 sec=109.2 frame=absolute data=canon30 prompt_mode=normal freeze=
+variant=S task=B n=16 seed=2 shift=90 frozen=False rel_l2=0.4887 final_train_loss=0.0026 sec=108.5 frame=absolute data=canon30 prompt_mode=normal freeze=
+variant=S task=B n=16 seed=0 shift=180 frozen=False rel_l2=0.4625 final_train_loss=0.0024 sec=112.0 frame=absolute data=canon30 prompt_mode=normal freeze=
+variant=S task=B n=16 seed=1 shift=180 frozen=False rel_l2=0.5119 final_train_loss=0.0021 sec=110.4 frame=absolute data=canon30 prompt_mode=normal freeze=
+variant=S task=B n=16 seed=2 shift=180 frozen=False rel_l2=0.4876 final_train_loss=0.0024 sec=106.1 frame=absolute data=canon30 prompt_mode=normal freeze=
+variant=L task=B n=16 seed=0 shift=0 frozen=False rel_l2=0.4314 final_train_loss=0.0019 sec=103.8 frame=absolute ckpt=ckpt/L.npz data=canon30 prompt_mode=normal freeze=
+results/exp2_finetune.jsonl: 206 jobs to run (88 of 294 already done)
+variant=L task=B n=16 seed=1 shift=0 frozen=False rel_l2=0.4741 final_train_loss=0.0019 sec=103.1 frame=absolute ckpt=ckpt/L.npz data=canon30 prompt_mode=normal freeze=
+variant=L task=B n=16 seed=2 shift=0 frozen=False rel_l2=0.4389 final_train_loss=0.002 sec=105.4 frame=absolute ckpt=ckpt/L.npz data=canon30 prompt_mode=normal freeze=
+variant=L task=B n=16 seed=0 shift=20 frozen=False rel_l2=0.4405 final_train_loss=0.002 sec=109.5 frame=absolute ckpt=ckpt/L.npz data=canon30 prompt_mode=normal freeze=

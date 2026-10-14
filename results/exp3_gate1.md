@@ -30,6 +30,9 @@ R1: mean over fine-tune seeds 0-2 (rho / normalised regret / top-1 within 2% / f
 
 | task | backbone | seeds | rho | regret | top-1 | field rel-L2 |
 |---|---|---|---|---|---|---|
+| A | S | 3 | 0.889 | 0.074 | 0.73 | 0.0961 |
+| A | L | 3 | 0.941 | 0.032 | 0.87 | 0.0631 |
+| A | LT | 3 | 0.908 | 0.064 | 0.74 | 0.0828 |
 | B | S | 3 | 0.938 | 0.056 | 0.84 | 0.1161 |
 | B | L | 3 | 0.944 | 0.049 | 0.85 | 0.1240 |
 | B | LT | 3 | 0.942 | 0.052 | 0.83 | 0.1079 |
@@ -38,8 +41,8 @@ R1 paired differences (per-body values averaged over seeds; 95% CI over bodies)
 
 | task | metric | LT - L | LT - S | L - S |
 |---|---|---|---|---|
-| A | rho | - | - | - |
-| A | regret | - | - | - |
+| A | rho | -0.033 [-0.041, -0.027]* better on 6% of bodies | +0.019 [+0.011, +0.027]* better on 74% of bodies | +0.052 [+0.041, +0.065]* better on 98% of bodies |
+| A | regret | +0.032 [+0.014, +0.051]* better on 19% of bodies | -0.010 [-0.035, +0.015]  better on 35% of bodies | -0.043 [-0.067, -0.019]* better on 48% of bodies |
 | B | rho | -0.002 [-0.006, +0.001]  better on 42% of bodies | +0.003 [-0.000, +0.007]  better on 55% of bodies | +0.006 [+0.002, +0.009]* better on 62% of bodies |
 | B | regret | +0.003 [-0.007, +0.015]  better on 25% of bodies | -0.004 [-0.020, +0.012]  better on 37% of bodies | -0.007 [-0.022, +0.007]  better on 35% of bodies |
 
@@ -47,16 +50,21 @@ R3: mean over fine-tune seeds 0-2 (rho / normalised regret / top-1 within 2%)
 
 | task | backbone | seeds | rho | regret | top-1 |
 |---|---|---|---|---|---|
+| A | S | 3 | 0.843 | 0.163 | 0.55 |
+| A | L | 3 | 0.878 | 0.096 | 0.66 |
+| A | LT | 3 | 0.869 | 0.096 | 0.71 |
+| B | S | 3 | 0.900 | 0.061 | 0.81 |
+| B | L | 3 | 0.949 | 0.037 | 0.89 |
 | B | LT | 3 | 0.935 | 0.042 | 0.86 |
 
 R3 paired differences (per-body values averaged over seeds; 95% CI over bodies)
 
 | task | metric | LT - L | LT - S | L - S |
 |---|---|---|---|---|
-| A | rho | - | - | - |
-| A | regret | - | - | - |
-| B | rho | - | - | - |
-| B | regret | - | - | - |
+| A | rho | -0.008 [-0.019, +0.000]  better on 50% of bodies | +0.026 [+0.016, +0.036]* better on 84% of bodies | +0.034 [+0.022, +0.049]* better on 84% of bodies |
+| A | regret | -0.001 [-0.023, +0.023]  better on 40% of bodies | -0.068 [-0.098, -0.039]* better on 61% of bodies | -0.067 [-0.098, -0.039]* better on 57% of bodies |
+| B | rho | -0.015 [-0.017, -0.012]* better on 11% of bodies | +0.035 [+0.031, +0.039]* better on 96% of bodies | +0.049 [+0.045, +0.054]* better on 100% of bodies |
+| B | regret | +0.006 [-0.004, +0.015]  better on 25% of bodies | -0.018 [-0.031, -0.005]* better on 50% of bodies | -0.024 [-0.036, -0.013]* better on 51% of bodies |
 
 Original plan-demo surrogates (single-action training, seed 0, first 40 test bodies), re-scored with scipy.stats.spearmanr
 

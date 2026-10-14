@@ -11,3 +11,28 @@ rho=0.9415 regret=0.05 top1=0.85 field_rel_l2=0.1274 sec=335.2 regime=R1 backbon
 rho=0.9427 regret=0.0324 top1=0.9 sec=352.2 regime=R3 backbone=LT task=B seed=0 lam=0.0 budget=64x8
 rho=0.9281 regret=0.0441 top1=0.85 sec=372.7 regime=R3 backbone=LT task=B seed=1 lam=0.0 budget=64x8
 rho=0.933 regret=0.0506 top1=0.82 sec=445.6 regime=R3 backbone=LT task=B seed=2 lam=0.0 budget=64x8
+rho=0.9447 regret=0.0487 top1=0.84 sec=719.7 regime=R3 backbone=L task=B seed=0 lam=0.0 budget=64x8
+rho=0.956 regret=0.028 top1=0.92 sec=740.9 regime=R3 backbone=L task=B seed=1 lam=0.0 budget=64x8
+rho=0.9467 regret=0.0335 top1=0.92 sec=601.5 regime=R3 backbone=L task=B seed=2 lam=0.0 budget=64x8
+rho=0.902 regret=0.0613 top1=0.8 sec=635.0 regime=R3 backbone=S task=B seed=0 lam=0.0 budget=64x8
+rho=0.8918 regret=0.0606 top1=0.84 sec=606.2 regime=R3 backbone=S task=B seed=1 lam=0.0 budget=64x8
+rho=0.9086 regret=0.0531 top1=0.73 field_rel_l2=0.0793 sec=108.5 regime=R1 backbone=LT task=A seed=0 lam=0.0 budget=64x8
+rho=0.9113 regret=0.0631 top1=0.76 field_rel_l2=0.0764 sec=109.3 regime=R1 backbone=LT task=A seed=1 lam=0.0 budget=64x8
+rho=0.9063 regret=0.0603 top1=0.8 sec=693.2 regime=R3 backbone=S task=B seed=2 lam=0.0 budget=64x8
+rho=0.9035 regret=0.0751 top1=0.72 field_rel_l2=0.0926 sec=106.9 regime=R1 backbone=LT task=A seed=2 lam=0.0 budget=64x8
+rho=0.9429 regret=0.0369 top1=0.85 field_rel_l2=0.061 sec=115.0 regime=R1 backbone=L task=A seed=0 lam=0.0 budget=64x8
+rho=0.9443 regret=0.0314 top1=0.86 field_rel_l2=0.0626 sec=105.5 regime=R1 backbone=L task=A seed=1 lam=0.0 budget=64x8
+rho=0.9367 regret=0.0266 top1=0.9 field_rel_l2=0.0657 sec=120.9 regime=R1 backbone=L task=A seed=2 lam=0.0 budget=64x8
+rho=0.8774 regret=0.0683 top1=0.72 field_rel_l2=0.0927 sec=103.4 regime=R1 backbone=S task=A seed=0 lam=0.0 budget=64x8
+rho=0.8923 regret=0.0979 top1=0.66 field_rel_l2=0.0983 sec=105.5 regime=R1 backbone=S task=A seed=1 lam=0.0 budget=64x8
+rho=0.897 regret=0.0562 top1=0.82 field_rel_l2=0.0974 sec=102.4 regime=R1 backbone=S task=A seed=2 lam=0.0 budget=64x8
+rho=0.8768 regret=0.0855 top1=0.69 sec=111.3 regime=R3 backbone=LT task=A seed=0 lam=0.0 budget=64x8
+rho=0.8652 regret=0.1014 top1=0.71 sec=108.2 regime=R3 backbone=LT task=A seed=1 lam=0.0 budget=64x8
+rho=0.8657 regret=0.0997 top1=0.72 sec=114.8 regime=R3 backbone=LT task=A seed=2 lam=0.0 budget=64x8
+rho=0.8839 regret=0.0987 top1=0.65 sec=106.9 regime=R3 backbone=L task=A seed=0 lam=0.0 budget=64x8
+rho=0.8734 regret=0.0784 top1=0.72 sec=113.5 regime=R3 backbone=L task=A seed=1 lam=0.0 budget=64x8
+rho=0.8753 regret=0.1115 top1=0.61 sec=106.5 regime=R3 backbone=L task=A seed=2 lam=0.0 budget=64x8
+rho=0.8322 regret=0.1729 top1=0.53 sec=112.9 regime=R3 backbone=S task=A seed=0 lam=0.0 budget=64x8
+rho=0.8486 regret=0.1516 top1=0.6 sec=111.0 regime=R3 backbone=S task=A seed=1 lam=0.0 budget=64x8
+rho=0.8493 regret=0.1652 top1=0.53 sec=81.8 regime=R3 backbone=S task=A seed=2 lam=0.0 budget=64x8
+exit 0
