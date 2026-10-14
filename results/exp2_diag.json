@@ -1,0 +1,98 @@
+[
+ {
+  "variant": "S",
+  "task": "A",
+  "seed": 0,
+  "train_rel_l2": 0.03229786828160286,
+  "test_rel_l2": 0.3417055606842041,
+  "final_train_loss": 0.004133434966206551
+ },
+ {
+  "variant": "S",
+  "task": "A",
+  "seed": 1,
+  "train_rel_l2": 0.03094426915049553,
+  "test_rel_l2": 0.326450914144516,
+  "final_train_loss": 0.003615400055423379
+ },
+ {
+  "variant": "S",
+  "task": "B",
+  "seed": 0,
+  "train_rel_l2": 0.08216113597154617,
+  "test_rel_l2": 0.4160248041152954,
+  "final_train_loss": 0.005602347198873758
+ },
+ {
+  "variant": "S",
+  "task": "B",
+  "seed": 1,
+  "train_rel_l2": 0.08130474388599396,
+  "test_rel_l2": 0.42047640681266785,
+  "final_train_loss": 0.008211318403482437
+ },
+ {
+  "variant": "L",
+  "task": "A",
+  "seed": 0,
+  "train_rel_l2": 0.038556892424821854,
+  "test_rel_l2": 0.15251818299293518,
+  "final_train_loss": 0.006958374287933111
+ },
+ {
+  "variant": "L",
+  "task": "A",
+  "seed": 1,
+  "train_rel_l2": 0.037740591913461685,
+  "test_rel_l2": 0.16576553881168365,
+  "final_train_loss": 0.006417783442884684
+ },
+ {
+  "variant": "L",
+  "task": "B",
+  "seed": 0,
+  "train_rel_l2": 0.06661154329776764,
+  "test_rel_l2": 0.20904657244682312,
+  "final_train_loss": 0.0047802794724702835
+ },
+ {
+  "variant": "L",
+  "task": "B",
+  "seed": 1,
+  "train_rel_l2": 0.06521186977624893,
+  "test_rel_l2": 0.17909498512744904,
+  "final_train_loss": 0.006107204593718052
+ },
+ {
+  "variant": "Lc",
+  "task": "A",
+  "seed": 0,
+  "train_rel_l2": 0.03825247287750244,
+  "test_rel_l2": 0.17589135468006134,
+  "final_train_loss": 0.007588677573949099
+ },
+ {
+  "variant": "Lc",
+  "task": "A",
+  "seed": 1,
+  "train_rel_l2": 0.03846894949674606,
+  "test_rel_l2": 0.15637484192848206,
+  "final_train_loss": 0.007577582262456417
+ },
+ {
+  "variant": "Lc",
+  "task": "B",
+  "seed": 0,
+  "train_rel_l2": 0.06459169089794159,
+  "test_rel_l2": 0.17663262784481049,
+  "final_train_loss": 0.004019949585199356
+ },
+ {
+  "variant": "Lc",
+  "task": "B",
+  "seed": 1,
+  "train_rel_l2": 0.06754399836063385,
+  "test_rel_l2": 0.1797652691602707,
+  "final_train_loss": 0.00763492938131094
+ }
+]

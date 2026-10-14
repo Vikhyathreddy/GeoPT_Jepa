@@ -1,0 +1,13 @@
+S  A seed 0: train rel-L2 0.0323  test 0.3417  final train loss (normalised MSE) 0.0041
+S  A seed 1: train rel-L2 0.0309  test 0.3265  final train loss (normalised MSE) 0.0036
+S  B seed 0: train rel-L2 0.0822  test 0.4160  final train loss (normalised MSE) 0.0056
+S  B seed 1: train rel-L2 0.0813  test 0.4205  final train loss (normalised MSE) 0.0082
+L  A seed 0: train rel-L2 0.0386  test 0.1525  final train loss (normalised MSE) 0.0070
+L  A seed 1: train rel-L2 0.0377  test 0.1658  final train loss (normalised MSE) 0.0064
+L  B seed 0: train rel-L2 0.0666  test 0.2090  final train loss (normalised MSE) 0.0048
+L  B seed 1: train rel-L2 0.0652  test 0.1791  final train loss (normalised MSE) 0.0061
+Lc A seed 0: train rel-L2 0.0383  test 0.1759  final train loss (normalised MSE) 0.0076
+Lc A seed 1: train rel-L2 0.0385  test 0.1564  final train loss (normalised MSE) 0.0076
+Lc B seed 0: train rel-L2 0.0646  test 0.1766  final train loss (normalised MSE) 0.0040
+Lc B seed 1: train rel-L2 0.0675  test 0.1798  final train loss (normalised MSE) 0.0076
+exit 0
