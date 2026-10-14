@@ -171,6 +171,19 @@ def pretrain2_jobs():
     return J
 
 
+def pretrain4_jobs():
+    """step 4 (SEED_REPLICATION.md): N, L, LT clean at seeds 2-4; L at lblfrz2 (seeds 2-4) and lblfrz4 (1-4)."""
+    J = [dict(variant="LT", tag="clean", pretrain_seed=k) for k in (2, 3, 4)]
+    J += [dict(variant=v, tag="clean", pretrain_seed=k) for v in ("N", "L") for k in (2, 3, 4)]
+    J += [dict(variant="L", tag="lblfrz2", pretrain_seed=k) for k in (2, 3, 4)]
+    J += [dict(variant="L", tag="lblfrz4", pretrain_seed=k) for k in (1, 2, 3, 4)]
+    return J
+
+
+def finetune4_jobs():
+    return [dict(j, task=t, n=64, ft_seed=s) for t in "BA" for j in pretrain4_jobs() for s in (0, 1)]
+
+
 def finetune2_jobs():
     return [dict(j, task=t, n=64, ft_seed=s) for t in "BA" for j in pretrain2_jobs() for s in (0, 1)]
 
@@ -498,6 +511,10 @@ if __name__ == "__main__":
         runner.run(pretrain2_jobs(), pretrain_job, PRE_OUT, ("variant", "tag", "pretrain_seed"), require_per=False)
     elif stage == "finetune2":
         runner.run(finetune2_jobs(), finetune_job, FT_OUT, FT_KEY)
+    elif stage == "pretrain4":
+        runner.run(pretrain4_jobs(), pretrain_job, PRE_OUT, ("variant", "tag", "pretrain_seed"), require_per=False)
+    elif stage == "finetune4":
+        runner.run(finetune4_jobs(), finetune_job, FT_OUT, FT_KEY)
     elif stage == "diag":
         diag()
     elif stage == "report2":

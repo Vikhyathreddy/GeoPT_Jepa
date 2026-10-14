@@ -113,14 +113,21 @@ def load_downstream():
     return {k: D[k] for k in D.files}
 
 
+def ckpt_for(name):
+    """'L' -> ckpt/L.npz (pretraining seed 0); 'L@s2' -> ckpt/exp1/L_clean_s2.npz (pretraining seed 2)."""
+    base, _, s = name.partition("@s")
+    return f"ckpt/{base}.npz" if s in ("", "0") else f"ckpt/exp1/{base}_clean_s{int(s)}.npz"
+
+
 def backbone(name, seed):
     import model as Mo
     from finetune import ENC, DEC
     P = Mo.build("S", 100 + seed)
-    if name != "S":
-        ck = np.load(f"ckpt/{name}.npz")
+    base = name.partition("@s")[0]
+    if base != "S":
+        ck = np.load(ckpt_for(name))
         for k in P:
-            if k.startswith(ENC) or (name != "J" and k.startswith(DEC)):
+            if k.startswith(ENC) or (base != "J" and k.startswith(DEC)):
                 P[k].data = ck[k].astype(np.float32).copy()
     return P
 
@@ -297,6 +304,15 @@ def run_job(j):
         rec.update(field_rel_l2=err, per_shape=[round(float(x), 5) for x in per])
     rec["sec"] = round(time.time() - t0, 1)
     return rec
+
+
+def seed_probe_jobs(seeds=(1, 2, 3, 4)):
+    return [dict(backbone=f"{b}@s{k}", task=t) for k in seeds for t in "BA" for b in ("LT", "L", "N")]
+
+
+def seed_run_jobs(seeds=(1, 2, 3, 4)):
+    return [dict(regime="R1", backbone=f"{b}@s{k}", task=t, seed=0, lam=0.0, budget="64x8")
+            for t in "BA" for k in seeds for b in ("LT", "L")]
 
 
 def run_jobs():
@@ -533,6 +549,10 @@ if __name__ == "__main__":
             print(reg, "task B one run: %.0f s" % (time.time() - t0), {k: v for k, v in r.items() if not isinstance(v, list)})
     elif stage == "runs":
         runner.run(run_jobs(), run_job, RUNS_OUT, RUNS_KEY)
+    elif stage == "probe4":
+        runner.run(seed_probe_jobs(), probe_job, PROBE_OUT, ("backbone", "task"))
+    elif stage == "runs4":
+        runner.run(seed_run_jobs(), run_job, RUNS_OUT, RUNS_KEY)
     elif stage == "report":
         report()
     else:
