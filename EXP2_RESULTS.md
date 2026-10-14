@@ -36,7 +36,7 @@ Copied verbatim from the spec before any run of this experiment. Not edited afte
 **Data and checks** (`results/exp2_checks.json`).
 - **`world.make_shape(rng, rotate=False)`** keeps the long axis along x and still draws the rotation angle.
   - The default path is bit-identical: one rebuilt chunk of each original dataset matches under `np.array_equal`.
-  - Canonical bodies have the same area and perimeter as the originals, to 6.0e-09 and 4.8e-07. That is float32 storage of the coordinates; the requirement is 1e-6.
+  - Canonical bodies have the same area and perimeter as the originals, to 6.0e-09 and 4.8e-07. The requirement is 1e-6. The area check runs in float64; the perimeter check ran on float32 vertices, and recomputed in float64 the perimeter difference is at most 2.9e-08.
 - **`data/exp2/downstream_canon.npz`** uses the same seeds and bodies as `data/downstream.npz`, with U_B reused (identical). The new flow angles are alpha_A and alpha_B ~ U(-30, +30) degrees.
   - They come from `np.random.default_rng(chunk seed + 50_000)`, drawing alpha_A then alpha_B for each body. This choice is not in the spec.
   - Labels are in the canonical absolute frame.
@@ -83,17 +83,37 @@ All variants at shift 0 vs scratch (negative = better than scratch)
 | B | Lc | 0.1782 | -54.1% [-57.2, -51.0]* better on 100% of bodies |
 
 
-**Gate verdicts.**
-- **G1 (learnability): passes, with a caveat on task A.**
-  - Scratch beats the mean predictor on both tasks with CIs excluding 0: B 0.418 vs 0.899 (-53%), A 0.334 vs 0.415 (-19%).
-  - The task-A margin is modest. Scratch is also much worse here than in the flow frame (0.334 vs 0.193 at n = 64), so the absolute frame with per-sample prompts is clearly harder for a randomly initialised model.
-  - The pretrained models do not have this problem (L 0.159 on A, 0.194 on B).
-- **G2 (the prompt must carry information): passes clearly.** Zeroing the prompt costs L +133% (A) and +159% (B), and Lc +120% and +177%; every CI excludes 0.
-  - Scratch barely uses the prompt (+4.6% on A, +9.2% on B). It cannot learn to read a per-sample flow angle from 64 examples.
-  - So the gain from pretraining here comes largely from the pretrained prompt pathway. That is the GeoPT mechanism, and it was absent in the constant-prompt flow frame.
-- **G3 (L vs Lc at shift 0): mixed.** Lc is worse on A (+6.8% [+3.5, +10.2]) and better on B (-5.2% [-9.4, -0.8]). P4 (Lc >= L) holds on task B only.
-- **Is a shift sweep worth running? Yes.**
-  - The flow angle now strongly affects the labels, and the pretrained models depend heavily on the prompt.
-  - Scratch's flat response to the prompt makes it a clean noise floor for the difference-in-differences analysis.
+**Gate verdicts** (revised after an independent audit; see the end of this section).
+- **G1 (learnability): fails on task A, so per the spec Stage 1 stops here for diagnosis.**
+  - Against the scalar training mean (the table above), scratch passes: A 0.334 vs 0.415, B 0.418 vs 0.899.
+  - But in this canonical absolute frame the surface points and grid cells line up across bodies. So the per-position training mean is also a constant, input-ignoring prediction, and it is much stronger.
+  - Task A: the per-surface-point mean profile scores 0.322, and scratch is worse than it: +5.7% [+1.8, +9.6], better on only 45% of bodies.
+  - Task B: the per-cell mean field scores 0.504. Scratch beats it, but by -14.0% [-20.2, -7.4], not -53%.
+  - Under the guard "scratch at n = 64 beats the mean predictor by a wide margin", task A fails and task B passes narrowly.
+- **Diagnosis so far.**
+  - Scratch is also 26% worse ([+20, +33]) than a prompt-blind geometry oracle: the average of the exact q over 25 angles spanning ±30°, which scores 0.280. So it fails to learn even the geometry-only map from 64 bodies.
+  - Its final training loss is tiny (normalised MSE [0.0041, 0.0036] on A), which points to memorising the 64 training bodies. That is the failure mode of the abandoned absolute-frame run.
+  - The pretrained models do not have this problem (L 0.159 on A, 0.194 on B, about half of scratch).
+  - Not yet tested, all cheap: scratch at n = 256; more steps or weight decay; scratch at n = 16, which Stage 2 needs and which is likely at the mean predictor.
+- **G2 (the prompt carries information): passes for L and Lc.**
+  - Zeroing the prompt costs L +133% (A) and +159% (B), and Lc +120% and +177%.
+  - For scratch the effect (+4.6% on A, +9.2% on B) has the same sign in both seeds, but it is no larger than scratch's own seed 0 vs seed 1 difference.
+  - At the label level the premise holds: the prompt-blind oracle scores 0.280 on A, against 0 for the exact solution.
+- **G3 (L vs Lc at shift 0): undetermined.** The pooled numbers (A +6.8%, B -5.2%) flip sign between fine-tuning seeds.
+  - Task A: +19.4% with seed 0, -2.3% with seed 1.
+  - Task B: -9.7% with seed 0, +3.7% with seed 1.
+  - L's own seed-to-seed spread on B (0.209 vs 0.179) is twice the Lc-L gap. P4 is undetermined on both tasks.
+- **Implications for Stage 2's design, if it goes ahead.**
+  - Scratch barely reads the prompt. Its shift curve will be flat by construction, so the difference-in-differences against scratch reduces to each variant's own shift penalty.
+  - Fine-tuning-seed noise is large: L on B differs by 26% between two seeds under this bootstrap.
+  - So Stage 2 should judge shift penalties against seed-level variability, for example with a bootstrap over seeds as well as bodies, or each variant's seed-to-seed difference as the noise floor. Otherwise a 10-25% "penalty", including a spurious 180° penalty on task A, could be seed noise.
+- **Statistics caveat.** The CIs resample the 100 test bodies only. They cover neither fine-tuning-seed variance (2 seeds, averaged) nor pretraining-seed variance (one L and one Lc checkpoint).
+- **A correction to an earlier sentence.** The flow-frame scratch number (0.193) comes from a different dataset (randomly oriented bodies, full-circle flows), so the comparison with 0.334 does not isolate the frame or the prompt parameterisation.
 
-**Stage 2 estimate.** One run here takes about 30 s (A) to 62 s (B) of one core. Stage 2's 180 runs (S, L, Lc × 5 shifts × 2 tasks × n 16/64 × 3 seeds) need about 2.3 core-hours, which is about 40 minutes on 4 cores. The 24 gate runs cover 12 of them (shift 0, normal prompt, seeds 0 and 1, n = 64), so these can be reused.
+**Stage 2 estimate.** One run here takes about 30 s (A) to 62 s (B) of one core. Stage 2's 180 runs (S, L, Lc × 5 shifts × 2 tasks × n 16/64 × 3 seeds) need about 2.3 core-hours, about 35 minutes on 4 idle cores. The 24 gate runs cover 12 of them (shift 0, normal prompt, seeds 0 and 1, n = 64), so these can be reused.
+
+**Independent audit.** Four agents recomputed every table entry and prose number from the raw results; all table entries reproduce exactly. They also challenged the interpretation. This section was revised because of it:
+- G1 on task A changed from "passes with a caveat" to "fails against the per-position mean baseline: stop and diagnose".
+- G3 changed from "mixed" to "undetermined", since it flips with the fine-tuning seed.
+- The claim that scratch is a clean noise floor was withdrawn.
+- The seed caveats and the corrected perimeter explanation were added.

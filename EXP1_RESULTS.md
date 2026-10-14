@@ -69,27 +69,48 @@ scratch / native-geometry references (n=64): {"A": {"S": 0.19283322244882584, "N
 
 **Figure:** `figs/exp1_noise_curves.png`. It plots test error against measured target-space noise, with one panel per task × family and scratch / native-geometry reference lines.
 
-**Reading.**
-- **No crossover in any condition tested.** L beats LT by 19-31% on task A and by 3-8% on task B. Every CI excludes 0.
-  - The gap narrows only under heavy label noise (lblfrz2: A +19.0%, B +2.8% [+0.2, +5.4]). That happens because L degrades while LT cannot, which is the by-construction case of P2.
-- **Trajectory noise (the fair test).** Both variants degrade only slightly, and by similar amounts.
-  - At pos030, L is +3.8% on A and +2.4% on B versus clean L; LT is +2.2% on A and +1.0% on B versus clean LT.
-  - So LT does degrade a little more slowly, but the LT-L gap barely moves (A: +31.5% clean → +30.2%; B: +7.3% → +6.5%). At this rate a crossover would need far more noise than pos030.
-- **Label noise does hurt L downstream more than P1 expected.** At sigma = 2, task A is +12.3% [+9.2, +15.4] and task B +4.9% [+2.8, +7.1]. Yet L's pretext error against clean targets rises only from 0.00177 to 0.00259.
-  - So a small loss of pretext accuracy still costs some downstream accuracy. L keeps 85% (A) and 90% (B) of its gain over scratch at sigma = 2.
-- **L's gain over scratch has not halved at any level tested** (lowest: 85% kept). So the spec's "refutes" verdict cannot be applied yet: it requires testing up to the noise level where that gain halves.
+**Reading** (revised after an independent audit; see the end of this section).
+- **No crossover in any condition tested.** L beats LT by 19-32% on task A and by 3-8% on task B. Every CI excludes 0.
+  - The gap narrows only under heavy label noise (lblfrz2: A +19.0%, B +2.8% [+0.2, +5.4]). There, L degrades while LT, which never sees those targets, cannot.
+- **Trajectory noise (the fair test) is uninformative at these levels.**
+  - At pos030, L is +3.8% (A) and +2.4% (B) against clean L; LT is +2.2% (A) and +1.0% (B) against clean LT.
+  - Per body, the difference in degradation (L minus LT) is A +1.6 points [-1.4, +4.6] and B +1.4 points [-1.0, +3.8]. The change in the LT-L gap from clean to pos030 is A -1.3 points [-5.2, +2.5] and B -0.8 points [-3.3, +1.8].
+  - All of these CIs include 0. At target noise up to 0.5 × std, the data cannot tell "LT degrades more slowly" from "both degrade alike". L still keeps 96% of its gain over scratch.
+- **Label noise hurts L downstream more than P1 expected.** At sigma = 2: task A +12.3% [+9.2, +15.4], task B +4.9% [+2.8, +7.1].
+  - The size is poorly pinned down: on task A, fine-tuning seed 0 alone gives +7.5% and seed 1 +19.5%. Both are above 5%.
+  - L's pretext error against clean targets rises 46% (0.00177 to 0.00259; 44% on all 800 validation samples). It rises 47% on the t = 0 output too, whose targets are clean in every corpus.
+  - So the noise degraded the shared representation; it was not simply averaged out. Clean-target pretext error does not track the downstream cost across families: pos030 raises it more (+74%) but costs less downstream.
+- **The label family can never produce the spec's "refutes" verdict.**
+  - LT is fixed by construction under label noise. L would tie LT once it keeps only 58% (A) or 85% (B) of its gain over scratch.
+  - So any label-noise sweep that reaches the halving level must first pass a by-construction crossover. That is "weak support", which P2 discounts.
+  - A refutation (or real support) can only come from the trajectory and bounce families, where L currently keeps 96% of its gain.
 
 **Predictions so far.**
-- **P1 (label noise barely hurts L, < 5% even at sigma = 2): refuted on task A (+12.3%) and borderline on B (+4.9%).** L's pretext error against clean targets stays near its clean value (0.0019 / 0.0026 vs 0.0018), which matches P1's mechanism. The fresh-vs-frozen and small-corpus parts await options d and e.
-- **P2: confirmed in the weak form.** L degrades under heavy label noise, and LT, which cannot degrade, narrows the gap. It does not overtake.
-- **P3 (trajectory noise): no crossover up to sigma_pos = 0.30** (target noise 0.50 × std). LT degrades slightly more slowly than L, but the gap is essentially unchanged. So far this sides with the alternative: the noise enters both target types much alike.
+- **P1 (label noise barely hurts L, < 5% even at sigma = 2).**
+  - Refuted on task A: +12.3%, and over 5% in each fine-tuning seed.
+  - Borderline on task B: +3.7% as a ratio of mean errors, +4.9% as the mean per-body change, +6.7% with seed 0 alone.
+  - P1's mechanism only partly holds: L's error against clean targets rises 46%, including on the always-clean t = 0 output.
+  - The fresh-vs-frozen and small-corpus parts await options d and e.
+- **P2: premise met, consequence not observed.** L does degrade under heavy label noise, and LT is invariant to it, verified bit for bit. But the overtaking P2 calls guaranteed has not happened at sigma = 2; only the by-construction narrowing is seen.
+- **P3 (trajectory noise): undetermined.** There is no crossover up to sigma_pos = 0.30 (target noise 0.50 × std), and the relative degradation of L and LT is indistinguishable (CIs above).
 - **P4, P5:** not yet tested (bounce, LJ).
-- **Verdict so far:** no support for the rule of thumb in this setting, not even weak support. The "refutes" verdict needs noise levels up to the point where L's gain over scratch halves (Stage 2 d and/or a larger sigma_pos).
+- **Verdict so far:** no support for the rule of thumb, not even weak support. No refutation is possible yet either: the family that could refute it (trajectory) has not reached the gain-halving level.
 
-**Stage 2 recommendation, with compute measured here (4 cores).** One L pretraining takes about 4-5 core-min, one LT about 10-17 core-min, and a fine-tuning run about 0.5-1 core-min.
-1. **d. Label extremes and fresh vs frozen** (lblfrz4, lblfrz8, lblfrs4 with L and LJ): about 35 core-min. This is needed to reach the "gain halved" level for the label family.
-2. **Larger trajectory noise** (pos060, and pos100 if needed; not in the menu) with L and LT: about 20 core-min per level. Without it the fair-test family can never reach a verdict.
-3. **a. A second pretraining seed for clean, pos030 and lblfrz2, with L and LT:** about 60 core-min. The gaps here are large compared with the noise effects, but pretraining-seed variance is uncovered.
-4. **c. Stochastic bounce** (bounce05, bounce10 with L, LT, LJ, LT0): about 90 core-min. This is the multimodality test (P4) and the most interesting remaining question.
-5. **b. LJ / LT0** on the kept conditions (P5): about 18 core-min per condition.
-6. **e. Small corpus:** about 40 core-min. **f. n = 16:** +50%. **g. pos005:** low value, since the curve is flat at the low end.
+**Caveats on the statistics.**
+- The CIs resample the 100 test bodies only. They cover neither fine-tuning-seed variance (2 seeds, averaged) nor pretraining-seed variance (1 seed per condition).
+- Seed effects are large here (task A at lblfrz2: +7.5% vs +19.5%), so effects of a few percent should be read with care.
+
+**Stage 2 recommendation** (revised). Compute is measured on this machine (4 cores, shared). One L pretraining takes 4-11 core-min (median 5.3), one LT about 17, and a fine-tuning run 0.5-1.2 core-min (mean 0.84).
+1. **Larger trajectory noise** (pos060, pos100; not in the menu) with L and LT: about 30 core-min per level, including 8 fine-tuning runs. This is the only family that can yield a verdict, and it needs to reach the level where L's gain over scratch halves.
+2. **c. Stochastic bounce** (bounce05, bounce10 with L, LT, LJ, LT0): about 100 core-min. This is the multimodality test (P4).
+3. **a. A second pretraining seed for clean and every kept condition (L, LT), plus fine-tuning seed 2:** about 25 core-min per condition. Seed variance is large compared with the effects measured here.
+4. **d. Label extremes and fresh vs frozen** (lblfrz4, lblfrz8, lblfrs4 with L and LJ): about 55 core-min. This settles P1's fresh-vs-frozen part, but it can only end in the by-construction crossover, so it cannot decide the rule of thumb.
+5. **b. LJ / LT0 on the kept conditions** (P5): about 20 core-min per condition. **e. Small corpus:** about 45 core-min. **f. n = 16:** +50%. **g. pos005:** low value, since the curve is flat at the low end.
+
+**Independent audit.** Four agents recomputed every table entry and prose number from the raw results; all table entries reproduce exactly. They also challenged the interpretation. This section was revised because of it:
+- The task-A range is now 19-32% (it said 19-31%).
+- P2 is now "premise met, consequence not observed" (it said "confirmed in the weak form").
+- P3 is now "undetermined" (it said the data sided with the alternative).
+- The claim that P1's mechanism was confirmed has been removed.
+- The label family's inability to refute is now stated.
+- Seed caveats were added and the compute estimates corrected (they were low).

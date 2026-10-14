@@ -1,0 +1,9 @@
+results/exp3_runs.jsonl: 36 jobs to run (0 of 36 already done)
+rho=0.9403 regret=0.055 top1=0.84 field_rel_l2=0.1109 sec=347.5 regime=R1 backbone=LT task=B seed=0 lam=0.0 budget=64x8
+rho=0.9445 regret=0.0542 top1=0.81 field_rel_l2=0.1034 sec=356.5 regime=R1 backbone=LT task=B seed=1 lam=0.0 budget=64x8
+rho=0.9438 regret=0.045 top1=0.88 field_rel_l2=0.136 sec=336.6 regime=R1 backbone=L task=B seed=0 lam=0.0 budget=64x8
+rho=0.9399 regret=0.0479 top1=0.83 field_rel_l2=0.1095 sec=346.8 regime=R1 backbone=LT task=B seed=2 lam=0.0 budget=64x8
+rho=0.9426 regret=0.0569 top1=0.83 field_rel_l2=0.1225 sec=340.2 regime=R1 backbone=L task=B seed=1 lam=0.0 budget=64x8
+rho=0.9449 regret=0.0464 top1=0.85 field_rel_l2=0.1136 sec=347.8 regime=R1 backbone=L task=B seed=2 lam=0.0 budget=64x8
+rho=0.9351 regret=0.0463 top1=0.88 field_rel_l2=0.1145 sec=350.1 regime=R1 backbone=S task=B seed=0 lam=0.0 budget=64x8
+rho=0.9378 regret=0.0726 top1=0.78 field_rel_l2=0.1066 sec=358.9 regime=R1 backbone=S task=B seed=1 lam=0.0 budget=64x8
