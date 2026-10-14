@@ -1,8 +1,13 @@
-"""Pretrain one variant on unlabeled geometry only.  usage: python pretrain.py VARIANT [steps]"""
+"""Pretrain one variant on unlabeled geometry only.
+
+usage: python pretrain.py VARIANT [steps]                      (writes ckpt/VARIANT.npz, as before)
+       python pretrain.py VARIANT --steps 3000 --seed 0 --data data/pretrain.npz --out ckpt/x.npz \
+                                  --train-shapes 2000
+"""
 import os
-import sys
 import time
 import json
+import argparse
 import numpy as np
 import ag
 import model as Mo
@@ -37,18 +42,39 @@ def cosine(it, steps, lr, warm=100):
     return 0.5 * lr * (1 + np.cos(np.pi * (it - warm) / max(1, steps - warm)))
 
 
-def pretrain(variant, steps=2500, B=16, lr=1e-3, seed=0, Dd=None, log_every=250, out=None):
+EXPLICIT = ("nat", "lift", "anchor")   # pretext losses on explicit vector-distance targets
+
+
+def clean_view(Dd):
+    """the corpus with its stored clean targets (vd_clean, and X_clean if present) swapped in."""
+    C = dict(Dd, vd=Dd["vd_clean"])
+    if "X_clean" in Dd:
+        C["X"] = Dd["X_clean"]
+    return C
+
+
+def pretrain(variant, steps=2500, B=16, lr=1e-3, seed=0, Dd=None, log_every=250, out=None,
+             batch_fn=None, train_shapes=N_TRAIN_SHAPES):
+    """batch_fn(batch, rng_aux) -> batch: optional transform of every training batch (e.g. fresh
+    label noise); rng_aux is seeded separately, so initialisation and batch order match the plain run.
+    If Dd holds vd_clean, the explicit heads' validation losses are also logged against the clean
+    targets (keys valclean_*).  train_shapes: train on samples with sid < train_shapes only;
+    validation always uses sid >= N_TRAIN_SHAPES."""
     rng = np.random.default_rng(seed)
+    rng_aux = np.random.default_rng(seed + 10_000) if batch_fn is not None else None
     P = Mo.build(variant, seed)
     ema = variant in ("J", "LJ", "LT", "LT0")
     Pt = Mo.copy_params(P) if ema else None
     opt = ag.AdamW(P, lr=lr)
-    tr = np.flatnonzero(Dd["sid"] < N_TRAIN_SHAPES)
+    tr = np.flatnonzero(Dd["sid"] < train_shapes)
     va = np.flatnonzero(Dd["sid"] >= N_TRAIN_SHAPES)
     hist, t0 = [], time.time()
     for it in range(steps):
         idx = rng.choice(tr, B, replace=False)
-        loss, log = Mo.pretext_loss(variant, P, Pt, make_batch(Dd, idx, rng), rng)
+        batch = make_batch(Dd, idx, rng)
+        if batch_fn is not None:
+            batch = batch_fn(batch, rng_aux)
+        loss, log = Mo.pretext_loss(variant, P, Pt, batch, rng)
         loss.backward()
         opt.step(cosine(it, steps, lr))
         if ema:
@@ -59,6 +85,11 @@ def pretrain(variant, steps=2500, B=16, lr=1e-3, seed=0, Dd=None, log_every=250,
                 _, vlog = Mo.pretext_loss(variant, P, Pt, make_batch(Dd, va[:64], vrng, 0.0), vrng)
             rec = {"it": it, "sec": round(time.time() - t0, 1), **{k: round(v, 5) for k, v in log.items()},
                    **{"val_" + k: round(v, 5) for k, v in vlog.items()}}
+            if "vd_clean" in Dd:
+                crng = np.random.default_rng(123)
+                with ag.no_grad():
+                    _, clog = Mo.pretext_loss(variant, P, Pt, make_batch(clean_view(Dd), va[:64], crng, 0.0), crng)
+                rec.update({"valclean_" + k: round(v, 5) for k, v in clog.items() if k in EXPLICIT})
             hist.append(rec)
             print(variant, rec, flush=True)
     if out:
@@ -69,8 +100,16 @@ def pretrain(variant, steps=2500, B=16, lr=1e-3, seed=0, Dd=None, log_every=250,
 
 
 if __name__ == "__main__":
-    v = sys.argv[1]
-    steps = int(sys.argv[2]) if len(sys.argv) > 2 else 2500
-    Dd = load("data/pretrain.npz")
-    os.makedirs("ckpt", exist_ok=True)
-    pretrain(v, steps=steps, Dd=Dd, out=f"ckpt/{v}.npz")
+    ap = argparse.ArgumentParser()
+    ap.add_argument("variant")
+    ap.add_argument("steps_pos", nargs="?", type=int, help="old positional form: number of steps")
+    ap.add_argument("--steps", type=int, default=None)
+    ap.add_argument("--seed", type=int, default=0)
+    ap.add_argument("--data", default="data/pretrain.npz")
+    ap.add_argument("--out", default=None)
+    ap.add_argument("--train-shapes", type=int, default=N_TRAIN_SHAPES)
+    a = ap.parse_args()
+    steps = a.steps if a.steps is not None else (a.steps_pos if a.steps_pos is not None else 2500)
+    out = a.out or f"ckpt/{a.variant}.npz"
+    os.makedirs(os.path.dirname(out) or ".", exist_ok=True)
+    pretrain(a.variant, steps=steps, seed=a.seed, Dd=load(a.data), out=out, train_shapes=a.train_shapes)

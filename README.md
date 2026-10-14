@@ -38,6 +38,7 @@ The repo ships the pretrained checkpoints (`ckpt/`), results (`results/`), logs 
 The generated datasets (`data/`, ~200 MB) are not committed; `make_data.py` rebuilds them.
 ```bash
 pip install -r requirements.txt   # numpy, scipy, matplotlib
+export N_PROCS=4                  # worker processes for every pool (default 2)
 python test_ag.py                 # gradient checks
 python make_data.py               # ~3 min: 2,100 unlabeled shapes x 8 dynamics, 356 labeled shapes
 for v in N L J LJ LT LT0; do python pretrain.py $v 3000; done
@@ -70,3 +71,10 @@ latent transport 108 / 118; Geo-JEPA 165 / 240.
 
 Caveats: 2D toy physics, 147k-parameter models, one pretraining seed per variant; the bootstrap
 intervals cover test-body sampling, not pretraining variance.
+
+## Follow-up experiments
+Specs for three follow-up experiments live in `experiments/` (run `00_setup.md` first).
+`CLAUDE.md` holds project notes for Claude Code.
+1. `01_noisy_targets.md`: do latent targets beat explicit ones once the pretext signal is noisy?
+2. `02_orientation_prompts.md`: does prompt alignment matter when the prompt carries the flow angle?
+3. `03_action_ranking.md`: do latent-transport features rank actions better when trained for it?

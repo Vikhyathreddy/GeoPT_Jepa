@@ -4,7 +4,7 @@ The first query-embedding layer (q.1, which reads [position features, prompt v, 
 its pretrained/initial values, so a rotated prompt cannot be undone by re-learning that layer.
 """
 import os
-os.environ.setdefault("OPENBLAS_NUM_THREADS", "1")
+from procs import N_PROCS  # single-threaded BLAS workers; must precede numpy
 import json
 import numpy as np
 from multiprocessing import Pool
@@ -20,7 +20,7 @@ def work(j):
 
 if __name__ == "__main__":
     jobs = [dict(variant=v, task=t, shift=s, seed=sd) for v in ["L", "S"] for t in "AB" for s in [0, 180] for sd in [0, 1]]
-    with Pool(2) as p, open("results/followup_freeze.jsonl", "w") as f:
+    with Pool(N_PROCS) as p, open("results/followup_freeze.jsonl", "w") as f:
         for r in p.imap_unordered(work, jobs):
             f.write(json.dumps(r) + "\n")
             f.flush()

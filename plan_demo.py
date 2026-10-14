@@ -10,7 +10,7 @@ cost B: plume footprint sum(c) at U = 1  (how much of the domain gets contaminat
 usage: python plan_demo.py S L LT ...
 """
 import os
-os.environ.setdefault("OPENBLAS_NUM_THREADS", "1")
+from procs import N_PROCS  # single-threaded BLAS workers; must precede numpy
 import sys
 import json
 import numpy as np
@@ -69,7 +69,7 @@ if __name__ == "__main__":
     Dd = F.load()
     ids = F.TEST[:N_SHAPES]
     tc_path = "results/plan_true_costs.npz"
-    with Pool(2) as pool:
+    with Pool(N_PROCS) as pool:
         if not os.path.exists(tc_path):
             TA = np.array(pool.map(true_costs_one, [("A", Dd["shapes"][i]) for i in ids]))
             TB = np.array(pool.map(true_costs_one, [("B", Dd["shapes"][i]) for i in ids]))

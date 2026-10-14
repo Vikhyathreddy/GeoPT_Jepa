@@ -1,5 +1,6 @@
 """Generate the unlabeled pretraining corpus and the labeled downstream sets."""
 import os
+from procs import N_PROCS  # single-threaded BLAS workers; must precede numpy
 import time
 import numpy as np
 from multiprocessing import Pool
@@ -19,7 +20,7 @@ def _down(args):
 if __name__ == "__main__":
     t0 = time.time()
     os.makedirs("data", exist_ok=True)
-    with Pool(2) as pool:
+    with Pool(N_PROCS) as pool:
         parts = pool.map(_pre, [(100, 1000 + i) for i in range(21)])   # 2100 shapes: 2000 train + 100 val
         off, merged = 0, {k: [] for k in ("shapes", "X", "v", "vd", "sid")}
         for p in parts:

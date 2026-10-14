@@ -1,6 +1,6 @@
 """Run the full experiment grid (resumable).  usage: python run_all.py [main|prompt|frozen|lt0|all]"""
 import os
-os.environ.setdefault("OPENBLAS_NUM_THREADS", "1")
+from procs import N_PROCS  # single-threaded BLAS workers; must precede numpy
 import sys
 import json
 import numpy as np
@@ -64,7 +64,7 @@ if __name__ == "__main__":
             done.add((r["variant"], r["task"], r["n"], r["seed"], r["shift"], r["frozen"]))
     todo = [j for j in jobs(which) if key(j) not in done]
     print(f"{len(todo)} jobs to run ({len(done)} already done)", flush=True)
-    with Pool(2) as pool, open(OUT, "a") as f:
+    with Pool(N_PROCS) as pool, open(OUT, "a") as f:
         for rec in pool.imap_unordered(work, todo):
             f.write(json.dumps(rec) + "\n")
             f.flush()
