@@ -3,3 +3,7 @@ variant=S task=B n=256 seed=0 shift=90 frozen=False rel_l2=0.1933 final_train_lo
 variant=S task=B n=256 seed=0 shift=0 frozen=False rel_l2=0.1657 final_train_loss=0.018 sec=110.1 frame=absolute data=canon30 prompt_mode=normal freeze=
 variant=S task=B n=256 seed=0 shift=180 frozen=False rel_l2=0.1657 final_train_loss=0.018 sec=140.5 frame=absolute data=canon30 prompt_mode=normal freeze=
 variant=S task=B n=256 seed=0 shift=0 frozen=False rel_l2=0.4778 final_train_loss=0.0297 sec=142.5 frame=absolute prompt_mode=zero data=canon30 freeze=
+variant=S task=B n=256 seed=1 shift=0 frozen=False rel_l2=0.1656 final_train_loss=0.0244 sec=144.6 frame=absolute data=canon30 prompt_mode=normal freeze=
+variant=S task=B n=256 seed=1 shift=90 frozen=False rel_l2=0.1605 final_train_loss=0.0233 sec=141.8 frame=absolute data=canon30 prompt_mode=normal freeze=
+variant=S task=B n=256 seed=1 shift=180 frozen=False rel_l2=0.1786 final_train_loss=0.0237 sec=144.9 frame=absolute data=canon30 prompt_mode=normal freeze=
+variant=S task=B n=256 seed=1 shift=0 frozen=False rel_l2=0.4744 final_train_loss=0.0292 sec=145.6 frame=absolute prompt_mode=zero data=canon30 freeze=
