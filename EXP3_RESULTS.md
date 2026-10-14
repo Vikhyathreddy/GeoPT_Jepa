@@ -145,7 +145,7 @@ Original plan-demo surrogates (single-action training, seed 0, first 40 test bod
   - On B, R1's rho values are within 0.006 of each other while field errors differ by 15%, with the U caveat above.
 
 **Predictions so far.**
-- **P1 (null: L >= LT on rho in every regime, so the original LT edge was noise): supported.** L >= LT everywhere; L is strictly better with CIs excluding 0 in 4 of the 8 regime × task cells (R1 A, R3 B, decoder probe B, encoder probe A), and the other 4 are ties.
+- **P1 (null: L >= LT on rho in every regime, so the original LT edge was noise): supported.** LT never beats L with a CI excluding 0. L is strictly better in 4 of the 8 regime × task cells (R1 A, R3 B, decoder probe B, encoder probe A). The other 4 are ties; in one of them, the task-A decoder probe, LT's point estimate is ahead by +0.003 [-0.014, +0.020].
 - **P2 (alternative: LT > L in the probe and in R3, at least on task B): not supported.** LT < L on task B in both the probe (-0.014) and R3 (-0.015), with CIs excluding 0.
   - The second half of P2 also fails: L does not beat LT on field error in R1 (A: L 0.063 vs LT 0.083; B: L 0.124 vs LT 0.108, with the U caveat).
 - **P3 (R1 beats the original single-action surrogates): supported.** On the same first 40 test bodies, R1's rho is A 0.865 / 0.926 / 0.887 (S / L / LT) against the plan demo's 0.701 / 0.841 / 0.768, and B 0.943 / 0.949 / 0.948 against 0.816 / 0.847 / 0.857.
@@ -156,7 +156,7 @@ Original plan-demo surrogates (single-action training, seed 0, first 40 test bod
   - The R2 half of P4 awaits Stage 2.
 
 **Is there any LT-vs-L ranking signal, and what would Stage 2 cost?**
-- **No LT advantage.** Where the two differ, L is better.
+- **No LT advantage.** Where the two differ with a CI excluding 0, L is better.
 - **Stage 2 as specified** needs about 62 runs, measured here at about 2 core-min per task-A run and about 6 per task-B run on a loaded machine:
   - choosing lambda for R2 on validation bodies 56-63 with S and L (about 8 runs);
   - R1, R2 and R3 for N and LJ (24 runs);
