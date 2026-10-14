@@ -1,0 +1,5 @@
+results/exp2_finetune.jsonl: 212 jobs to run (118 of 330 already done)
+variant=S task=B n=64 seed=0 shift=20 frozen=False rel_l2=0.4158 final_train_loss=0.0055 sec=68.1 frame=absolute data=canon30 prompt_mode=normal freeze=
+variant=S task=B n=64 seed=2 shift=20 frozen=False rel_l2=0.4507 final_train_loss=0.0068 sec=71.7 frame=absolute data=canon30 prompt_mode=normal freeze=
+variant=S task=B n=64 seed=0 shift=45 frozen=False rel_l2=0.4343 final_train_loss=0.0057 sec=71.7 frame=absolute data=canon30 prompt_mode=normal freeze=
+variant=S task=B n=64 seed=1 shift=20 frozen=False rel_l2=0.4203 final_train_loss=0.008 sec=73.5 frame=absolute data=canon30 prompt_mode=normal freeze=
