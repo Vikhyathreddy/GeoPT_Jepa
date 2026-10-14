@@ -1,0 +1,3 @@
+data/downstream_oriented.npz: 356 shapes
+results/rank_train_costs.npz: 113 bodies x 36 actions
+exit 0
