@@ -1,0 +1,16 @@
+L A shift 0 seed 1 relL2 0.1181
+L A shift 0 seed 0 relL2 0.1191
+L A shift 180 seed 0 relL2 0.1169
+L A shift 180 seed 1 relL2 0.1315
+L B shift 0 seed 0 relL2 0.1207
+L B shift 0 seed 1 relL2 0.1228
+L B shift 180 seed 0 relL2 0.1141
+L B shift 180 seed 1 relL2 0.1202
+S A shift 0 seed 0 relL2 0.1991
+S A shift 0 seed 1 relL2 0.2046
+S A shift 180 seed 0 relL2 0.1985
+S A shift 180 seed 1 relL2 0.2080
+S B shift 0 seed 0 relL2 0.1749
+S B shift 0 seed 1 relL2 0.1776
+S B shift 180 seed 0 relL2 0.1694
+S B shift 180 seed 1 relL2 0.1960

@@ -1,0 +1,4 @@
+{"variant": "L", "task": "A", "n": 64, "seed": 0, "shift": 0, "frozen": false, "rel_l2": 0.10926363617181778, "final_train_loss": 0.004467369988560677, "sec": 28.3, "prompt": "zero"}
+{"variant": "L", "task": "A", "n": 64, "seed": 1, "shift": 0, "frozen": false, "rel_l2": 0.12580837309360504, "final_train_loss": 0.005378629546612501, "sec": 28.9, "prompt": "zero"}
+{"variant": "S", "task": "A", "n": 64, "seed": 0, "shift": 0, "frozen": false, "rel_l2": 0.18994173407554626, "final_train_loss": 0.0031122418586164713, "sec": 26.8, "prompt": "zero"}
+{"variant": "S", "task": "A", "n": 64, "seed": 1, "shift": 0, "frozen": false, "rel_l2": 0.19384604692459106, "final_train_loss": 0.0032928604632616043, "sec": 28.8, "prompt": "zero"}

@@ -1,0 +1,11 @@
+{
+ "N  explicit: vector distance": 0.9493366912423535,
+ "L  explicit: trajectory vector distances": 0.9367907714183269,
+ "LT latent: representation at x1, x2": 0.5410050317190864,
+ "LT latent, blind input = true landing points": 0.45923576298969293,
+ "J  latent: masked-patch representation": 0.6309678628965443,
+ "L  explicit, near-body points only": 0.5722986408438472,
+ "LT latent, near-body points only": -0.21418355987938686,
+ "L  network (sees geometry)": 0.9908145070075989,
+ "LT network (sees geometry)": 0.7241823673248291
+}

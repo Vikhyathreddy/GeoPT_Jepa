@@ -1,0 +1,13 @@
+J {'it': 0, 'sec': 0.1, 'jepa': 1.99875, 'tgt_std': 0.88103, 'loss': 1.99875, 'val_jepa': 1.99145, 'val_tgt_std': 0.90528, 'val_loss': 1.99145}
+J {'it': 250, 'sec': 8.8, 'jepa': 0.07201, 'tgt_std': 0.7585, 'loss': 0.07201, 'val_jepa': 0.06741, 'val_tgt_std': 0.75766, 'val_loss': 0.06741}
+J {'it': 500, 'sec': 17.9, 'jepa': 0.06252, 'tgt_std': 0.79768, 'loss': 0.06252, 'val_jepa': 0.06899, 'val_tgt_std': 0.81108, 'val_loss': 0.06899}
+J {'it': 750, 'sec': 27.1, 'jepa': 0.05902, 'tgt_std': 0.83468, 'loss': 0.05902, 'val_jepa': 0.06331, 'val_tgt_std': 0.84957, 'val_loss': 0.06331}
+J {'it': 1000, 'sec': 35.9, 'jepa': 0.05228, 'tgt_std': 0.86604, 'loss': 0.05228, 'val_jepa': 0.06027, 'val_tgt_std': 0.86667, 'val_loss': 0.06027}
+J {'it': 1250, 'sec': 44.8, 'jepa': 0.04865, 'tgt_std': 0.85847, 'loss': 0.04865, 'val_jepa': 0.05354, 'val_tgt_std': 0.8773, 'val_loss': 0.05354}
+J {'it': 1500, 'sec': 53.1, 'jepa': 0.05255, 'tgt_std': 0.8612, 'loss': 0.05255, 'val_jepa': 0.04765, 'val_tgt_std': 0.87921, 'val_loss': 0.04765}
+J {'it': 1750, 'sec': 61.0, 'jepa': 0.03925, 'tgt_std': 0.8727, 'loss': 0.03925, 'val_jepa': 0.04702, 'val_tgt_std': 0.87891, 'val_loss': 0.04702}
+J {'it': 2000, 'sec': 69.6, 'jepa': 0.03939, 'tgt_std': 0.85893, 'loss': 0.03939, 'val_jepa': 0.04493, 'val_tgt_std': 0.87836, 'val_loss': 0.04493}
+J {'it': 2250, 'sec': 78.8, 'jepa': 0.04122, 'tgt_std': 0.87679, 'loss': 0.04122, 'val_jepa': 0.04494, 'val_tgt_std': 0.87691, 'val_loss': 0.04494}
+J {'it': 2500, 'sec': 87.7, 'jepa': 0.036, 'tgt_std': 0.8507, 'loss': 0.036, 'val_jepa': 0.04378, 'val_tgt_std': 0.87548, 'val_loss': 0.04378}
+J {'it': 2750, 'sec': 96.3, 'jepa': 0.03657, 'tgt_std': 0.87493, 'loss': 0.03657, 'val_jepa': 0.04354, 'val_tgt_std': 0.87454, 'val_loss': 0.04354}
+J {'it': 2999, 'sec': 105.9, 'jepa': 0.04257, 'tgt_std': 0.85468, 'loss': 0.04257, 'val_jepa': 0.04406, 'val_tgt_std': 0.87403, 'val_loss': 0.04406}

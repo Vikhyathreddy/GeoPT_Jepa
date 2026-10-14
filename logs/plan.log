@@ -1,0 +1,58 @@
+A S {'regret': 0.09746111558902848, 'regret_vs_random': 0.14454098286729314, 'frac_candidates_better': 0.11180555555555556, 'within_2pct_of_best': 0.5}
+A L {'regret': 0.06817767274908235, 'regret_vs_random': 0.10111178975532249, 'frac_candidates_better': 0.09305555555555556, 'within_2pct_of_best': 0.475}
+A LT {'regret': 0.07335896485003485, 'regret_vs_random': 0.10879597280892303, 'frac_candidates_better': 0.10069444444444445, 'within_2pct_of_best': 0.475}
+B S {'regret': 15.827653869821859, 'regret_vs_random': 0.20467210061856153, 'frac_candidates_better': 0.0875, 'within_2pct_of_best': 0.5}
+B L {'regret': 12.208220895620673, 'regret_vs_random': 0.15786813611626083, 'frac_candidates_better': 0.08819444444444445, 'within_2pct_of_best': 0.55}
+B LT {'regret': 8.807303471495727, 'regret_vs_random': 0.11388986119624235, 'frac_candidates_better': 0.05763888888888889, 'within_2pct_of_best': 0.725}
+{
+ "A": {
+  "random": {
+   "regret": 0.6742801498624793
+  },
+  "mean_best_cost": 1.851697895634151,
+  "mean_random_cost": 2.5259780454966307,
+  "S": {
+   "regret": 0.09746111558902848,
+   "regret_vs_random": 0.14454098286729314,
+   "frac_candidates_better": 0.11180555555555556,
+   "within_2pct_of_best": 0.5
+  },
+  "L": {
+   "regret": 0.06817767274908235,
+   "regret_vs_random": 0.10111178975532249,
+   "frac_candidates_better": 0.09305555555555556,
+   "within_2pct_of_best": 0.475
+  },
+  "LT": {
+   "regret": 0.07335896485003485,
+   "regret_vs_random": 0.10879597280892303,
+   "frac_candidates_better": 0.10069444444444445,
+   "within_2pct_of_best": 0.475
+  }
+ },
+ "B": {
+  "random": {
+   "regret": 77.33176051834816
+  },
+  "mean_best_cost": 362.25783685042995,
+  "mean_random_cost": 439.58959736877813,
+  "S": {
+   "regret": 15.827653869821859,
+   "regret_vs_random": 0.20467210061856153,
+   "frac_candidates_better": 0.0875,
+   "within_2pct_of_best": 0.5
+  },
+  "L": {
+   "regret": 12.208220895620673,
+   "regret_vs_random": 0.15786813611626083,
+   "frac_candidates_better": 0.08819444444444445,
+   "within_2pct_of_best": 0.55
+  },
+  "LT": {
+   "regret": 8.807303471495727,
+   "regret_vs_random": 0.11388986119624235,
+   "frac_candidates_better": 0.05763888888888889,
+   "within_2pct_of_best": 0.725
+  }
+ }
+}

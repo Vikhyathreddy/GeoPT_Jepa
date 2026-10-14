@@ -1,0 +1,16 @@
+{"variant": "L", "task": "A", "n": 64, "seed": 1, "shift": 0, "frozen": false, "rel_l2": 0.11813779920339584, "final_train_loss": 0.00596841424703598, "sec": 28.3, "freeze": "q.1"}
+{"variant": "L", "task": "A", "n": 64, "seed": 0, "shift": 0, "frozen": false, "rel_l2": 0.11911832541227341, "final_train_loss": 0.006906040012836456, "sec": 28.5, "freeze": "q.1"}
+{"variant": "L", "task": "A", "n": 64, "seed": 0, "shift": 180, "frozen": false, "rel_l2": 0.11691106110811234, "final_train_loss": 0.00675092451274395, "sec": 25.5, "freeze": "q.1"}
+{"variant": "L", "task": "A", "n": 64, "seed": 1, "shift": 180, "frozen": false, "rel_l2": 0.1314850002527237, "final_train_loss": 0.00927409715950489, "sec": 25.5, "freeze": "q.1"}
+{"variant": "L", "task": "B", "n": 64, "seed": 0, "shift": 0, "frozen": false, "rel_l2": 0.12066158652305603, "final_train_loss": 0.0056433407589793205, "sec": 43.9, "freeze": "q.1"}
+{"variant": "L", "task": "B", "n": 64, "seed": 1, "shift": 0, "frozen": false, "rel_l2": 0.1227620393037796, "final_train_loss": 0.007637271657586098, "sec": 51.2, "freeze": "q.1"}
+{"variant": "L", "task": "B", "n": 64, "seed": 0, "shift": 180, "frozen": false, "rel_l2": 0.11414637416601181, "final_train_loss": 0.005543768871575594, "sec": 43.7, "freeze": "q.1"}
+{"variant": "L", "task": "B", "n": 64, "seed": 1, "shift": 180, "frozen": false, "rel_l2": 0.1202140599489212, "final_train_loss": 0.006896972190588713, "sec": 52.2, "freeze": "q.1"}
+{"variant": "S", "task": "A", "n": 64, "seed": 0, "shift": 0, "frozen": false, "rel_l2": 0.1990668922662735, "final_train_loss": 0.003721325658261776, "sec": 24.7, "freeze": "q.1"}
+{"variant": "S", "task": "A", "n": 64, "seed": 1, "shift": 0, "frozen": false, "rel_l2": 0.204604834318161, "final_train_loss": 0.003823811188340187, "sec": 24.2, "freeze": "q.1"}
+{"variant": "S", "task": "A", "n": 64, "seed": 0, "shift": 180, "frozen": false, "rel_l2": 0.1984855979681015, "final_train_loss": 0.004068681038916111, "sec": 23.9, "freeze": "q.1"}
+{"variant": "S", "task": "A", "n": 64, "seed": 1, "shift": 180, "frozen": false, "rel_l2": 0.207992821931839, "final_train_loss": 0.003525114618241787, "sec": 25.1, "freeze": "q.1"}
+{"variant": "S", "task": "B", "n": 64, "seed": 0, "shift": 0, "frozen": false, "rel_l2": 0.17494447529315948, "final_train_loss": 0.011232011020183563, "sec": 45.1, "freeze": "q.1"}
+{"variant": "S", "task": "B", "n": 64, "seed": 1, "shift": 0, "frozen": false, "rel_l2": 0.1775614321231842, "final_train_loss": 0.01620394177734852, "sec": 51.9, "freeze": "q.1"}
+{"variant": "S", "task": "B", "n": 64, "seed": 0, "shift": 180, "frozen": false, "rel_l2": 0.1693948209285736, "final_train_loss": 0.011583507061004639, "sec": 44.7, "freeze": "q.1"}
+{"variant": "S", "task": "B", "n": 64, "seed": 1, "shift": 180, "frozen": false, "rel_l2": 0.19596710801124573, "final_train_loss": 0.01491071842610836, "sec": 52.1, "freeze": "q.1"}

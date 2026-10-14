@@ -1,0 +1,13 @@
+LJ {'it': 0, 'sec': 0.3, 'lift': 1.24314, 'jepa': 1.95678, 'tgt_std': 0.88103, 'loss': 1.43882, 'val_lift': 1.15303, 'val_jepa': 1.924, 'val_tgt_std': 0.90528, 'val_loss': 1.34543}
+LJ {'it': 250, 'sec': 27.1, 'lift': 0.01115, 'jepa': 0.05837, 'tgt_std': 0.67144, 'loss': 0.01699, 'val_lift': 0.01109, 'val_jepa': 0.0531, 'val_tgt_std': 0.67655, 'val_loss': 0.0164}
+LJ {'it': 500, 'sec': 53.8, 'lift': 0.00621, 'jepa': 0.03271, 'tgt_std': 0.63959, 'loss': 0.00948, 'val_lift': 0.00638, 'val_jepa': 0.03424, 'val_tgt_std': 0.64429, 'val_loss': 0.00981}
+LJ {'it': 750, 'sec': 80.4, 'lift': 0.00423, 'jepa': 0.02298, 'tgt_std': 0.65002, 'loss': 0.00652, 'val_lift': 0.00397, 'val_jepa': 0.0264, 'val_tgt_std': 0.65636, 'val_loss': 0.00661}
+LJ {'it': 1000, 'sec': 107.6, 'lift': 0.00279, 'jepa': 0.01896, 'tgt_std': 0.66623, 'loss': 0.00468, 'val_lift': 0.00292, 'val_jepa': 0.02339, 'val_tgt_std': 0.67731, 'val_loss': 0.00526}
+LJ {'it': 1250, 'sec': 134.7, 'lift': 0.0022, 'jepa': 0.01837, 'tgt_std': 0.67679, 'loss': 0.00404, 'val_lift': 0.00247, 'val_jepa': 0.02034, 'val_tgt_std': 0.68956, 'val_loss': 0.00451}
+LJ {'it': 1500, 'sec': 162.1, 'lift': 0.00193, 'jepa': 0.01839, 'tgt_std': 0.67858, 'loss': 0.00377, 'val_lift': 0.00222, 'val_jepa': 0.01905, 'val_tgt_std': 0.69586, 'val_loss': 0.00413}
+LJ {'it': 1750, 'sec': 189.4, 'lift': 0.00206, 'jepa': 0.01471, 'tgt_std': 0.6848, 'loss': 0.00353, 'val_lift': 0.00201, 'val_jepa': 0.01799, 'val_tgt_std': 0.70087, 'val_loss': 0.00381}
+LJ {'it': 2000, 'sec': 217.1, 'lift': 0.00166, 'jepa': 0.01256, 'tgt_std': 0.67561, 'loss': 0.00291, 'val_lift': 0.0019, 'val_jepa': 0.01641, 'val_tgt_std': 0.70471, 'val_loss': 0.00354}
+LJ {'it': 2250, 'sec': 244.9, 'lift': 0.00174, 'jepa': 0.01369, 'tgt_std': 0.69782, 'loss': 0.00311, 'val_lift': 0.00184, 'val_jepa': 0.0159, 'val_tgt_std': 0.7072, 'val_loss': 0.00343}
+LJ {'it': 2500, 'sec': 271.5, 'lift': 0.00145, 'jepa': 0.01219, 'tgt_std': 0.69328, 'loss': 0.00267, 'val_lift': 0.00179, 'val_jepa': 0.01563, 'val_tgt_std': 0.70848, 'val_loss': 0.00335}
+LJ {'it': 2750, 'sec': 298.2, 'lift': 0.00167, 'jepa': 0.01225, 'tgt_std': 0.7006, 'loss': 0.0029, 'val_lift': 0.00177, 'val_jepa': 0.01538, 'val_tgt_std': 0.70924, 'val_loss': 0.00331}
+LJ {'it': 2999, 'sec': 325.3, 'lift': 0.00172, 'jepa': 0.01375, 'tgt_std': 0.70447, 'loss': 0.00309, 'val_lift': 0.00177, 'val_jepa': 0.01542, 'val_tgt_std': 0.70968, 'val_loss': 0.00331}

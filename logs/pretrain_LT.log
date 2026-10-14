@@ -1,0 +1,13 @@
+LT {'it': 0, 'sec': 0.7, 'latent': 1.38104, 'tgt_std': 0.76724, 'anchor': 0.64897, 'loss': 0.78707, 'val_latent': 1.38315, 'val_tgt_std': 0.77795, 'val_anchor': 0.67181, 'val_loss': 0.81013}
+LT {'it': 250, 'sec': 50.5, 'latent': 0.06713, 'tgt_std': 0.27674, 'anchor': 0.00412, 'loss': 0.01083, 'val_latent': 0.06707, 'val_tgt_std': 0.27659, 'val_anchor': 0.0041, 'val_loss': 0.0108}
+LT {'it': 500, 'sec': 99.2, 'latent': 0.03761, 'tgt_std': 0.23544, 'anchor': 0.00157, 'loss': 0.00533, 'val_latent': 0.03783, 'val_tgt_std': 0.23427, 'val_anchor': 0.00193, 'val_loss': 0.00572}
+LT {'it': 750, 'sec': 146.6, 'latent': 0.02965, 'tgt_std': 0.22826, 'anchor': 0.00123, 'loss': 0.0042, 'val_latent': 0.02968, 'val_tgt_std': 0.22686, 'val_anchor': 0.00145, 'val_loss': 0.00442}
+LT {'it': 1000, 'sec': 194.0, 'latent': 0.02576, 'tgt_std': 0.23138, 'anchor': 0.00115, 'loss': 0.00372, 'val_latent': 0.02566, 'val_tgt_std': 0.22739, 'val_anchor': 0.00108, 'val_loss': 0.00365}
+LT {'it': 1250, 'sec': 241.5, 'latent': 0.02302, 'tgt_std': 0.22868, 'anchor': 0.00088, 'loss': 0.00318, 'val_latent': 0.02297, 'val_tgt_std': 0.2303, 'val_anchor': 0.00093, 'val_loss': 0.00323}
+LT {'it': 1500, 'sec': 289.6, 'latent': 0.02111, 'tgt_std': 0.23314, 'anchor': 0.00064, 'loss': 0.00275, 'val_latent': 0.02117, 'val_tgt_std': 0.23407, 'val_anchor': 0.00078, 'val_loss': 0.0029}
+LT {'it': 1750, 'sec': 337.2, 'latent': 0.01991, 'tgt_std': 0.23592, 'anchor': 0.00063, 'loss': 0.00262, 'val_latent': 0.01998, 'val_tgt_std': 0.23764, 'val_anchor': 0.00073, 'val_loss': 0.00272}
+LT {'it': 2000, 'sec': 384.8, 'latent': 0.01887, 'tgt_std': 0.23979, 'anchor': 0.00066, 'loss': 0.00254, 'val_latent': 0.01921, 'val_tgt_std': 0.24119, 'val_anchor': 0.00068, 'val_loss': 0.0026}
+LT {'it': 2250, 'sec': 432.3, 'latent': 0.01882, 'tgt_std': 0.24508, 'anchor': 0.0005, 'loss': 0.00238, 'val_latent': 0.01872, 'val_tgt_std': 0.2441, 'val_anchor': 0.00062, 'val_loss': 0.00249}
+LT {'it': 2500, 'sec': 480.0, 'latent': 0.01848, 'tgt_std': 0.24717, 'anchor': 0.00056, 'loss': 0.00241, 'val_latent': 0.01846, 'val_tgt_std': 0.24624, 'val_anchor': 0.0006, 'val_loss': 0.00245}
+LT {'it': 2750, 'sec': 527.6, 'latent': 0.01812, 'tgt_std': 0.24311, 'anchor': 0.00045, 'loss': 0.00226, 'val_latent': 0.01833, 'val_tgt_std': 0.24762, 'val_anchor': 0.00058, 'val_loss': 0.00242}
+LT {'it': 2999, 'sec': 575.9, 'latent': 0.01825, 'tgt_std': 0.24722, 'anchor': 0.00046, 'loss': 0.00228, 'val_latent': 0.01832, 'val_tgt_std': 0.24838, 'val_anchor': 0.00058, 'val_loss': 0.00241}

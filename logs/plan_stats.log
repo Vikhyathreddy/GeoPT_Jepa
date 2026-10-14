@@ -1,0 +1,8 @@
+task A: regret L - S = -0.0293  95% CI [-0.0676, +0.0052]
+task A: regret LT - S = -0.0241  95% CI [-0.0724, +0.0186]
+task A: regret LT - L = +0.0052  95% CI [-0.0244, +0.0323]
+task A: Spearman rank corr surrogate vs solver over 36 actions: {'S': 0.7007528957528958, 'L': 0.8405984555984556, 'LT': 0.7676512226512227}
+task B: regret L - S = -3.6194  95% CI [-9.9792, +2.1982]
+task B: regret LT - S = -7.0204  95% CI [-12.1747, -2.2246]
+task B: regret LT - L = -3.4009  95% CI [-7.7349, +0.7130]
+task B: Spearman rank corr surrogate vs solver over 36 actions: {'S': 0.815830115830116, 'L': 0.8471814671814671, 'LT': 0.8572651222651224}
