@@ -1,0 +1,10 @@
+{
+ "first40_max_abs_diff_A": 0.0,
+ "first40_max_abs_diff_B": 0.0,
+ "subgrid_spearman_first10_min": 0.9583011583011584,
+ "subgrid_spearman_all100_min": 0.9583011583011584,
+ "subgrid_spearman_all100_mean": 0.9853075933075932,
+ "subgrid_ok": false,
+ "train_solver_runs_per_task": 512,
+ "test_solver_runs_per_task": 3600
+}

@@ -14,10 +14,12 @@ Choices the spec leaves open (also recorded in EXP3_RESULTS.md):
     with np.random.default_rng(0), body by body.
   * Field normalisation (R1/R2) uses the mean/std of the 512 training fields; cost
     standardisation uses the mean/std of the 512 training costs.
-  * Task B probe points are the fluid cells of the 32 x 32 sub-grid, for training and test alike;
-    during R1/R3 training, 256 random fluid cells per sample.  Surrogate costs for evaluation:
-    A = max predicted q over the 128 surface points; B = sum of predicted c clipped to [0, 1]
-    over the sub-grid fluid cells (plan_demo.py's cost on the sub-grid).
+  * The 32 x 32 sub-grid shortcut failed its check (within-body Spearman of true sub-grid vs
+    full-grid costs as low as 0.958 < 0.99 on the first 10 test bodies; results/
+    exp3_data_checks.json), so task B uses all fluid cells: probe features and evaluation costs
+    are computed on the full grid.  During R1/R3 training, 256 random fluid cells per sample.
+    Surrogate costs for evaluation: A = max predicted q over the 128 surface points; B = sum of
+    predicted c clipped to [0, 1] over all fluid cells (exactly plan_demo.py's cost).
   * S and J have no trained decoder: their probe uses a freshly initialised one
     (model.build("S", 100)), the same initialisation fine-tuning seed 0 starts from.
   * Ridge strength: grouped 8-fold cross-validation over the 64 training bodies (8 bodies per
@@ -45,6 +47,13 @@ PROBE_OUT = "results/exp3_probe.jsonl"
 PRED_DIR = "results/exp3_preds"
 STEPS, LR = 1000, 1e-3
 BB, BA, NQ = 4, 4, 256          # batch: 4 bodies x 4 of their actions; 256 fluid cells per sample (B)
+
+
+def eval_cells(body_mask):
+    """task-B probe/evaluation cells of one body: the fluid cells of the full grid, or of the
+    32 x 32 sub-grid if the sub-grid check passed."""
+    ok = json.load(open("results/exp3_data_checks.json"))["subgrid_ok"]
+    return np.flatnonzero(~body_mask & (sub_mask() if ok else True))
 
 
 def sub_mask():
@@ -243,11 +252,10 @@ def predict_costs(P, regime, task, norm, ids=TEST):
     import model as Mo
     Dd = load_downstream()
     mu, sd, _, _ = norm
-    sub = sub_mask()
     C = np.zeros((len(ids), len(ANG)))
     with ag.no_grad():
         for k, i in enumerate(ids):
-            cells = [np.flatnonzero(~Dd["body"][i] & sub)] * len(ANG) if task == "B" else None
+            cells = [eval_cells(Dd["body"][i])] * len(ANG) if task == "B" else None
             pts, nrm, q, v = inputs(Dd, np.full(len(ANG), i), ANG, task, cells)
             _, h = decoder_out(P, pts, nrm, q, v)
             if regime in ("R1", "R2"):
@@ -301,11 +309,10 @@ def probe_feats(P, task, bodies, angs_per_body):
     """[mean, max] over probe points of the decoder output, and over the encoder tokens."""
     import ag
     Dd = load_downstream()
-    sub = sub_mask()
     dec, enc = [], []
     with ag.no_grad():
         for i, angs in zip(bodies, angs_per_body):
-            cells = [np.flatnonzero(~Dd["body"][i] & sub)] * len(angs) if task == "B" else None
+            cells = [eval_cells(Dd["body"][i])] * len(angs) if task == "B" else None
             pts, nrm, q, v = inputs(Dd, np.full(len(angs), i), angs, task, cells)
             geo, h = decoder_out(P, pts, nrm, q, v)
             dec.append(np.concatenate([h.data.mean(1), h.data.max(1)], -1))
