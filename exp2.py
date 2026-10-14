@@ -33,6 +33,9 @@ FLOW_RANGE_DEG = 30.0
 
 
 def ckpt_of(v):
+    """S scratch; L / Lc pretraining seed 0; Ls<k> = L pretraining seed k (ckpt/exp1/L_clean_s<k>.npz)."""
+    if v.startswith("Ls"):
+        return f"ckpt/exp1/L_clean_s{int(v[2:])}.npz"
     return {"S": None, "L": "ckpt/L.npz", "Lc": LC}[v]
 
 
@@ -237,6 +240,27 @@ def sweep_jobs():
     return J
 
 
+def step3_jobs():
+    """the rest of the Stage 2/3a grid plus L pretraining seed 1, confirmatory n = 64 runs first."""
+    job = lambda v, t, n, s, sh, m="normal", fr="": dict(variant=v, data="canon30", task=t, n=n, seed=s, shift=sh,
+                                                       prompt_mode=m, freeze=fr)
+    ls1 = [job("Ls1", t, 64, s, sh) for t in "BA" for sh in SHIFTS for s in SEEDS] + \
+          [job("Ls1", t, 64, s, 0, "zero") for t in "BA" for s in SEEDS]
+    J = sweep_jobs()
+    prio = lambda j: (0 if j["n"] == 64 and not j["freeze"] else 2 if j["freeze"] else 1, j["task"] != "B")
+    J = sorted(J, key=prio)
+    n64 = [j for j in J if prio(j)[0] == 0]
+    return n64 + ls1 + [j for j in J if prio(j)[0] > 0]
+
+
+def seed_jobs(seeds=(2, 3, 4)):
+    """step 4: L pretraining seeds 2-4 at n = 64, shifts 0/90/180 + zero prompt, ft seeds 0-2."""
+    job = lambda v, t, s, sh, m="normal": dict(variant=v, data="canon30", task=t, n=64, seed=s, shift=sh,
+                                               prompt_mode=m, freeze="")
+    return [job(f"Ls{k}", t, s, sh) for k in seeds for t in "BA" for sh in (0, 90, 180) for s in SEEDS] + \
+           [job(f"Ls{k}", t, s, 0, "zero") for k in seeds for t in "BA" for s in SEEDS]
+
+
 def report2():
     import bootstrap as BS
     from runner import load_rows
@@ -420,6 +444,10 @@ if __name__ == "__main__":
         diag()
     elif stage == "sweep":
         runner.run(sweep_jobs(), finetune_job, FT_OUT, FT_KEY)
+    elif stage == "step3":
+        runner.run(step3_jobs(), finetune_job, FT_OUT, FT_KEY)
+    elif stage == "seeds":
+        runner.run(seed_jobs(), finetune_job, FT_OUT, FT_KEY)
     elif stage == "report2":
         report2()
     else:
