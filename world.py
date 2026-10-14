@@ -20,7 +20,9 @@ KAPPA = 0.01      # plume diffusivity
 
 
 # ----------------------------------------------------------------- geometry
-def make_shape(rng):
+def make_shape(rng, rotate=True):
+    """rotate=False keeps the long axis along x (canonical orientation); the rotation angle is
+    still drawn, so the random stream - and every other property of the body - is unchanged."""
     th = np.linspace(0, 2 * np.pi, NV, endpoint=False)
     r = np.ones(NV)
     for k in range(2, 6):
@@ -31,7 +33,9 @@ def make_shape(rng):
     p *= rng.uniform(0.32, 0.5) / np.abs(p).max()        # size
     b = rng.uniform(0, 2 * np.pi)                        # rotation
     R = np.array([[np.cos(b), -np.sin(b)], [np.sin(b), np.cos(b)]])
-    p = p @ R.T + rng.uniform(-0.08, 0.08, 2)
+    if rotate:
+        p = p @ R.T
+    p = p + rng.uniform(-0.08, 0.08, 2)
     return p  # CCW polygon (NV,2)
 
 
@@ -208,11 +212,11 @@ def plume_solve(V, alpha, U, N=GRID, kappa=KAPPA):
 
 
 # ----------------------------------------------------------------- datasets
-def build_pretrain(n_shapes, n_dyn, seed):
+def build_pretrain(n_shapes, n_dyn, seed, rotate=True):
     rng = np.random.default_rng(seed)
     shapes, X, Vv, VD, sid = [], [], [], [], []
     for i in range(n_shapes):
-        V = make_shape(rng)
+        V = make_shape(rng, rotate)
         shapes.append(V)
         for xs, v, vds in pretext_samples(V, rng, n_dyn=n_dyn):
             X.append(xs)
@@ -223,15 +227,24 @@ def build_pretrain(n_shapes, n_dyn, seed):
                 v=np.array(Vv, np.float32), vd=np.array(VD, np.float32), sid=np.array(sid))
 
 
-def build_downstream(n_shapes, seed):
+def build_downstream(n_shapes, seed, canonical=False, flow_range=np.radians(30.0), flow_seed=None):
+    """canonical=True: the same bodies (same random stream) without their rotation, and flow
+    angles alpha_A, alpha_B ~ U(-flow_range, flow_range) from a separate generator (flow_seed,
+    default seed + 50_000); U_B is the original draw.  Labels are in this absolute frame."""
     rng = np.random.default_rng(seed)
+    if canonical:
+        rng_flow = np.random.default_rng(seed + 50_000 if flow_seed is None else flow_seed)
     shapes, aA, CpM, Cp, aB, UB, C, Body = [], [], [], [], [], [], [], []
     for i in range(n_shapes):
-        V = make_shape(rng)
+        V = make_shape(rng, rotate=not canonical)
         a = rng.uniform(0, 2 * np.pi)
+        if canonical:
+            a = rng_flow.uniform(-flow_range, flow_range)
         M, cp, _ = panel_solve(V, a)
         b = rng.uniform(0, 2 * np.pi)
         U = rng.uniform(0.5, 1.5)
+        if canonical:
+            b = rng_flow.uniform(-flow_range, flow_range)
         X, body, c = plume_solve(V, b, U)
         shapes.append(V)
         aA.append(a)

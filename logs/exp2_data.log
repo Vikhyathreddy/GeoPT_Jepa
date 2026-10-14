@@ -1,0 +1,3 @@
+data/exp2/downstream_canon.npz: 356 shapes
+data/exp2/pretrain_canon.npz: 2100 shapes, 16800 samples
+exit 0

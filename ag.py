@@ -257,6 +257,27 @@ def mse(pred, target):
     return _mk(np.asarray((diff * diff).mean(), DT), (pred,), back)
 
 
+def logsumexp(x, axis=-1):
+    """log(sum(exp(x))) along `axis` (the axis is removed)."""
+    m = x.data.max(axis, keepdims=True)
+    e = np.exp(x.data - m)
+    s = e.sum(axis, keepdims=True)
+    y = (np.log(s) + m).squeeze(axis)
+
+    def back(g):
+        _acc(x, np.expand_dims(g, axis) * (e / s))
+    return _mk(y.astype(DT), (x,), back)
+
+
+def softplus(x):
+    """log(1 + exp(x)), computed stably."""
+    xd = x.data
+
+    def back(g):
+        _acc(x, g / (DT(1.0) + np.exp(-xd)))
+    return _mk(np.logaddexp(DT(0.0), xd).astype(DT), (x,), back)
+
+
 def total(*terms):
     out = terms[0]
     for t in terms[1:]:

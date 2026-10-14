@@ -1,0 +1,30 @@
+LT {'it': 0, 'sec': 1.1, 'latent': 1.38104, 'tgt_std': 0.76724, 'anchor': 0.64897, 'loss': 0.78707, 'val_latent': 1.38315, 'val_tgt_std': 0.77795, 'val_anchor': 0.67181, 'val_loss': 0.81013}
+LT {'it': 49, 'sec': 12.3, 'latent': 0.5855, 'tgt_std': 0.6706, 'anchor': 0.03317, 'loss': 0.09172, 'val_latent': 0.6375, 'val_tgt_std': 0.7301, 'val_anchor': 0.03133, 'val_loss': 0.09508}
+LT {'it': 0, 'sec': 0.7, 'latent': 1.38104, 'tgt_std': 0.76724, 'anchor': 0.64897, 'loss': 0.78707, 'val_latent': 1.38315, 'val_tgt_std': 0.77795, 'val_anchor': 0.67181, 'val_loss': 0.81013, 'valclean_anchor': 0.67181}
+LT {'it': 49, 'sec': 12.8, 'latent': 0.5855, 'tgt_std': 0.6706, 'anchor': 0.03317, 'loss': 0.09172, 'val_latent': 0.6375, 'val_tgt_std': 0.7301, 'val_anchor': 0.03133, 'val_loss': 0.09508, 'valclean_anchor': 0.03133}
+LT lblfrz05 identical after 50 steps: True
+LT0 {'it': 0, 'sec': 0.5, 'latent': 1.38104, 'tgt_std': 0.76724, 'loss': 1.38104, 'val_latent': 1.37909, 'val_tgt_std': 0.77796, 'val_loss': 1.37909}
+LT0 {'it': 49, 'sec': 8.2, 'latent': 0.5408, 'tgt_std': 0.68668, 'loss': 0.5408, 'val_latent': 0.60358, 'val_tgt_std': 0.73749, 'val_loss': 0.60358}
+LT0 {'it': 0, 'sec': 0.5, 'latent': 1.38104, 'tgt_std': 0.76724, 'loss': 1.38104, 'val_latent': 1.37909, 'val_tgt_std': 0.77796, 'val_loss': 1.37909}
+LT0 {'it': 49, 'sec': 8.3, 'latent': 0.5408, 'tgt_std': 0.68668, 'loss': 0.5408, 'val_latent': 0.60358, 'val_tgt_std': 0.73749, 'val_loss': 0.60358}
+LT0 lblfrz05 identical after 50 steps: True
+J {'it': 0, 'sec': 0.1, 'jepa': 1.99875, 'tgt_std': 0.88103, 'loss': 1.99875, 'val_jepa': 1.99145, 'val_tgt_std': 0.90528, 'val_loss': 1.99145}
+J {'it': 49, 'sec': 1.8, 'jepa': 0.73945, 'tgt_std': 0.89032, 'loss': 0.73945, 'val_jepa': 0.7332, 'val_tgt_std': 0.90077, 'val_loss': 0.7332}
+J {'it': 0, 'sec': 0.1, 'jepa': 1.99875, 'tgt_std': 0.88103, 'loss': 1.99875, 'val_jepa': 1.99145, 'val_tgt_std': 0.90528, 'val_loss': 1.99145}
+J {'it': 49, 'sec': 1.7, 'jepa': 0.73945, 'tgt_std': 0.89032, 'loss': 0.73945, 'val_jepa': 0.7332, 'val_tgt_std': 0.90077, 'val_loss': 0.7332}
+J lblfrz05 identical after 50 steps: True
+LT {'it': 0, 'sec': 0.7, 'latent': 1.38104, 'tgt_std': 0.76724, 'anchor': 0.64897, 'loss': 0.78707, 'val_latent': 1.38315, 'val_tgt_std': 0.77795, 'val_anchor': 0.67181, 'val_loss': 0.81013}
+LT {'it': 49, 'sec': 12.5, 'latent': 0.5855, 'tgt_std': 0.6706, 'anchor': 0.03317, 'loss': 0.09172, 'val_latent': 0.6375, 'val_tgt_std': 0.7301, 'val_anchor': 0.03133, 'val_loss': 0.09508}
+LT {'it': 0, 'sec': 0.7, 'latent': 1.38104, 'tgt_std': 0.76724, 'anchor': 0.64897, 'loss': 0.78707, 'val_latent': 1.38315, 'val_tgt_std': 0.77795, 'val_anchor': 0.67181, 'val_loss': 0.81013, 'valclean_anchor': 0.67181}
+LT {'it': 49, 'sec': 12.8, 'latent': 0.5855, 'tgt_std': 0.6706, 'anchor': 0.03317, 'loss': 0.09172, 'val_latent': 0.6375, 'val_tgt_std': 0.7301, 'val_anchor': 0.03133, 'val_loss': 0.09508, 'valclean_anchor': 0.03133}
+LT lblfrz2 identical after 50 steps: True
+LT0 {'it': 0, 'sec': 0.5, 'latent': 1.38104, 'tgt_std': 0.76724, 'loss': 1.38104, 'val_latent': 1.37909, 'val_tgt_std': 0.77796, 'val_loss': 1.37909}
+LT0 {'it': 49, 'sec': 9.3, 'latent': 0.5408, 'tgt_std': 0.68668, 'loss': 0.5408, 'val_latent': 0.60358, 'val_tgt_std': 0.73749, 'val_loss': 0.60358}
+LT0 {'it': 0, 'sec': 0.5, 'latent': 1.38104, 'tgt_std': 0.76724, 'loss': 1.38104, 'val_latent': 1.37909, 'val_tgt_std': 0.77796, 'val_loss': 1.37909}
+LT0 {'it': 49, 'sec': 9.3, 'latent': 0.5408, 'tgt_std': 0.68668, 'loss': 0.5408, 'val_latent': 0.60358, 'val_tgt_std': 0.73749, 'val_loss': 0.60358}
+LT0 lblfrz2 identical after 50 steps: True
+J {'it': 0, 'sec': 0.1, 'jepa': 1.99875, 'tgt_std': 0.88103, 'loss': 1.99875, 'val_jepa': 1.99145, 'val_tgt_std': 0.90528, 'val_loss': 1.99145}
+J {'it': 49, 'sec': 1.8, 'jepa': 0.73945, 'tgt_std': 0.89032, 'loss': 0.73945, 'val_jepa': 0.7332, 'val_tgt_std': 0.90077, 'val_loss': 0.7332}
+J {'it': 0, 'sec': 0.1, 'jepa': 1.99875, 'tgt_std': 0.88103, 'loss': 1.99875, 'val_jepa': 1.99145, 'val_tgt_std': 0.90528, 'val_loss': 1.99145}
+J {'it': 49, 'sec': 1.9, 'jepa': 0.73945, 'tgt_std': 0.89032, 'loss': 0.73945, 'val_jepa': 0.7332, 'val_tgt_std': 0.90077, 'val_loss': 0.7332}
+J lblfrz2 identical after 50 steps: True

@@ -6,7 +6,8 @@ jobs is a list of dicts; work(job) -> dict runs one job in a worker process (it 
 module-level function so it can be pickled).  Each result is stored as one JSON line
 {**result, **job}, so the job's own fields always identify the row.  Jobs whose key already
 appears in `out` are skipped, so an interrupted grid resumes where it stopped.  Every row must
-carry per-body values (a list-valued field whose name starts with "per_"), for paired statistics.
+carry per-body values (a list-valued field whose name starts with "per_"), for paired statistics
+(require_per=False for jobs without test bodies, such as pretraining).
 N_PROCS workers run in parallel.
 """
 from procs import N_PROCS  # single-threaded BLAS workers; must precede numpy
@@ -34,16 +35,16 @@ def load_rows(path):
 
 
 def _call(args):
-    work, job = args
+    work, job, require_per = args
     t0 = time.time()
     rec = {**work(job), **job}
     rec.setdefault("sec", round(time.time() - t0, 1))
-    if not any(k.startswith("per_") and isinstance(v, (list, np.ndarray)) for k, v in rec.items()):
+    if require_per and not any(k.startswith("per_") and isinstance(v, (list, np.ndarray)) for k, v in rec.items()):
         raise ValueError(f"job {job} returned no per-body field (per_*)")
     return rec
 
 
-def run(jobs, work, out, key, procs=None):
+def run(jobs, work, out, key, procs=None, require_per=True):
     os.makedirs(os.path.dirname(out) or ".", exist_ok=True)
     done = {key_of(r, key) for r in load_rows(out)}
     todo = [j for j in jobs if key_of(j, key) not in done]
@@ -53,7 +54,7 @@ def run(jobs, work, out, key, procs=None):
     if not todo:
         return
     with Pool(procs or N_PROCS) as pool, open(out, "a") as f:
-        for rec in pool.imap_unordered(_call, [(work, j) for j in todo]):
+        for rec in pool.imap_unordered(_call, [(work, j, require_per) for j in todo]):
             f.write(json.dumps(rec, default=_jsonable) + "\n")
             f.flush()
             brief = {k: (round(v, 4) if isinstance(v, float) else v) for k, v in rec.items()

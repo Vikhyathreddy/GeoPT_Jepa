@@ -1,0 +1,21 @@
+{
+ "downstream_default_bit_identical": true,
+ "pretrain_default_bit_identical": true,
+ "downstream_area_max_abs_diff": 5.182821172233787e-09,
+ "downstream_perimeter_max_abs_diff": 2.384185791015625e-07,
+ "pretrain_area_max_abs_diff": 6.003681218835766e-09,
+ "pretrain_perimeter_max_abs_diff": 4.76837158203125e-07,
+ "same_UB": true,
+ "alpha_range_deg": [
+  -29.68647003173828,
+  -29.930234909057617,
+  29.947052001953125,
+  29.855316162109375
+ ],
+ "canon_principal_axis_deg_median_p90_max": [
+  1.915514699128778,
+  9.481609455321248,
+  85.69351723817736
+ ],
+ "all_ok": true
+}

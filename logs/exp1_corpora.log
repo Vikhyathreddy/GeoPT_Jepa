@@ -1,0 +1,5 @@
+lblfrz05 {'family': 'label', 'level': 0.5, 'target_noise': 0.49980807304382324, 'target_noise_t1': 0.5865477323532104, 'target_noise_t2': 0.44273731112480164, 'frac_targets_changed': 1.0}
+lblfrz2 {'family': 'label', 'level': 2.0, 'target_noise': 1.999232292175293, 'target_noise_t1': 2.346190929412842, 'target_noise_t2': 1.7709492444992065, 'frac_targets_changed': 1.0}
+pos015 {'family': 'trajectory', 'level': 0.15, 'target_noise': 0.25289833545684814, 'target_noise_t1': 0.2935227155685425, 'target_noise_t2': 0.2264634519815445, 'frac_targets_changed': 0.9999906994047619}
+pos030 {'family': 'trajectory', 'level': 0.3, 'target_noise': 0.49702247977256775, 'target_noise_t1': 0.57524573802948, 'target_noise_t2': 0.44626230001449585, 'frac_targets_changed': 0.9999958147321428}
+exit 0
