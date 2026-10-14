@@ -1,0 +1,14 @@
+{
+ "steps": 50,
+ "identical": {
+  "LT_lblfrz4": true,
+  "LT0_lblfrz4": true,
+  "J_lblfrz4": true,
+  "LT_lblfrz8": true,
+  "LT0_lblfrz8": true,
+  "J_lblfrz8": true,
+  "LT_lblfrs4": true,
+  "LT0_lblfrs4": true,
+  "J_lblfrs4": true
+ }
+}

@@ -7,3 +7,7 @@ rho=0.9426 regret=0.0569 top1=0.83 field_rel_l2=0.1225 sec=340.2 regime=R1 backb
 rho=0.9449 regret=0.0464 top1=0.85 field_rel_l2=0.1136 sec=347.8 regime=R1 backbone=L task=B seed=2 lam=0.0 budget=64x8
 rho=0.9351 regret=0.0463 top1=0.88 field_rel_l2=0.1145 sec=350.1 regime=R1 backbone=S task=B seed=0 lam=0.0 budget=64x8
 rho=0.9378 regret=0.0726 top1=0.78 field_rel_l2=0.1066 sec=358.9 regime=R1 backbone=S task=B seed=1 lam=0.0 budget=64x8
+rho=0.9415 regret=0.05 top1=0.85 field_rel_l2=0.1274 sec=335.2 regime=R1 backbone=S task=B seed=2 lam=0.0 budget=64x8
+rho=0.9427 regret=0.0324 top1=0.9 sec=352.2 regime=R3 backbone=LT task=B seed=0 lam=0.0 budget=64x8
+rho=0.9281 regret=0.0441 top1=0.85 sec=372.7 regime=R3 backbone=LT task=B seed=1 lam=0.0 budget=64x8
+rho=0.933 regret=0.0506 top1=0.82 sec=445.6 regime=R3 backbone=LT task=B seed=2 lam=0.0 budget=64x8

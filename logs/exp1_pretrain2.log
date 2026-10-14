@@ -1,0 +1,6 @@
+results/exp1_pretrain.jsonl: 9 jobs to run (0 of 9 already done)
+LT {'it': 0, 'sec': 1.8, 'latent': 1.46957, 'tgt_std': 0.78313, 'anchor': 1.27507, 'loss': 1.42203, 'val_latent': 1.45907, 'val_tgt_std': 0.78891, 'val_anchor': 1.32423, 'val_loss': 1.47014}
+LJ {'it': 0, 'sec': 0.9, 'lift': 3.69529, 'jepa': 1.95678, 'tgt_std': 0.88103, 'loss': 3.89097, 'val_lift': 3.63879, 'val_jepa': 1.924, 'val_tgt_std': 0.90528, 'val_loss': 3.83119, 'valclean_lift': 1.15298}
+LJ {'it': 250, 'sec': 63.9, 'lift': 2.50639, 'jepa': 0.05977, 'tgt_std': 0.68382, 'loss': 2.51237, 'val_lift': 2.4952, 'val_jepa': 0.05366, 'val_tgt_std': 0.68729, 'val_loss': 2.50057, 'valclean_lift': 0.02169}
+LT {'it': 250, 'sec': 119.6, 'latent': 0.05691, 'tgt_std': 0.25883, 'anchor': 0.00443, 'loss': 0.01012, 'val_latent': 0.05452, 'val_tgt_std': 0.25345, 'val_anchor': 0.00534, 'val_loss': 0.01079}
+LJ {'it': 500, 'sec': 128.2, 'lift': 2.49758, 'jepa': 0.0369, 'tgt_std': 0.67307, 'loss': 2.50127, 'val_lift': 2.48437, 'val_jepa': 0.03725, 'val_tgt_std': 0.67218, 'val_loss': 2.48809, 'valclean_lift': 0.01294}
