@@ -114,3 +114,34 @@ scratch / native-geometry references (n=64): {"A": {"S": 0.19283322244882584, "N
 - The claim that P1's mechanism was confirmed has been removed.
 - The label family's inability to refute is now stated.
 - Seed caveats were added and the compute estimates corrected (they were low).
+
+## Amendment (2026-10-14, after Gate 1): yardstick and Stage 2 scope
+User decision, recorded before any Stage 2 run. The text above is unchanged.
+
+**New yardstick.** L is judged by its advantage over native geometry N: the part of L's gain that comes from the dynamics.
+- The t = 0 targets stay clean in every condition, so L can never sink much below N's level.
+- That means the original rule ("up to the level where L's gain over scratch has halved") could never trigger.
+- Amended verdict rule: "refutes for this setting" requires L >= LT at every level tested, up to the level where L's advantage over N has halved.
+
+**Where the dynamics information sits** (the user's measurements on the clean data and model, to be re-measured by `python exp1.py diag`):
+- The part of the t = 1,2 target that comes from particles sticking to the wall is only about 1.4% of the target variance.
+- Label noise at sigma = 0.5 adds noise variance about 17 times that signal, and sigma = 2 about 277 times.
+- In the clean L model, wall-hitting particles are about 18% of points but carry about 36% of the remaining pretext error.
+- This is why L's overall pretext fit barely moved while task A degraded 12%: the noise drowns exactly the slice that matters. P1 failed for the same reason, since it treated the target as uniform.
+
+**Why LT cannot test the rule of thumb here.** Clean LT scores about the same as N (within about 3%), so its latent part adds little over its explicit anchor. "LT overtakes L" can therefore only mean "L fell to geometry-only level".
+
+**Stage 2 scope (user decision).**
+- **Run:**
+  - option d (lblfrz4, lblfrz8 frozen; lblfrs4 fresh) for L, reusing the clean LT;
+  - LJ at lblfrz2 and lblfrz4;
+  - a second pretraining seed (s1) for L clean and L lblfrz2, plus N clean and LT clean.
+- **Diagnostics, no training:**
+  - an L-vs-N table for every condition, with paired CIs and the share of L's clean advantage retained;
+  - L's pretext error against clean targets, split into wall-hitting vs free particles and near-body (|vd0| < 0.15) vs far, for every L checkpoint.
+- **Skip, with reasons:**
+  - **Stronger trajectory noise.** pos030 already equals label sigma = 0.5 in target space, and that barely hurt either model. At sigma_pos >= 0.6 the landing points are effectively scrambled, which erases the dynamics signal for both models instead of testing which copes better.
+  - **Bounce (c).** It changes only about 18% of particles. Clean LT is about N-level, so its latent part has nothing to show there.
+  - **Small corpus (e), n = 16 (f), and LT0.** Out of scope for the question as reframed.
+
+**Prediction recorded with this amendment, before the diagnostic is run:** label noise raises the pretext error of wall-hitting particles far more than that of free particles.

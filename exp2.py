@@ -7,6 +7,9 @@ usage (from the repo root; N_PROCS sets the worker count):
   python exp2.py pretrain   Lc: L pretrained on pretrain_canon.npz -> ckpt/exp2/Lc_s0.npz
   python exp2.py gates      G1-G3 fine-tuning runs -> results/exp2_finetune.jsonl
   python exp2.py report     Gate tables -> results/exp2_gates.json / .md
+  python exp2.py diag       G1 diagnostic: train vs test error at n=64 -> results/exp2_diag.json
+  python exp2.py sweep      scratch n=256 control, zero-prompt runs, Stage 2 shift sweep, Stage 3a (q.1 frozen)
+  python exp2.py report2    Stage 2/3a tables -> results/exp2_stage2.json / .md, figs/exp2_shift_curves.png
 
 Choices the spec leaves open (also recorded in EXP2_RESULTS.md):
   * New flow angles come from np.random.default_rng(chunk seed + 50_000): alpha_A then alpha_B
@@ -184,6 +187,220 @@ def report():
     print(text)
 
 
+# ----------------------------------------------------------------------------- G1 diagnostic
+def diag_job(j):
+    import finetune as F
+    D = F.get_data(None, DOWN)
+    P, loss = F.fit(D, j["variant"], j["task"], 64, j["seed"], ckpt=ckpt_of(j["variant"]), frame="absolute")
+    pool = np.random.default_rng(j["seed"])                      # replay fit()'s pool draw
+    import model as Mo
+    Mo.init_head({}, pool, "head.task", 1)
+    ids = pool.choice(F.TRAIN, 64, replace=False)
+    mu, sd = F.norm_stats(D, j["task"])
+    tr, _, _ = F.evaluate(P, D, j["task"], 0.0, False, mu, sd, ids=ids, frame="absolute")
+    te, per, _ = F.evaluate(P, D, j["task"], 0.0, False, mu, sd, frame="absolute")
+    return dict(train_rel_l2=tr, test_rel_l2=te, final_train_loss=float(loss.data), per_shape=list(per))
+
+
+def diag():
+    from multiprocessing import Pool as P_
+    jobs = [dict(variant=v, task=t, seed=s) for v in ("S", "L", "Lc") for t in "AB" for s in (0, 1)]
+    with P_(N_PROCS) as pool:
+        res = pool.map(diag_job, jobs)
+    out = [{**j, **{k: v for k, v in r.items() if k != "per_shape"}} for j, r in zip(jobs, res)]
+    json.dump(out, open("results/exp2_diag.json", "w"), indent=1)
+    for r in out:
+        print(f"{r['variant']:2s} {r['task']} seed {r['seed']}: train rel-L2 {r['train_rel_l2']:.4f}  "
+              f"test {r['test_rel_l2']:.4f}  final train loss (normalised MSE) {r['final_train_loss']:.4f}")
+
+
+# ----------------------------------------------------------------------------- Stage 2 / 3a
+SHIFTS = (0, 20, 45, 90, 180)
+SEEDS = (0, 1, 2)
+
+
+def sweep_jobs():
+    J = []
+    job = lambda v, t, n, s, sh, m="normal", fr="": dict(variant=v, data="canon30", task=t, n=n, seed=s, shift=sh,
+                                                       prompt_mode=m, freeze=fr)
+    for t in "BA":                                   # scratch control that uses the prompt (n = 256)
+        for s in SEEDS:
+            J += [job("S", t, 256, s, sh) for sh in (0, 90, 180)] + [job("S", t, 256, s, 0, "zero")]
+    for t in "BA":                                   # zero-prompt reference for every (variant, n, seed)
+        for n in (16, 64):
+            J += [job(v, t, n, s, 0, "zero") for v in ("S", "L", "Lc") for s in SEEDS]
+    for t in "BA":                                   # Stage 2 shift sweep
+        for n in (16, 64):
+            J += [job(v, t, n, s, sh) for v in ("S", "L", "Lc") for sh in SHIFTS for s in SEEDS]
+    for t in "BA":                                   # Stage 3a: prompt-reading layer q.1 frozen
+        J += [job(v, t, 64, s, sh, fr="q.1") for v in ("S", "L", "Lc") for sh in (0, 45, 180) for s in SEEDS]
+    return J
+
+
+def report2():
+    import bootstrap as BS
+    from runner import load_rows
+    R = load_rows(FT_OUT)
+    sel = lambda v, t, n, sh, m="normal", fr="": [r for r in R if (r["variant"], r["task"], r["n"], r["shift"],
+                                                                   r["prompt_mode"], r["freeze"]) == (v, t, n, sh, m, fr)]
+    per = lambda rows: np.mean([r["per_shape"] for r in rows], 0)
+    mean = lambda rows: float(np.mean([r["rel_l2"] for r in rows]))
+    out, L = {"penalty": [], "did": [], "benefit_lost": [], "seed_floor": [], "freeze": []}, []
+    L.append("Shift penalty Delta_V(shift) = err(shift) - err(0), per body, averaged over fine-tune seeds 0-2; "
+             "95% bootstrap CI over the 100 test bodies (covers bodies only, not seeds).\n")
+    L.append("| task | n | variant | err(0) | 20 | 45 | 90 | 180 | zero prompt |\n|---|---|---|---|---|---|---|---|---|")
+    for t in "AB":
+        for n in (16, 64, 256):
+            for v in ("S", "L", "Lc"):
+                r0 = sel(v, t, n, 0)
+                if len(r0) < 3:
+                    continue
+                cells = []
+                for sh in SHIFTS[1:]:
+                    rs = sel(v, t, n, sh)
+                    if len(rs) < 3:
+                        cells.append("-")
+                        continue
+                    c = BS.paired(rs, r0, mode="diff")
+                    out["penalty"].append(dict(task=t, n=n, variant=v, shift=sh, **c))
+                    cells.append(f"{c['mean']:+.4f} [{c['lo']:+.4f}, {c['hi']:+.4f}]{'*' if c['sig'] else ''}")
+                rz = sel(v, t, n, 0, "zero")
+                z = BS.paired(rz, r0, mode="diff") if len(rz) >= 3 else None
+                L.append(f"| {t} | {n} | {v} | {mean(r0):.4f} | " + " | ".join(cells) +
+                         (f" | {z['mean']:+.4f} [{z['lo']:+.4f}, {z['hi']:+.4f}]{'*' if z['sig'] else ''} |" if z else " | - |"))
+    L.append("\nDifference-in-differences Delta_V(shift) - Delta_S(shift) at the same n (95% CI over bodies)\n")
+    L.append("| task | n | variant | 20 | 45 | 90 | 180 |\n|---|---|---|---|---|---|---|")
+    for t in "AB":
+        for n in (16, 64):
+            for v in ("L", "Lc"):
+                cells = []
+                for sh in SHIFTS[1:]:
+                    rv0, rvs, rs0, rss = sel(v, t, n, 0), sel(v, t, n, sh), sel("S", t, n, 0), sel("S", t, n, sh)
+                    if min(map(len, (rv0, rvs, rs0, rss))) < 3:
+                        cells.append("-")
+                        continue
+                    d = (per(rvs) - per(rv0)) - (per(rss) - per(rs0))
+                    m, lo, hi = BS.boot_mean(d)
+                    out["did"].append(dict(task=t, n=n, variant=v, shift=sh, mean=m, lo=lo, hi=hi))
+                    cells.append(f"{m:+.4f} [{lo:+.4f}, {hi:+.4f}]{'*' if lo > 0 or hi < 0 else ''}")
+                L.append(f"| {t} | {n} | {v} | " + " | ".join(cells) + " |")
+    L.append("\nFraction of the prompt's benefit lost, (err(shift) - err(0)) / (err(zero) - err(0)), "
+             "from seed-averaged mean errors; 95% CI from a bootstrap over bodies of the ratio of means\n")
+    L.append("| task | n | variant | 20 | 45 | 90 | 180 |\n|---|---|---|---|---|---|---|")
+    rng = np.random.default_rng(0)
+    for t in "AB":
+        for n in (16, 64):
+            for v in ("L", "Lc"):
+                r0, rz = sel(v, t, n, 0), sel(v, t, n, 0, "zero")
+                if len(r0) < 3 or len(rz) < 3:
+                    continue
+                e0, ez = per(r0), per(rz)
+                cells = []
+                for sh in SHIFTS[1:]:
+                    rs = sel(v, t, n, sh)
+                    if len(rs) < 3:
+                        cells.append("-")
+                        continue
+                    es = per(rs)
+                    f = (es.mean() - e0.mean()) / (ez.mean() - e0.mean())
+                    bs = []
+                    for _ in range(4000):
+                        k = rng.integers(0, len(e0), len(e0))
+                        bs.append((es[k].mean() - e0[k].mean()) / (ez[k].mean() - e0[k].mean()))
+                    lo, hi = np.percentile(bs, [2.5, 97.5])
+                    out["benefit_lost"].append(dict(task=t, n=n, variant=v, shift=sh, frac=float(f), lo=float(lo), hi=float(hi)))
+                    cells.append(f"{100 * f:+.1f}% [{100 * lo:+.1f}, {100 * hi:+.1f}]")
+                L.append(f"| {t} | {n} | {v} | " + " | ".join(cells) + " |")
+    L.append("\nSeed-level noise floor at shift 0: largest relative difference in test error between two fine-tune "
+             "seeds of the same variant (mean errors)\n")
+    L.append("| task | n | variant | errors by seed | max pairwise relative difference |\n|---|---|---|---|---|")
+    for t in "AB":
+        for n in (16, 64, 256):
+            for v in ("S", "L", "Lc"):
+                r0 = sorted(sel(v, t, n, 0), key=lambda r: r["seed"])
+                if len(r0) < 3:
+                    continue
+                e = [r["rel_l2"] for r in r0]
+                mx = max(abs(a / b - 1) for a in e for b in e)
+                out["seed_floor"].append(dict(task=t, n=n, variant=v, errors=e, max_rel_diff=mx))
+                L.append(f"| {t} | {n} | {v} | {', '.join(f'{x:.4f}' for x in e)} | {100 * mx:.1f}% |")
+    L.append("\nStage 3a: q.1 frozen (n = 64); shift penalty err(shift) - err(0) within the frozen runs, "
+             "and frozen vs unfrozen at the same shift\n")
+    L.append("| task | variant | err(0), q.1 frozen | penalty 45 | penalty 180 | frozen vs free at 0 | at 180 |\n|---|---|---|---|---|---|---|")
+    for t in "AB":
+        for v in ("S", "L", "Lc"):
+            f0 = sel(v, t, 64, 0, fr="q.1")
+            if len(f0) < 3:
+                continue
+            cells = []
+            for sh in (45, 180):
+                fs = sel(v, t, 64, sh, fr="q.1")
+                if len(fs) < 3:
+                    cells.append("-")
+                    continue
+                c = BS.paired(fs, f0, mode="diff")
+                out["freeze"].append(dict(task=t, variant=v, shift=sh, **c))
+                cells.append(f"{c['mean']:+.4f} [{c['lo']:+.4f}, {c['hi']:+.4f}]{'*' if c['sig'] else ''}")
+            for sh in (0, 180):
+                a, b = sel(v, t, 64, sh, fr="q.1"), sel(v, t, 64, sh)
+                if len(a) >= 3 and len(b) >= 3:
+                    cells.append(BS.fmt(BS.paired(a, b)))
+                else:
+                    cells.append("-")
+            L.append(f"| {t} | {v} | {mean(f0):.4f} | " + " | ".join(cells) + " |")
+    json.dump(out, open("results/exp2_stage2.json", "w"), indent=1)
+    text = "\n".join(L)
+    open("results/exp2_stage2.md", "w").write(text + "\n")
+    print(text)
+    figure2(R, sel, mean)
+
+
+def figure2(R, sel, mean):
+    import matplotlib.pyplot as plt
+    import analyze as A
+    col = dict(A.COL, Lc="#7a5cd6")
+    mrk = dict(A.MRK, Lc="h")
+    name = dict(A.NAME, Lc="GeoPT-lifted, canonical pretraining")
+    fig, axes = plt.subplots(2, 2, figsize=(11, 8.2), sharex=True)
+    for c, t in enumerate("AB"):
+        for r_, n in enumerate((16, 64)):
+            ax = axes[r_, c]
+            A.style(ax)
+            series = [(v, n, "-") for v in ("S", "L", "Lc")] + ([("S", 256, "--")] if n == 64 else [])
+            ends = []
+            for v, nn, ls in series:
+                pts = [(sh, sel(v, t, nn, sh)) for sh in SHIFTS]
+                pts = [(sh, np.mean([r["rel_l2"] for r in rs]), min(r["rel_l2"] for r in rs), max(r["rel_l2"] for r in rs))
+                       for sh, rs in pts if len(rs) >= 3]
+                if not pts:
+                    continue
+                x, m, lo, hi = map(np.array, zip(*pts))
+                lab = name[v] + (f", n = {nn}" if nn != n else "")
+                ax.fill_between(x, lo, hi, color=col[v], alpha=0.12, lw=0)
+                ax.plot(x, m, ls, color=col[v], marker=mrk[v], ms=7, lw=2, markeredgecolor=A.SURF, label=lab)
+                rz = sel(v, t, nn, 0, "zero")
+                if len(rz) >= 3:
+                    ax.plot([200], [mean(rz)], marker=mrk[v], ms=7, color=col[v], ls="none", alpha=0.6,
+                            markeredgecolor=A.SURF)
+                ends.append((m[-1], lab))
+            ax.set_xticks(list(SHIFTS) + [200])
+            ax.set_xticklabels(["0", "20", "45", "90", "180", "no\nprompt"])
+            ax.set_ylabel("test relative L2 error")
+            ax.set_title(f"{A.TASK[t]}\n{n} labelled bodies (canonical bodies, flow +-30 deg)", loc="left", fontsize=10)
+    for ax in axes[1]:
+        ax.set_xlabel("prompt rotated away from the true flow direction (degrees)")
+    h, l = axes[0, 1].get_legend_handles_labels()
+    h2, l2 = axes[1, 1].get_legend_handles_labels()
+    for hh, ll in zip(h2, l2):
+        if ll not in l:
+            h.append(hh)
+            l.append(ll)
+    fig.legend(h, l, frameon=False, fontsize=8.5, loc="lower center", ncol=4)
+    fig.tight_layout(rect=(0, 0.05, 1, 1))
+    fig.savefig("figs/exp2_shift_curves.png", dpi=130)
+    plt.close(fig)
+
+
 if __name__ == "__main__":
     import runner
     stage = sys.argv[1] if len(sys.argv) > 1 else "report"
@@ -199,5 +416,11 @@ if __name__ == "__main__":
         runner.run(gate_jobs(), finetune_job, FT_OUT, FT_KEY)
     elif stage == "report":
         report()
+    elif stage == "diag":
+        diag()
+    elif stage == "sweep":
+        runner.run(sweep_jobs(), finetune_job, FT_OUT, FT_KEY)
+    elif stage == "report2":
+        report2()
     else:
         sys.exit(__doc__)
