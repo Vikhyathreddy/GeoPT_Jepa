@@ -98,9 +98,7 @@ def evaluate(P, Dd, task, shift, frozen, mu, sd, ids=TEST, keep_pred=0):
     return float(np.mean(errs)), np.array(errs), preds[:keep_pred]
 
 
-def fit(Dd, variant, task, n, seed, shift=0.0, frozen=False, steps=1000, B=8, lr=1e-3, freeze=(),
-        extra=None):
-    """extra(P, ids_pool, mu, sd) -> optional additional loss term per step (uses its own rng)."""
+def fit(Dd, variant, task, n, seed, shift=0.0, frozen=False, steps=1000, B=8, lr=1e-3, freeze=()):
     rng = np.random.default_rng(seed)
     P = Mo.build("S", 100 + seed)                        # fresh encoder + decoder
     if variant != "S":
@@ -120,10 +118,7 @@ def fit(Dd, variant, task, n, seed, shift=0.0, frozen=False, steps=1000, B=8, lr
         pts, nrm, q, v, y = train_batch(Dd, task, ids, rng, shift)
         out = forward(P, pts, nrm, q, v, frozen)
         loss = ag.mse(out, ((y - mu) / sd)[..., None].astype(np.float32))
-        if extra is not None:
-            ag.add(loss, extra(P, ids_pool, mu, sd)).backward()
-        else:
-            loss.backward()
+        loss.backward()
         opt.step(cosine(it, steps, lr, warm=50))
     return P, loss
 
@@ -133,11 +128,11 @@ def finetune_params(Dd, variant, task, n, seed, **kw):
 
 
 def finetune(Dd, variant, task, n, seed, shift=0.0, frozen=False, steps=1000, B=8, lr=1e-3, keep_pred=0,
-             freeze=(), extra=None, return_params=False):
+             freeze=()):
     t0 = time.time()
-    P, loss = fit(Dd, variant, task, n, seed, shift, frozen, steps, B, lr, freeze, extra)
+    P, loss = fit(Dd, variant, task, n, seed, shift, frozen, steps, B, lr, freeze)
     mu, sd = norm_stats(Dd, task)
     err, per, preds = evaluate(P, Dd, task, shift, frozen, mu, sd, keep_pred=keep_pred)
     return dict(variant=variant, task=task, n=n, seed=seed, shift=round(float(np.degrees(shift))),
                 frozen=frozen, rel_l2=err, final_train_loss=float(loss.data),
-                sec=round(time.time() - t0, 1)), per, (P if return_params else preds)
+                sec=round(time.time() - t0, 1)), per, preds

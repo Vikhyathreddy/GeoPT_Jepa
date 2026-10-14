@@ -20,7 +20,7 @@ KAPPA = 0.01      # plume diffusivity
 
 
 # ----------------------------------------------------------------- geometry
-def make_shape(rng, return_angle=False):
+def make_shape(rng):
     th = np.linspace(0, 2 * np.pi, NV, endpoint=False)
     r = np.ones(NV)
     for k in range(2, 6):
@@ -32,7 +32,7 @@ def make_shape(rng, return_angle=False):
     b = rng.uniform(0, 2 * np.pi)                        # rotation
     R = np.array([[np.cos(b), -np.sin(b)], [np.sin(b), np.cos(b)]])
     p = p @ R.T + rng.uniform(-0.08, 0.08, 2)
-    return (p, b) if return_angle else p  # CCW polygon (NV,2); b = direction of the long axis
+    return p  # CCW polygon (NV,2)
 
 
 def edges(V):
@@ -223,16 +223,14 @@ def build_pretrain(n_shapes, n_dyn, seed):
                 v=np.array(Vv, np.float32), vd=np.array(VD, np.float32), sid=np.array(sid))
 
 
-def build_downstream(n_shapes, seed, orient_sd=None):
-    """orient_sd=None: flow direction uniform over the circle.  Otherwise the flow follows the
-    body's long axis up to N(0, orient_sd) radians (a preferred orientation, like cars or airfoils)."""
+def build_downstream(n_shapes, seed):
     rng = np.random.default_rng(seed)
     shapes, aA, CpM, Cp, aB, UB, C, Body = [], [], [], [], [], [], [], []
     for i in range(n_shapes):
-        V, ax = make_shape(rng, return_angle=True)
-        a = rng.uniform(0, 2 * np.pi) if orient_sd is None else ax + rng.normal(0, orient_sd)
+        V = make_shape(rng)
+        a = rng.uniform(0, 2 * np.pi)
         M, cp, _ = panel_solve(V, a)
-        b = rng.uniform(0, 2 * np.pi) if orient_sd is None else ax + rng.normal(0, orient_sd)
+        b = rng.uniform(0, 2 * np.pi)
         U = rng.uniform(0.5, 1.5)
         X, body, c = plume_solve(V, b, U)
         shapes.append(V)
