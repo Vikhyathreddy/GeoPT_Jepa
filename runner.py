@@ -26,8 +26,13 @@ def _jsonable(x):
     raise TypeError(f"not JSON serialisable: {type(x)}")
 
 
+def _hashable(v):
+    return tuple(_hashable(x) for x in v) if isinstance(v, (list, tuple)) else v
+
+
 def key_of(row, key):
-    return tuple(row.get(k) for k in key)
+    """job key; lists and tuples compare equal, since JSON stores a tuple as a list."""
+    return tuple(_hashable(row.get(k)) for k in key)
 
 
 def load_rows(path):

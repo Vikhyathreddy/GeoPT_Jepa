@@ -110,6 +110,8 @@ if __name__ == "__main__":
     ap.add_argument("--train-shapes", type=int, default=N_TRAIN_SHAPES)
     a = ap.parse_args()
     steps = a.steps if a.steps is not None else (a.steps_pos if a.steps_pos is not None else 2500)
+    if a.out is None and (a.seed != 0 or a.data != "data/pretrain.npz" or a.train_shapes != N_TRAIN_SHAPES):
+        ap.error("non-default --seed/--data/--train-shapes need an explicit --out (keeps the original ckpt/<V>.npz)")
     out = a.out or f"ckpt/{a.variant}.npz"
     os.makedirs(os.path.dirname(out) or ".", exist_ok=True)
     pretrain(a.variant, steps=steps, seed=a.seed, Dd=load(a.data), out=out, train_shapes=a.train_shapes)

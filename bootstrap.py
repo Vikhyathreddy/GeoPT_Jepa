@@ -34,10 +34,13 @@ def paired(rows_a, rows_b, field="per_shape", mode="rel", higher_is_better=False
     d = ea / eb - 1 if mode == "rel" else ea - eb
     m, lo, hi = boot_mean(d, n_boot, seed)
     better = ea > eb if higher_is_better else ea < eb
-    seeds = lambda R: sorted({r.get("seed", r.get("ft_seed")) for r in R}, key=str)
+    seeds = lambda R: [r.get("seed", r.get("ft_seed")) for r in R]
+    sa, sb = seeds(rows_a), seeds(rows_b)
+    if len(set(map(str, sa))) != len(sa) or len(set(map(str, sb))) != len(sb):
+        raise ValueError(f"duplicate seeds in a comparison: {sa} vs {sb}")
     return dict(mean=m, lo=lo, hi=hi, better=float(better.mean()), a=float(ea.mean()), b=float(eb.mean()),
-                n_bodies=len(d), seeds_a=seeds(rows_a), seeds_b=seeds(rows_b),
-                sig=bool(lo > 0 or hi < 0))
+                n_bodies=len(d), seeds_a=sorted(sa, key=str), seeds_b=sorted(sb, key=str),
+                seeds_match=sorted(map(str, sa)) == sorted(map(str, sb)), sig=bool(lo > 0 or hi < 0))
 
 
 def fmt(r, pct=True):
