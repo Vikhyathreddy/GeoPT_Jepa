@@ -169,3 +169,173 @@ User decision (Goals and Validation, steps 1-2). Written and committed before an
 - **Support:** pretrained models lose more than scratch at 20-90° shifts. Operationally, for L at n = 64, the difference-in-differences Delta_L(shift) - Delta_S(shift) is positive with its CI excluding zero at one or more of 20, 45 and 90 degrees, on a task, in both L seeds.
 - **Refutation:** no loss beyond scratch's at any shift at n = 16 or n = 64. Operationally, no positive difference-in-differences with a CI excluding zero, for L or Lc, at any shift, n or task.
 - **Anything else is unresolved.**
+
+### Stage 2 and Stage 3a results (2026-10-14): the shift sweep, L pretraining seed 1, q.1 frozen
+**Decisions recorded (user, 2026-10-14).**
+- **Task A passes G1, with a caveat.** The G1 diagnostic (`results/exp2_diag.json`) gives scratch at n = 64 a training rel-L2 of 0.031-0.032 against a test rel-L2 of 0.33-0.34 on task A.
+  - That near-zero training error marks memorisation of the 64 training bodies (L reaches a similar training error, 0.038, but tests at 0.15-0.17).
+  - Scratch still beats the scalar mean predictor (0.415), and the sweep measures the pretrained models, which behave well.
+- **P4 is recorded as failed on task A and passed on task B** (shift 0, n = 64, fine-tuning seeds 0-2: L 0.1654 vs Lc 0.1670 on A; L 0.1856 vs Lc 0.1805 on B). Fine-tuning-seed spread is comparable to these gaps (see the noise floor table).
+
+**Runs.**
+- 330 rows in `results/exp2_finetune.jsonl` (all keys unique): S, L and Lc × shifts 0/20/45/90/180 × tasks A and B × n = 16 and 64 × fine-tuning seeds 0-2, plus zero-prompt references.
+- Scratch at n = 256 as a control that uses the prompt.
+- L pretraining seed 1 (`Ls1`) at n = 64.
+- Stage 3a (`q.1` frozen; S, L, Lc; shifts 0, 45, 180; n = 64).
+- The n = 64 shift runs were all made after the pre-registration commit (d10cbf6).
+
+**Tables** (`results/exp2_stage2.md`, `.json`):
+
+Shift penalty Delta_V(shift) = err(shift) - err(0), per body, averaged over fine-tune seeds 0-2; 95% bootstrap CI over the 100 test bodies (covers bodies only, not seeds).
+
+| task | n | variant | err(0) | 20 | 45 | 90 | 180 | zero prompt |
+|---|---|---|---|---|---|---|---|---|
+| A | 16 | S | 0.3905 | -0.0003 [-0.0014, +0.0008] | +0.0006 [-0.0012, +0.0025] | -0.0001 [-0.0025, +0.0023] | +0.0020 [-0.0011, +0.0049] | +0.0021 [+0.0001, +0.0043]* |
+| A | 16 | L | 0.2707 | +0.0187 [+0.0125, +0.0247]* | +0.0228 [+0.0162, +0.0296]* | +0.0163 [+0.0088, +0.0236]* | +0.0099 [+0.0016, +0.0181]* | +0.1235 [+0.1088, +0.1390]* |
+| A | 16 | Lc | 0.2693 | +0.0168 [+0.0127, +0.0208]* | +0.0284 [+0.0223, +0.0342]* | +0.0312 [+0.0233, +0.0388]* | +0.0207 [+0.0124, +0.0288]* | +0.1218 [+0.1065, +0.1375]* |
+| A | 64 | S | 0.3392 | +0.0052 [+0.0017, +0.0088]* | +0.0086 [+0.0039, +0.0131]* | +0.0027 [-0.0012, +0.0067] | +0.0014 [-0.0032, +0.0062] | +0.0198 [+0.0151, +0.0246]* |
+| A | 64 | L | 0.1654 | +0.0015 [-0.0021, +0.0052] | -0.0154 [-0.0211, -0.0099]* | -0.0293 [-0.0350, -0.0241]* | -0.0024 [-0.0096, +0.0048] | +0.1926 [+0.1719, +0.2132]* |
+| A | 64 | Ls1 | 0.1748 | +0.0000 [-0.0038, +0.0038] | -0.0006 [-0.0047, +0.0036] | -0.0188 [-0.0236, -0.0143]* | -0.0068 [-0.0135, +0.0001] | +0.1886 [+0.1689, +0.2080]* |
+| A | 64 | Lc | 0.1670 | -0.0061 [-0.0100, -0.0024]* | -0.0179 [-0.0238, -0.0123]* | -0.0164 [-0.0228, -0.0102]* | +0.0029 [-0.0050, +0.0102] | +0.1872 [+0.1668, +0.2076]* |
+| A | 256 | S | 0.1867 | - | - | +0.0298 [+0.0244, +0.0352]* | +0.0066 [+0.0023, +0.0109]* | +0.1732 [+0.1567, +0.1902]* |
+| B | 16 | S | 0.4901 | +0.0009 [-0.0014, +0.0032] | +0.0007 [-0.0020, +0.0034] | -0.0017 [-0.0058, +0.0023] | -0.0027 [-0.0072, +0.0017] | +0.0055 [+0.0010, +0.0099]* |
+| B | 16 | L | 0.4481 | +0.0016 [-0.0018, +0.0048] | -0.0067 [-0.0115, -0.0022]* | -0.0538 [-0.0613, -0.0464]* | -0.1020 [-0.1150, -0.0889]* | +0.0126 [+0.0069, +0.0183]* |
+| B | 16 | Lc | 0.4391 | -0.0051 [-0.0083, -0.0019]* | -0.0142 [-0.0194, -0.0089]* | -0.0516 [-0.0599, -0.0431]* | -0.1139 [-0.1281, -0.0993]* | +0.0210 [+0.0142, +0.0275]* |
+| B | 64 | S | 0.4296 | -0.0007 [-0.0060, +0.0050] | +0.0112 [+0.0054, +0.0170]* | -0.0002 [-0.0062, +0.0058] | -0.0028 [-0.0115, +0.0054] | +0.0224 [+0.0139, +0.0305]* |
+| B | 64 | L | 0.1856 | +0.0012 [-0.0028, +0.0052] | -0.0075 [-0.0129, -0.0024]* | -0.0329 [-0.0407, -0.0251]* | -0.0202 [-0.0264, -0.0140]* | +0.2816 [+0.2556, +0.3082]* |
+| B | 64 | Ls1 | 0.1842 | +0.0104 [+0.0079, +0.0128]* | +0.0081 [+0.0036, +0.0128]* | -0.0283 [-0.0347, -0.0219]* | -0.0349 [-0.0423, -0.0272]* | +0.2728 [+0.2487, +0.2979]* |
+| B | 64 | Lc | 0.1805 | -0.0001 [-0.0028, +0.0025] | -0.0045 [-0.0087, -0.0006]* | -0.0209 [-0.0267, -0.0154]* | -0.0261 [-0.0321, -0.0198]* | +0.2825 [+0.2558, +0.3106]* |
+| B | 256 | S | 0.1760 | - | - | -0.0039 [-0.0069, -0.0006]* | -0.0102 [-0.0138, -0.0064]* | +0.2944 [+0.2657, +0.3222]* |
+
+Difference-in-differences Delta_V(shift) - Delta_S(shift) at the same n (95% CI over bodies)
+
+| task | n | variant | 20 | 45 | 90 | 180 |
+|---|---|---|---|---|---|---|
+| A | 16 | L | +0.0190 [+0.0129, +0.0250]* | +0.0222 [+0.0156, +0.0289]* | +0.0164 [+0.0089, +0.0237]* | +0.0080 [-0.0008, +0.0164] |
+| A | 16 | Ls1 | - | - | - | - |
+| A | 16 | Lc | +0.0171 [+0.0128, +0.0213]* | +0.0278 [+0.0214, +0.0340]* | +0.0312 [+0.0230, +0.0392]* | +0.0188 [+0.0101, +0.0269]* |
+| A | 64 | L | -0.0036 [-0.0083, +0.0010] | -0.0239 [-0.0314, -0.0167]* | -0.0320 [-0.0388, -0.0255]* | -0.0037 [-0.0120, +0.0041] |
+| A | 64 | Ls1 | -0.0052 [-0.0105, -0.0001]* | -0.0091 [-0.0151, -0.0033]* | -0.0214 [-0.0277, -0.0155]* | -0.0081 [-0.0160, -0.0001]* |
+| A | 64 | Lc | -0.0113 [-0.0161, -0.0065]* | -0.0265 [-0.0334, -0.0200]* | -0.0190 [-0.0267, -0.0116]* | +0.0015 [-0.0073, +0.0099] |
+| B | 16 | L | +0.0007 [-0.0035, +0.0048] | -0.0073 [-0.0127, -0.0021]* | -0.0521 [-0.0598, -0.0443]* | -0.0993 [-0.1122, -0.0859]* |
+| B | 16 | Ls1 | - | - | - | - |
+| B | 16 | Lc | -0.0060 [-0.0098, -0.0025]* | -0.0149 [-0.0205, -0.0094]* | -0.0499 [-0.0585, -0.0413]* | -0.1111 [-0.1257, -0.0964]* |
+| B | 64 | L | +0.0019 [-0.0052, +0.0085] | -0.0187 [-0.0266, -0.0112]* | -0.0327 [-0.0421, -0.0232]* | -0.0174 [-0.0270, -0.0075]* |
+| B | 64 | Ls1 | +0.0110 [+0.0046, +0.0172]* | -0.0032 [-0.0108, +0.0043] | -0.0281 [-0.0362, -0.0203]* | -0.0320 [-0.0419, -0.0225]* |
+| B | 64 | Lc | +0.0006 [-0.0059, +0.0065] | -0.0157 [-0.0231, -0.0084]* | -0.0208 [-0.0292, -0.0126]* | -0.0232 [-0.0328, -0.0128]* |
+
+Fraction of the prompt's benefit lost, (err(shift) - err(0)) / (err(zero) - err(0)), from seed-averaged mean errors; 95% CI from a bootstrap over bodies of the ratio of means
+
+| task | n | variant | 20 | 45 | 90 | 180 |
+|---|---|---|---|---|---|---|
+| A | 16 | L | +15.1% [+10.5, +19.5] | +18.5% [+13.4, +23.6] | +13.2% [+7.4, +19.4] | +8.0% [+0.9, +15.0] |
+| A | 16 | Lc | +13.8% [+11.0, +16.6] | +23.3% [+19.6, +26.9] | +25.6% [+20.5, +30.5] | +17.0% [+10.6, +23.7] |
+| A | 64 | L | +0.8% [-1.1, +2.6] | -8.0% [-11.5, -4.9] | -15.2% [-19.3, -11.8] | -1.2% [-5.0, +2.4] |
+| A | 64 | Ls1 | +0.0% [-2.0, +2.0] | -0.3% [-2.5, +1.9] | -10.0% [-12.9, -7.3] | -3.6% [-7.4, -0.0] |
+| A | 64 | Lc | -3.3% [-5.6, -1.1] | -9.6% [-13.4, -6.3] | -8.7% [-13.1, -5.1] | +1.5% [-2.7, +5.4] |
+| B | 16 | L | +12.7% [-15.0, +45.5] | -52.8% [-116.4, -15.5] | -425.9% [-771.7, -273.0] | -807.0% [-1467.5, -540.1] |
+| B | 16 | Lc | -24.2% [-49.4, -8.2] | -67.8% [-115.3, -37.5] | -245.9% [-370.1, -175.0] | -542.3% [-788.7, -408.5] |
+| B | 64 | L | +0.4% [-1.0, +1.8] | -2.7% [-4.6, -0.8] | -11.7% [-14.5, -9.1] | -7.2% [-9.3, -5.2] |
+| B | 64 | Ls1 | +3.8% [+2.9, +4.7] | +3.0% [+1.3, +4.6] | -10.4% [-12.6, -8.2] | -12.8% [-15.4, -10.2] |
+| B | 64 | Lc | -0.0% [-1.0, +0.9] | -1.6% [-3.0, -0.2] | -7.4% [-9.4, -5.4] | -9.2% [-11.5, -7.0] |
+
+Seed-level noise floor at shift 0: largest relative difference in test error between two fine-tune seeds of the same variant (mean errors)
+
+| task | n | variant | errors by seed | max pairwise relative difference |
+|---|---|---|---|---|
+| A | 16 | S | 0.3703, 0.4049, 0.3964 | 9.4% |
+| A | 16 | L | 0.2625, 0.2959, 0.2536 | 16.7% |
+| A | 16 | Lc | 0.2771, 0.2674, 0.2633 | 5.2% |
+| A | 64 | S | 0.3417, 0.3265, 0.3495 | 7.1% |
+| A | 64 | L | 0.1525, 0.1658, 0.1778 | 16.6% |
+| A | 64 | Ls1 | 0.1603, 0.1831, 0.1810 | 14.2% |
+| A | 64 | Lc | 0.1759, 0.1564, 0.1686 | 12.5% |
+| A | 256 | S | 0.1964, 0.1625, 0.2012 | 23.8% |
+| B | 16 | S | 0.4581, 0.5169, 0.4953 | 12.8% |
+| B | 16 | L | 0.4314, 0.4741, 0.4389 | 9.9% |
+| B | 16 | Lc | 0.4199, 0.4793, 0.4182 | 14.6% |
+| B | 64 | S | 0.4160, 0.4205, 0.4523 | 8.7% |
+| B | 64 | L | 0.2090, 0.1791, 0.1687 | 23.9% |
+| B | 64 | Ls1 | 0.2348, 0.1656, 0.1524 | 54.1% |
+| B | 64 | Lc | 0.1766, 0.1798, 0.1851 | 4.8% |
+| B | 256 | S | 0.1657, 0.1656, 0.1966 | 18.7% |
+
+Stage 3a: q.1 frozen (n = 64); shift penalty err(shift) - err(0) within the frozen runs, and frozen vs unfrozen at the same shift
+
+| task | variant | err(0), q.1 frozen | penalty 45 | penalty 180 | frozen vs free at 0 | at 180 |
+|---|---|---|---|---|---|---|
+| A | S | 0.3571 | +0.0034 [-0.0005, +0.0073] | -0.0017 [-0.0065, +0.0030] | +5.6% [+4.2, +7.1]* better on 18% of bodies | +4.7% [+3.5, +5.9]* better on 28% of bodies |
+| A | L | 0.1772 | -0.0148 [-0.0203, -0.0093]* | -0.0072 [-0.0144, -0.0001]* | +8.3% [+6.4, +10.2]* better on 20% of bodies | +4.9% [+3.3, +6.5]* better on 29% of bodies |
+| A | Lc | 0.1770 | -0.0128 [-0.0183, -0.0074]* | -0.0027 [-0.0102, +0.0044] | +7.0% [+5.4, +8.7]* better on 24% of bodies | +3.6% [+1.9, +5.3]* better on 37% of bodies |
+| B | S | 0.4589 | -0.0030 [-0.0091, +0.0030] | -0.0018 [-0.0084, +0.0048] | +7.7% [+5.8, +9.7]* better on 21% of bodies | +7.5% [+5.6, +9.3]* better on 23% of bodies |
+| B | L | 0.2749 | -0.0434 [-0.0527, -0.0349]* | -0.0841 [-0.0956, -0.0731]* | +50.8% [+45.6, +56.6]* better on 2% of bodies | +16.0% [+13.8, +18.2]* better on 7% of bodies |
+| B | Lc | 0.2735 | -0.0495 [-0.0587, -0.0408]* | -0.0858 [-0.0983, -0.0748]* | +54.7% [+49.0, +61.0]* better on 2% of bodies | +22.5% [+20.2, +24.8]* better on 2% of bodies |
+
+Pre-registered checks (amendment of 2026-10-14)
+
+| check | variant | Delta(180) = err(180) - err(0) [95% CI over bodies] | 2 x SE_seed | outcome |
+|---|---|---|---|---|
+| P6 task A 180 ~ 0 | L | -0.0024 [-0.0096, +0.0048] | 0.0199 | holds |
+| P6 task A 180 ~ 0 | Ls1 | -0.0068 [-0.0135, +0.0001] | 0.0227 | holds |
+| P6 task A 180 ~ 0 | Lc | +0.0029 [-0.0050, +0.0102] | 0.0158 | holds |
+| P7 task B reversed beats aligned | L | -0.0202 [-0.0264, -0.0140] | 0.0238 | holds |
+| P7 task B reversed beats aligned | Ls1 | -0.0349 [-0.0423, -0.0272] | 0.0602 | holds |
+
+Difference-in-differences Delta_V(shift) - Delta_S(shift) used by the verdict rule (95% CI over bodies)
+
+| task | n | variant | 20 | 45 | 90 | 180 |
+|---|---|---|---|---|---|---|
+| A | 16 | L | +0.0190 [+0.0129, +0.0250]* | +0.0222 [+0.0156, +0.0289]* | +0.0164 [+0.0089, +0.0237]* | +0.0080 [-0.0008, +0.0164] |
+| A | 16 | Lc | +0.0171 [+0.0128, +0.0213]* | +0.0278 [+0.0214, +0.0340]* | +0.0312 [+0.0230, +0.0392]* | +0.0188 [+0.0101, +0.0269]* |
+| A | 64 | L | -0.0036 [-0.0083, +0.0010] | -0.0239 [-0.0314, -0.0167]* | -0.0320 [-0.0388, -0.0255]* | -0.0037 [-0.0120, +0.0041] |
+| A | 64 | Ls1 | -0.0052 [-0.0105, -0.0001]* | -0.0091 [-0.0151, -0.0033]* | -0.0214 [-0.0277, -0.0155]* | -0.0081 [-0.0160, -0.0001]* |
+| A | 64 | Lc | -0.0113 [-0.0161, -0.0065]* | -0.0265 [-0.0334, -0.0200]* | -0.0190 [-0.0267, -0.0116]* | +0.0015 [-0.0073, +0.0099] |
+| B | 16 | L | +0.0007 [-0.0035, +0.0048] | -0.0073 [-0.0127, -0.0021]* | -0.0521 [-0.0598, -0.0443]* | -0.0993 [-0.1122, -0.0859]* |
+| B | 16 | Lc | -0.0060 [-0.0098, -0.0025]* | -0.0149 [-0.0205, -0.0094]* | -0.0499 [-0.0585, -0.0413]* | -0.1111 [-0.1257, -0.0964]* |
+| B | 64 | L | +0.0019 [-0.0052, +0.0085] | -0.0187 [-0.0266, -0.0112]* | -0.0327 [-0.0421, -0.0232]* | -0.0174 [-0.0270, -0.0075]* |
+| B | 64 | Ls1 | +0.0110 [+0.0046, +0.0172]* | -0.0032 [-0.0108, +0.0043] | -0.0281 [-0.0362, -0.0203]* | -0.0320 [-0.0419, -0.0225]* |
+| B | 64 | Lc | +0.0006 [-0.0059, +0.0065] | -0.0157 [-0.0231, -0.0084]* | -0.0208 [-0.0292, -0.0126]* | -0.0232 [-0.0328, -0.0128]* |
+
+P6 (task A 180 costs about nothing, L s0, L s1, Lc): holds. P7 (task B reversed beats aligned at n = 64 in both L seeds): holds. Verdict by the pre-registered rule: unresolved.
+
+**Figure:** `figs/exp2_shift_curves.png`.
+
+**Pre-registered checks.**
+- **P6 (task A, 180° costs about nothing at n = 64): holds** for L seed 0 (-0.0024 [-0.0096, +0.0048]), L seed 1 (-0.0068) and Lc (+0.0029). All are well within 2 × SE_seed.
+- **P7 (task B, reversed beats aligned at n = 64 in both L seeds): holds by the pre-registered rule.** L seed 0: -0.0202 [-0.0264, -0.0140]; L seed 1: -0.0349 [-0.0423, -0.0272].
+  - **Caveat:** those intervals cover test bodies, not fine-tuning seeds. L seed 1's shift-0 errors on task B span 0.235, 0.166 and 0.152 across fine-tuning seeds (a 54% spread), so its effect is smaller than 2 × SE_seed (0.060).
+  - Lc shows the same direction (-0.0232 difference-in-differences), and it holds in every task-B cell at n = 16.
+- **Verdict on the question (pre-registered rule): unresolved.**
+  - **Support fails.** At n = 64, no shift makes L lose more than scratch in both L seeds. The difference-in-differences is negative (shifting helps) at 45° and 90° on both tasks, in both seeds. The only positive cell is L seed 1 on task B at 20° (+0.011), and it does not replicate in seed 0.
+  - **Refutation fails.** At n = 16 on task A, L and Lc do lose more than scratch at 20-90° (+0.016 to +0.031, CIs excluding 0). That is 13-26% of the prompt's benefit lost.
+
+**Reading.**
+- **The toy reproduces GeoPT's alignment penalty only in one corner:** small data (n = 16) on the elliptic task A. There, a misaligned prompt costs 13-26% of the benefit the prompt provides. Scratch is flat, as the symmetry argument requires.
+- **With 64 labels, misalignment never hurts, and 45-90° shifts help.** At 90°: task A L -15%, L seed 1 -10%, Lc -9% of the prompt's benefit; task B -12%, -10% and -7%.
+  - **Task A, exploratory (post hoc) analysis:** the 90° gain grows with body elongation for all three pretrained models (Spearman of aspect ratio vs Delta(90): -0.32, -0.26 and -0.32; p <= 0.009). The rounder half of the bodies gains -0.007 to -0.021 and the more elongated half -0.025 to -0.038; scratch shows no such link.
+  - This fits a non-physical mechanism. The canonical bodies have their long axis along x, so a 90° prompt points at the broad side, where pretraining's transport features are most geometry-rich.
+  - On task B there is no elongation link, so the B gain has another source.
+- **On the plume task the pretrained models prefer the reversed prompt** (P3: the best prompt is reversed). That holds at n = 16 (L 0.448 → 0.346, Lc 0.439 → 0.325) and at n = 64 (both L seeds, and Lc). The best prompt direction at n = 64 is 90° for L seed 0 and 180° for L seed 1 and Lc.
+- **Stage 3a, q.1 frozen.** No shift penalty appears even when the prompt-reading layer cannot re-map.
+  - On task B, shifting helps a lot (L: 45° -0.043, 180° -0.084). Freezing q.1 at the aligned prompt costs +51% (L) and +55% (Lc).
+  - So the pretrained prompt pathway's own semantics prefer a rotated or reversed prompt on the plume task. The spec's "penalty only when frozen" pattern does not occur.
+- **Investigation of the n = 16 task-A 180° penalty for Lc** (+0.019 [+0.010, +0.027] beyond scratch). The spec's P2 asks for an investigation before such a penalty is reported.
+  - It is consistent across fine-tuning seeds (+0.019, +0.024, +0.019), so it is not seed noise.
+  - It is not a code bug. Scratch is flat at 180° at n = 16, 64 and 256 (per-seed differences within ±0.024). Lc is flat at 180° at n = 64 (P6), and L's n = 16 value is inconsistent across seeds (+0.003, -0.022, +0.049).
+  - Most likely reading: the lifted pretext is not symmetric under v → -v (particles moving toward vs away from the wall), while task A's physics is. With 16 labels, fine-tuning cannot learn the invariance.
+  - That is a non-physical asymmetry inherited from pretraining. It is not a test of the physics, and it vanishes at n = 64.
+  - A direct test (not run) would be fine-tuning with random prompt sign flips on task A.
+
+**Predictions: outcomes.**
+- **P1 (penalty growing 0 → 90° for L and Lc, larger at n = 16; scratch none): mostly failed.** It holds only on task A at n = 16. At n = 64, and on task B at both n, shifts help. Scratch shows none, as predicted.
+- **P2 (task A 180° costs nothing for every variant): held at n = 64** (pre-registered as P6), and for scratch at every n. It **failed for Lc at n = 16**; investigated above, with no bug found.
+- **P3 (task B sign of the 180° penalty, open): the reversed prompt is better,** at both n, in both L seeds, for L and Lc.
+- **P4 (Lc >= L at shift 0): failed on task A, passed on task B** (recorded per the user's decision; see above).
+- **P5 (no penalty → GeoPT's effect depends on something the toy lacks): partly applies.** The toy shows a penalty only with 16 labels on task A. With 64 labels the pretrained prompt semantics are re-mapped (or even exploited), and the q.1-frozen runs show that the remaining prompt semantics prefer non-aligned prompts.
+- **P6: held. P7: held,** with the fine-tuning-seed caveat for L seed 1.
+
+**Caveats.**
+- The CIs cover the 100 test bodies only.
+- Fine-tuning-seed spread at n = 64 reaches 17-24% for L and 54% for L seed 1 on task B (noise floor table), comparable to many of the shift effects.
+- There is one Lc checkpoint, and two L pretraining seeds (seed 1 at n = 64 only).
+- Scratch at n = 64 memorises (the G1 caveat).

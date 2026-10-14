@@ -275,7 +275,7 @@ def report2():
     L.append("| task | n | variant | err(0) | 20 | 45 | 90 | 180 | zero prompt |\n|---|---|---|---|---|---|---|---|---|")
     for t in "AB":
         for n in (16, 64, 256):
-            for v in ("S", "L", "Lc"):
+            for v in ("S", "L", "Ls1", "Lc"):
                 r0 = sel(v, t, n, 0)
                 if len(r0) < 3:
                     continue
@@ -296,7 +296,7 @@ def report2():
     L.append("| task | n | variant | 20 | 45 | 90 | 180 |\n|---|---|---|---|---|---|---|")
     for t in "AB":
         for n in (16, 64):
-            for v in ("L", "Lc"):
+            for v in ("L", "Ls1", "Lc"):
                 cells = []
                 for sh in SHIFTS[1:]:
                     rv0, rvs, rs0, rss = sel(v, t, n, 0), sel(v, t, n, sh), sel("S", t, n, 0), sel("S", t, n, sh)
@@ -314,7 +314,7 @@ def report2():
     rng = np.random.default_rng(0)
     for t in "AB":
         for n in (16, 64):
-            for v in ("L", "Lc"):
+            for v in ("L", "Ls1", "Lc"):
                 r0, rz = sel(v, t, n, 0), sel(v, t, n, 0, "zero")
                 if len(r0) < 3 or len(rz) < 3:
                     continue
@@ -340,7 +340,7 @@ def report2():
     L.append("| task | n | variant | errors by seed | max pairwise relative difference |\n|---|---|---|---|---|")
     for t in "AB":
         for n in (16, 64, 256):
-            for v in ("S", "L", "Lc"):
+            for v in ("S", "L", "Ls1", "Lc"):
                 r0 = sorted(sel(v, t, n, 0), key=lambda r: r["seed"])
                 if len(r0) < 3:
                     continue
@@ -372,6 +372,8 @@ def report2():
                 else:
                     cells.append("-")
             L.append(f"| {t} | {v} | {mean(f0):.4f} | " + " | ".join(cells) + " |")
+    out["prereg"], pl = prereg(sel, per)
+    L += pl
     json.dump(out, open("results/exp2_stage2.json", "w"), indent=1)
     text = "\n".join(L)
     open("results/exp2_stage2.md", "w").write(text + "\n")
@@ -379,18 +381,79 @@ def report2():
     figure2(R, sel, mean)
 
 
+def se_seed(sel, v, t, n):
+    """SE of a 3-seed difference from the pooled fine-tune-seed SD of the variant's mean errors (all shifts)."""
+    res = [np.asarray([r["rel_l2"] for r in sel(v, t, n, sh)]) for sh in SHIFTS]
+    res = [x - x.mean() for x in res if len(x) >= 2]
+    dof = sum(len(x) - 1 for x in res)
+    return float(np.sqrt(sum((x ** 2).sum() for x in res) / dof) * np.sqrt(2 / 3))
+
+
+def prereg(sel, per):
+    """the checks pre-registered in EXP2_RESULTS.md (amendment of 2026-10-14) before the n = 64 runs."""
+    import bootstrap as BS
+    out, L = {}, ["\nPre-registered checks (amendment of 2026-10-14)\n"]
+    L.append("| check | variant | Delta(180) = err(180) - err(0) [95% CI over bodies] | 2 x SE_seed | outcome |\n|---|---|---|---|---|")
+    p6 = []
+    for v in ("L", "Ls1", "Lc"):
+        c = BS.paired(sel(v, "A", 64, 180), sel(v, "A", 64, 0), mode="diff")
+        se = se_seed(sel, v, "A", 64)
+        ok = abs(c["mean"]) <= 2 * se
+        p6.append(ok)
+        out[f"P6_{v}"] = dict(c, se_seed=se, holds=ok)
+        L.append(f"| P6 task A 180 ~ 0 | {v} | {c['mean']:+.4f} [{c['lo']:+.4f}, {c['hi']:+.4f}] | {2 * se:.4f} | {'holds' if ok else 'FAILS'} |")
+    p7 = []
+    for v in ("L", "Ls1"):
+        c = BS.paired(sel(v, "B", 64, 180), sel(v, "B", 64, 0), mode="diff")
+        ok = c["hi"] < 0
+        p7.append(ok)
+        out[f"P7_{v}"] = dict(c, holds=ok)
+        L.append(f"| P7 task B reversed beats aligned | {v} | {c['mean']:+.4f} [{c['lo']:+.4f}, {c['hi']:+.4f}] | {2 * se_seed(sel, v, 'B', 64):.4f} | {'holds' if ok else 'fails'} |")
+    out["P6_holds"], out["P7_holds"] = all(p6), all(p7)
+    # verdict rule: difference-in-differences vs scratch at the same n
+    L.append("\nDifference-in-differences Delta_V(shift) - Delta_S(shift) used by the verdict rule (95% CI over bodies)\n")
+    L.append("| task | n | variant | 20 | 45 | 90 | 180 |\n|---|---|---|---|---|---|---|")
+    pos, did = {}, {}
+    for t in "AB":
+        for n in (16, 64):
+            for v in ("L", "Ls1", "Lc"):
+                cells = []
+                for sh in SHIFTS[1:]:
+                    rv0, rvs, rs0, rss = sel(v, t, n, 0), sel(v, t, n, sh), sel("S", t, n, 0), sel("S", t, n, sh)
+                    if min(map(len, (rv0, rvs, rs0, rss))) < 3:
+                        cells.append("-")
+                        continue
+                    m, lo, hi = BS.boot_mean((per(rvs) - per(rv0)) - (per(rss) - per(rs0)))
+                    did[(t, n, v, sh)] = (m, lo, hi)
+                    cells.append(f"{m:+.4f} [{lo:+.4f}, {hi:+.4f}]{'*' if lo > 0 or hi < 0 else ''}")
+                if any(c != "-" for c in cells):
+                    L.append(f"| {t} | {n} | {v} | " + " | ".join(cells) + " |")
+    support = any(all(did.get((t, 64, v, sh), (0, 0, 0))[1] > 0 for v in ("L", "Ls1"))
+                  for t in "AB" for sh in (20, 45, 90))
+    refuted = not any(lo > 0 for (t, n, v, sh), (m, lo, hi) in did.items() if v in ("L", "Lc"))
+    out["verdict"] = "support" if support else "refutation" if refuted else "unresolved"
+    out["positive_did"] = [dict(task=t, n=n, variant=v, shift=sh, mean=m, lo=lo, hi=hi)
+                           for (t, n, v, sh), (m, lo, hi) in did.items() if lo > 0]
+    out["negative_did"] = [dict(task=t, n=n, variant=v, shift=sh, mean=m, lo=lo, hi=hi)
+                           for (t, n, v, sh), (m, lo, hi) in did.items() if hi < 0]
+    L.append(f"\nP6 (task A 180 costs about nothing, L s0, L s1, Lc): {'holds' if out['P6_holds'] else 'FAILS'}. "
+             f"P7 (task B reversed beats aligned at n = 64 in both L seeds): {'holds' if out['P7_holds'] else 'fails'}. "
+             f"Verdict by the pre-registered rule: {out['verdict']}.")
+    return out, L
+
+
 def figure2(R, sel, mean):
     import matplotlib.pyplot as plt
     import analyze as A
-    col = dict(A.COL, Lc="#7a5cd6")
-    mrk = dict(A.MRK, Lc="h")
-    name = dict(A.NAME, Lc="GeoPT-lifted, canonical pretraining")
+    col = dict(A.COL, Lc="#7a5cd6", Ls1=A.COL["L"])
+    mrk = dict(A.MRK, Lc="h", Ls1="^")
+    name = dict(A.NAME, Lc="GeoPT-lifted, canonical pretraining", Ls1="GeoPT-lifted, pretraining seed 1")
     fig, axes = plt.subplots(2, 2, figsize=(11, 8.2), sharex=True)
     for c, t in enumerate("AB"):
         for r_, n in enumerate((16, 64)):
             ax = axes[r_, c]
             A.style(ax)
-            series = [(v, n, "-") for v in ("S", "L", "Lc")] + ([("S", 256, "--")] if n == 64 else [])
+            series = [(v, n, "-") for v in ("S", "L", "Lc")] + ([("Ls1", 64, ":"), ("S", 256, "--")] if n == 64 else [])
             ends = []
             for v, nn, ls in series:
                 pts = [(sh, sel(v, t, nn, sh)) for sh in SHIFTS]
