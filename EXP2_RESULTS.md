@@ -117,3 +117,55 @@ All variants at shift 0 vs scratch (negative = better than scratch)
 - G3 changed from "mixed" to "undetermined", since it flips with the fine-tuning seed.
 - The claim that scratch is a clean noise floor was withdrawn.
 - The seed caveats and the corrected perimeter explanation were added.
+
+## Amendment (2026-10-14, before any n = 64 shift run): scratch control corrected; new pre-registered predictions
+User decision (Goals and Validation, steps 1-2). Written and committed before any n = 64 shift run exists. At this point the only n = 64 runs are shift 0 and zero prompt; task B n = 16 (S, L, Lc, all shifts) and the scratch n = 256 control have been run.
+
+### Step 1: the scratch reading, corrected
+**Earlier claims replaced:**
+- An earlier sentence above said scratch's shift curve "will be flat by construction" because scratch barely reads the prompt.
+- An informal summary called scratch's task-A n = 256 pattern (a penalty at 90°, none at 180°) "the predicted physics pattern".
+
+**The correct reason scratch must be flat at 90° and 180°: symmetry.**
+- Rotating every prompt by 90° permutes and sign-flips the two prompt inputs of `q.1`; rotating by 180° flips their signs.
+- The Gaussian initialisation is invariant under that change, and AdamW (with weight decay and global-norm clipping) is equivariant under permutations and sign flips of parameter coordinates.
+- So over initialisation seeds, scratch's error has exactly the same distribution at 0°, 90° and 180°, whether or not it reads the prompt.
+- At 20° and 45° the symmetry is only approximate, because Adam's per-coordinate normalisation is not rotation-equivariant.
+
+**The check: differences between 3-seed means, against the pooled seed-to-seed SD** (SE of a 3-seed difference = SD × sqrt(2/3)):
+
+| task, n | pooled seed SD | 0° (seeds) | 90° | 180° | z(90) | z(180) |
+|---|---|---|---|---|---|---|
+| A, 256 | 0.0223 | 0.196, 0.163, 0.201 | 0.217, 0.234, 0.199 | 0.179, 0.176, 0.225 | +1.64 | +0.36 |
+| B, 256 | 0.0165 | 0.166, 0.166, 0.197 | 0.193, 0.161, 0.163 | 0.166, 0.179, 0.153 | -0.29 | -0.75 |
+| B, 16 | 0.0276 | 0.458, 0.517, 0.495 | 0.462, 0.515, 0.489 | 0.463, 0.512, 0.488 | -0.08 | -0.12 |
+
+**Reading.**
+- All differences fall within scratch's own seed spread (|z| <= 1.64), so the control passes, with no sign of a bug.
+- The task-A n = 256 "90° penalty" (+0.030) is seed noise and must not be read as physics.
+- The n = 256 control does read the prompt (zeroing it costs A 0.187 → 0.360, B 0.176 → 0.470) and is still flat at 90° and 180°. Flatness therefore says nothing about prompt use.
+- At n = 16, each scratch seed barely moves with the shift at all.
+
+### Step 2: predictions and verdict rules for the n = 64 sweep, pre-registered now
+**Scope.**
+- L = `ckpt/L.npz` (pretraining seed 0) and L seed 1 = `ckpt/exp1/L_clean_s1.npz`, both pretrained on randomly oriented bodies.
+- Lc = `ckpt/exp2/Lc_s0.npz`.
+- Shifts 0, 20, 45, 90 and 180, plus zero prompt; n = 64; fine-tuning seeds 0-2; the canonical data and absolute frame of Stage 1.
+
+**Statistics.**
+- Delta_V(shift) = err(shift) - err(0), per test body, averaged over fine-tuning seeds.
+- "Beats" / "excludes zero" refers to the paired 95% bootstrap interval over the 100 test bodies.
+- SE_seed is the standard error of a 3-seed difference, from the variant's pooled seed SD at that n and task.
+
+**P6, task A at 180° costs about nothing.**
+- For L seed 0, L seed 1 and Lc at n = 64: |Delta_V(180)| <= 2 × SE_seed.
+- A task-A 180° penalty with its paired CI excluding zero and larger than 2 × SE_seed counts as a failure, and triggers an investigation (bug or non-physical shortcut) before anything is reported.
+
+**P7, new prediction: on task B the reversed prompt beats the aligned one.**
+- At n = 64, Delta_L(180) < 0 with its paired CI excluding zero, separately for L seed 0 and for L seed 1. Both are required.
+- **Provenance:** this effect was first seen at n = 16 (L 0.448 → 0.346, Lc 0.439 → 0.325, scratch flat), so task-B n = 16 is exploratory. Only n = 64 is a confirmatory test.
+
+**Verdict rule for the question (from the Goals and Validation note).**
+- **Support:** pretrained models lose more than scratch at 20-90° shifts. Operationally, for L at n = 64, the difference-in-differences Delta_L(shift) - Delta_S(shift) is positive with its CI excluding zero at one or more of 20, 45 and 90 degrees, on a task, in both L seeds.
+- **Refutation:** no loss beyond scratch's at any shift at n = 16 or n = 64. Operationally, no positive difference-in-differences with a CI excluding zero, for L or Lc, at any shift, n or task.
+- **Anything else is unresolved.**
