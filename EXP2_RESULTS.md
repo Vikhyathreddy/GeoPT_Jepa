@@ -303,15 +303,23 @@ P6 (task A 180 costs about nothing, L s0, L s1, Lc): holds. P7 (task B reversed 
 **Pre-registered checks.**
 - **P6 (task A, 180° costs about nothing at n = 64): holds** for L seed 0 (-0.0024 [-0.0096, +0.0048]), L seed 1 (-0.0068) and Lc (+0.0029). All are well within 2 × SE_seed.
 - **P7 (task B, reversed beats aligned at n = 64 in both L seeds): holds by the pre-registered rule.** L seed 0: -0.0202 [-0.0264, -0.0140]; L seed 1: -0.0349 [-0.0423, -0.0272].
-  - **Caveat:** those intervals cover test bodies, not fine-tuning seeds. L seed 1's shift-0 errors on task B span 0.235, 0.166 and 0.152 across fine-tuning seeds (a 54% spread), so its effect is smaller than 2 × SE_seed (0.060).
+  - **Caveat (corrected after the audit; it applies to both L seeds):** those intervals cover test bodies, not fine-tuning seeds. Neither seed's effect clears 2 × SE_seed (L seed 0: |-0.0202| < 0.0238; L seed 1: |-0.0349| < 0.060).
+  - Pairing fine-tuning seeds, L seed 0 is negative in all three (-0.027, -0.015, -0.019; t95 [-0.036, -0.005]), while L seed 1 (-0.083, -0.018, -0.003; t95 [-0.141, +0.071]) and Lc (t95 [-0.058, +0.006]) are not robust.
+  - L seed 1's magnitude comes mostly from one poor shift-0 run (its errors span 0.235, 0.166 and 0.152).
   - Lc shows the same direction (-0.0232 difference-in-differences), and it holds in every task-B cell at n = 16.
 - **Verdict on the question (pre-registered rule): unresolved.**
   - **Support fails.** At n = 64, no shift makes L lose more than scratch in both L seeds. The difference-in-differences is negative (shifting helps) at 45° and 90° on both tasks, in both seeds. The only positive cell is L seed 1 on task B at 20° (+0.011), and it does not replicate in seed 0.
   - **Refutation fails.** At n = 16 on task A, L and Lc do lose more than scratch at 20-90° (+0.016 to +0.031, CIs excluding 0). That is 13-26% of the prompt's benefit lost.
 
 **Reading.**
-- **The toy reproduces GeoPT's alignment penalty only in one corner:** small data (n = 16) on the elliptic task A. There, a misaligned prompt costs 13-26% of the benefit the prompt provides. Scratch is flat, as the symmetry argument requires.
-- **With 64 labels, misalignment never hurts, and 45-90° shifts help.** At 90°: task A L -15%, L seed 1 -10%, Lc -9% of the prompt's benefit; task B -12%, -10% and -7%.
+- **An alignment penalty appears only in one corner: small data (n = 16) on task A** (13-26% of the prompt's benefit lost). Corrected after the audit, three qualifications apply:
+  - This is outside the pre-registered confirmatory test, which covers n = 64.
+  - For L it is not robust across fine-tuning seeds (every 3-seed paired t interval includes 0).
+  - Lc's 180° difference-in-differences there (+0.019) is as large and as seed-consistent as its 20° one (+0.017). The same checkpoint-level asymmetry may produce both, which weakens reading it as GeoPT's physical alignment effect.
+- **With 64 labels, only the 90° shift helps consistently** (corrected after the audit; the original line said "misalignment never hurts, and 45-90° shifts help"). At 90°: task A L -15%, L seed 1 -10%, Lc -9% of the prompt's benefit; task B -12%, -10%, -7%.
+  - L seed 1 on task B is hurt at 20° (+0.0104 [+0.0079, +0.0128]) and 45° (+0.0081 [+0.0036, +0.0128]), on body-only CIs and inconsistently across fine-tuning seeds.
+  - At 45° L seed 1 gains nothing on task A either.
+  - Scratch has small penalties at 20° and 45° (A +0.005 and +0.009, B 45° +0.011). These push the pretrained models' difference-in-differences down, so some "helps beyond scratch" cells reflect scratch getting worse.
   - **Task A, exploratory (post hoc) analysis:** the 90° gain grows with body elongation for all three pretrained models (Spearman of aspect ratio vs Delta(90): -0.32, -0.26 and -0.32; p <= 0.009). The rounder half of the bodies gains -0.007 to -0.021 and the more elongated half -0.025 to -0.038; scratch shows no such link.
   - This fits a non-physical mechanism. The canonical bodies have their long axis along x, so a 90° prompt points at the broad side, where pretraining's transport features are most geometry-rich.
   - On task B there is no elongation link, so the B gain has another source.
@@ -322,20 +330,41 @@ P6 (task A 180 costs about nothing, L s0, L s1, Lc): holds. P7 (task B reversed 
 - **Investigation of the n = 16 task-A 180° penalty for Lc** (+0.019 [+0.010, +0.027] beyond scratch). The spec's P2 asks for an investigation before such a penalty is reported.
   - It is consistent across fine-tuning seeds (+0.019, +0.024, +0.019), so it is not seed noise.
   - It is not a code bug. Scratch is flat at 180° at n = 16, 64 and 256 (per-seed differences within ±0.024). Lc is flat at 180° at n = 64 (P6), and L's n = 16 value is inconsistent across seeds (+0.003, -0.022, +0.049).
-  - Most likely reading: the lifted pretext is not symmetric under v → -v (particles moving toward vs away from the wall), while task A's physics is. With 16 labels, fine-tuning cannot learn the invariance.
+  - Mechanism (corrected after the audit; the original suggested that the pretext is not symmetric under v → -v).
+    - The 180°-shifted problem is physically identical, since q(alpha) = q(alpha + pi) to 4e-15, so no invariance has to be learned.
+    - The pretext is symmetric under a joint 180° rotation of body and velocity, and the canonical body distribution is 180°-symmetric.
+    - A penalty therefore needs a network that is not 180°-equivariant: absolute Fourier(x) features and a single finite pretraining run.
+    - That points to a checkpoint-level (pretraining-seed) effect, which neither the body CI nor the fine-tuning seeds cover.
   - That is a non-physical asymmetry inherited from pretraining. It is not a test of the physics, and it vanishes at n = 64.
-  - A direct test (not run) would be fine-tuning with random prompt sign flips on task A.
+  - The right test (not run) is a second Lc pretraining seed. Random prompt sign flips during fine-tuning would not separate the two explanations.
 
 **Predictions: outcomes.**
-- **P1 (penalty growing 0 → 90° for L and Lc, larger at n = 16; scratch none): mostly failed.** It holds only on task A at n = 16. At n = 64, and on task B at both n, shifts help. Scratch shows none, as predicted.
-- **P2 (task A 180° costs nothing for every variant): held at n = 64** (pre-registered as P6), and for scratch at every n. It **failed for Lc at n = 16**; investigated above, with no bug found.
-- **P3 (task B sign of the 180° penalty, open): the reversed prompt is better,** at both n, in both L seeds, for L and Lc.
+- **P1 (penalty growing 0 → 90° for L and Lc, larger at n = 16; scratch none): mostly failed.** A penalty appears only on task A at n = 16. It grows toward 90° only for Lc (L: +0.019, +0.023, +0.016) and is not fine-tuning-seed robust for L.
+  - At n = 64 there is no consistent penalty, and 90° helps.
+  - Scratch has small 20°/45° penalties at n = 64, so its clause holds only at the exactly symmetric 90° and 180° (corrected after the audit).
+- **P2 (task A 180° costs nothing for every variant): held at n = 64,** pre-registered as P6, with the pre-registered criterion (|Delta| <= 2 × SE_seed).
+  - At n = 16, Lc's +0.021 penalty is seed-consistent but inside 2 × SE_seed (0.026), so under the P6 criterion it would not count as a failure.
+  - L at n = 16 has a body-CI-significant +0.010 that is seed-inconsistent; scratch at n = 256 has +0.007, within seed noise. (Criteria made explicit after the audit.)
+- **P3 (task B sign of the 180° penalty, open): the reversed prompt is better** for L and Lc at n = 16 (one L pretraining seed) and at n = 64 (both L seeds, on body CIs). Across fine-tuning seeds this is robust only for L seed 0 (corrected after the audit; L seed 1 was run at n = 64 only).
 - **P4 (Lc >= L at shift 0): failed on task A, passed on task B** (recorded per the user's decision; see above).
 - **P5 (no penalty → GeoPT's effect depends on something the toy lacks): partly applies.** The toy shows a penalty only with 16 labels on task A. With 64 labels the pretrained prompt semantics are re-mapped (or even exploited), and the q.1-frozen runs show that the remaining prompt semantics prefer non-aligned prompts.
-- **P6: held. P7: held,** with the fine-tuning-seed caveat for L seed 1.
+- **P6: held. P7: held by the pre-registered rule.** Neither L seed's effect clears 2 × SE_seed; across fine-tuning seeds it is robust for L seed 0 only.
 
 **Caveats.**
 - The CIs cover the 100 test bodies only.
 - Fine-tuning-seed spread at n = 64 reaches 17-24% for L and 54% for L seed 1 on task B (noise floor table), comparable to many of the shift effects.
 - There is one Lc checkpoint, and two L pretraining seeds (seed 1 at n = 64 only).
 - Scratch at n = 64 memorises (the G1 caveat).
+
+
+## Independent audit (step 5, 2026-10-14)
+Three agents recomputed every number, checked the code and challenged the claims for the Stage 2/3a sweep and the pre-registered checks. Every number reproduces.
+- **No bug:** shift units, the per-sample prompt, the `Ls1` checkpoint, `q.1` freezing, zero-prompt mode and the verdict code all check out.
+- **Pre-registration holds:** every n = 64 shift row postdates the pre-registration commit (d10cbf6).
+- **The verdict stays "unresolved".** The corrections are interpretive and are applied in place above, marked "corrected after the audit".
+
+**Further points from the audit.**
+- **P4 (recorded per the user as failed on task A and passed on task B): neither gap is significant.** With 3 fine-tuning seeds, the paired Lc vs L difference is A +2.3% [-0.3, +4.9] and B -1.3% [-4.6, +2.0], and the per-seed sign flips on both tasks. The record therefore reflects the user's decision, not a significant result.
+- **Stage 3a freezes only `q.1`.** `q.2` and the decoder blocks still train, so the frozen runs show that a model with a fixed first prompt layer still prefers rotated or reversed prompts on task B. They do not isolate the pretrained semantics.
+- **G1 caveat, with all 3 seeds:** scratch on task A is still worse than the per-surface-point mean profile (+7.3% [+3.6, +11.1]). The task-A scratch control is valid through the symmetry argument, not through its fit.
+- **Statistics:** intervals cover the 100 test bodies only. Pretraining seeds: L 2 (seed 1 at n = 64 only), Lc 1.

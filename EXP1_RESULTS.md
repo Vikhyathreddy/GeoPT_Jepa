@@ -298,7 +298,7 @@ second pretraining seed
 - **Where the dynamics information sits: the user's measurements reproduce.**
   - The sticking signal is 1.44% of the t = 1,2 target variance.
   - Wall-hitting particles are 17.8% of validation points and carry 33% of clean L's pretext error (the user measured 36%; 41% for the seed-1 model).
-- **The prediction recorded with the amendment is refuted.** Label noise does not raise the wall-hitting particles' error more than the free particles'. The opposite holds, at every level and in both seeds:
+- **The prediction recorded with the amendment is not supported proportionally** (corrected after the audit; the original wording said "refuted ... the opposite holds"). The prediction named no metric. Measured relative to each slice's clean error, wall-hitting error rises less than free error at every level and in both seeds (sigma 2: hit × 1.33 vs free × 1.48; seed 1: 1.26 vs 1.46; sigma 4: 1.89 vs 2.10; sigma 8: 3.02 vs 3.47; fresh sigma 4: 1.78 vs 1.88), and the hit share of the error falls from 33% to 30%. In absolute MSE, though, the wall-hitting error rises 1.4-2.0 times as much as the free error (sigma 2: +0.00106 vs +0.00069), in line with its higher clean error. So label noise adds error roughly in proportion to each slice's baseline: it does not single out the dynamic slice, and it does not raise it "far more".
   - sigma 2: hit × 1.33 vs free × 1.48 (seed 1: 1.26 vs 1.46);
   - sigma 4: 1.89 vs 2.10;
   - sigma 8: 3.02 vs 3.47;
@@ -321,7 +321,7 @@ second pretraining seed
 - **The second pretraining seed shows large pretraining-seed variance.**
   - Clean L: seed 1 vs seed 0 is A +5.8%, B -11.5%. Clean LT: A -12.6%, B -5.1%. Clean N: A -2.7%, B +0.8% (both CIs include 0).
   - At seed 1, clean LT beats N (A -7.7%, B -5.2%, both CIs exclude 0), whereas at seed 0 it does not (A +3.2%, B +0.7%). So the amendment's premise that clean LT is about N-level holds for seed 0 only. Seed 1's latent part does add something over geometry.
-  - L still beats LT within seed 1: LT vs L is A +9.1% [+5.0, +13.4], B +15.0% [+11.9, +18.2].
+  - Clean L still beats clean LT within seed 1: LT vs L is A +9.1% [+5.0, +13.4], B +15.0% [+11.9, +18.2]. **But at seed 1's halving level (sigma 2: L keeps 41% on A and 44% on B of its advantage over N), L only ties the clean LT: A -1.0% [-4.7, +2.6] (LT nominally better), B +2.5% [-0.7, +5.9].** (Added after the audit.)
   - The sigma = 2 degradation of L replicates in seed 1: A +11.1% (seed 0: +12.3%), B +13.2% (seed 0: +4.9%).
 
 **Predictions: outcomes after Stage 2.**
@@ -329,19 +329,40 @@ second pretraining seed
   - Label noise at sigma = 2 costs L +12.3% (A) and +4.9% (B) with seed 0, and +11.1% and +13.2% with seed 1. All are over 5%, except seed 0 on task B, which is borderline.
   - The fresh-vs-frozen part holds: they match at full corpus size.
   - The small-corpus part was not tested (option e skipped).
-- **P2: confirmed as an interpretation.** L degrades under heavy label noise, and LT overtakes it only at sigma 8, once L has fallen below geometry-only level. That crossover is by construction and does not support the rule of thumb.
+- **P2: confirmed as an interpretation, at seed 0.** L degrades under heavy label noise, and LT overtakes it only at sigma 8, once L has fallen below geometry-only level. That crossover is by construction and does not support the rule of thumb. At seed 1, LT draws level with L already at sigma 2, while L still beats N (A +7.9%, B +9.0%).
 - **P3: undetermined.** Stage 1 found no crossover up to sigma_pos = 0.30 and indistinguishable degradation; the family was not extended, by decision.
 - **P4: not tested.** Bounce was skipped by decision.
 - **P5: refuted.** LJ is no more noise-robust than L.
 - **Amendment prediction (wall-hitting error rises far more than free error under label noise): refuted.**
 
 **Verdict.**
-- **Under the amended rule: refutes for the label family.** L >= LT at every label level up to the level where L's advantage over N has halved (A: sigma 4; B: sigma 2, with a tie at sigma 4). LT overtakes only at sigma 8, after L has lost its whole advantage over geometry.
+- **Under the amended rule, the label family cannot be informative** (corrected after the audit; the original line said "refutes for the label family").
+  - At seed 0 the reused clean LT sits at N's level (A +3.2%, B +0.7% vs N). Any level where L still keeps half its advantage over N therefore has L below LT's error, so "L >= LT up to the halving level" could not fail. It is as much a construction artefact as the sigma 8 crossover that P2 discounts.
+  - At seed 1, the informative seed (clean LT beats N), L only ties LT at the halving level (sigma 2).
+  - The amended rule was also written after the Stage 1 data, which already fixed task B's halving level.
 - **The trajectory family stopped (by decision) before the halving level,** so no verdict can be given for it.
 - **Under the spec's original rules,** a crossover that appears only under label noise reads as "weak support". Here it appears only past the point where the label family is mechanically guaranteed to cross.
-- **Overall:** no evidence in this setting that latent targets beat explicit ones because the explicit targets are noisy.
+- **Overall: no support for the rule of thumb, and no informative refutation either.** Question 1 stays **unresolved**.
+  - The Goals-and-Validation support rule requires noise that hits both target types (trajectory noise or bounce). Trajectory noise up to pos030 never reached the level where L's advantage over N halves (90% and 75% kept). Bounce was not run.
+  - Under the original, pre-data rule (L's gain over scratch halves), the label family does reach the halving point at sigma 8 (L keeps 47% on A and 34% on B), and LT beats L there: the pre-registered "weak support" outcome, discounted by P2 as by construction.
 
 **Caveats.**
 - The CIs cover test-body sampling only.
 - Most conditions have one pretraining seed, and the seed-1 checkpoints differ from seed 0 by 5-13%, comparable to many of the effects measured. The LT ≈ N premise itself does not survive the second seed.
 - Task-B retained shares are unstable because L's clean advantage over N there is small (5%).
+
+
+## Independent audit (step 5, 2026-10-14)
+Three agents recomputed every number, checked the code and challenged the claims for Stage 2. Every number reproduces, including an independent forward pass for all 13 pretext-split checkpoints, and no code bug was found. The corrections below are interpretive; no run had to be repeated. They are applied in place above, marked "corrected after the audit".
+
+**What changed.**
+- **The headline verdict:** "refutes for the label family" became "uninformative by construction; question unresolved" (see Verdict).
+- **The hit-vs-free prediction:** "refuted ... the opposite holds" became "not supported proportionally". Absolute increases are larger for wall-hitting particles; proportional ones are not.
+- **Seed 1 at its halving level is now reported:** L only ties the clean LT (A -1.0% [-4.7, +2.6], B +2.5% [-0.7, +5.9]).
+
+**What the audit added.**
+- **LJ (P5) is refuted on task A only.** On task B, LJ degrades nominally less than L (+4.1% / +8.4% vs +4.9% / +8.7%); every task-B LJ vs L CI includes 0.
+- **The task-B halving level is poorly pinned down:** L keeps 37% [-16, 72] of its advantage at sigma 2.
+- **The amendment's premise conflicts with the measurements.** It says "L's overall pretext fit barely moved"; in fact L's clean-target pretext error rose 43-46% at sigma 2, including on the always-clean t = 0 output.
+- **Seed 1 halves earlier than seed 0 on task A** (41% vs 60% kept at sigma 2).
+- **Statistics:** all intervals above cover the 100 test bodies only. Pretraining seeds: one per condition, except clean and sigma 2, which have two.
