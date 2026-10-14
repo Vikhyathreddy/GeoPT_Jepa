@@ -205,9 +205,10 @@ def report():
     from runner import load_rows
     R = rows()
     meta = json.load(open("results/exp1_corpora.json"))
-    pre = {(r["variant"], r["tag"]): r for r in load_rows(PRE_OUT)}
+    pre = {(r["variant"], r["tag"]): r for r in load_rows(PRE_OUT) if r["pretrain_seed"] == 0}
     clean_hist = {v: json.load(open(f"ckpt/{v}.json"))[-1] for v in ("L", "LT")}
-    sel = lambda v, tag, t: [r for r in R if (r["variant"], r["tag"], r["task"], r["n"]) == (v, tag, t, 64)]
+    sel = lambda v, tag, t: [r for r in R if (r["variant"], r["tag"], r["task"], r["n"], r["pretrain_seed"])
+                             == (v, tag, t, 64, 0)]
     tags = ["clean"] + list(STAGE1)
     out = dict(conditions={}, tables=[])
     lines = ["| task | condition | target noise | L | LT | LT vs L | L vs clean L | LT vs clean LT |",
@@ -350,24 +351,28 @@ def pretext_split(ckpts):
     return stats, rows
 
 
-def diag():
+def diag(recompute=True):
     from runner import load_rows
     R = rows()
     out, lines = l_vs_n(R)
-    ckpts = [("L clean s0", "ckpt/L.npz", "head.lift"), ("LJ clean s0", "ckpt/LJ.npz", "head.lift")]
-    for r in sorted(load_rows(PRE_OUT), key=lambda r: (r["variant"], r["pretrain_seed"], r["tag"])):
-        if r["variant"] in ("L", "LJ"):
-            ckpts.append((f"{r['variant']} {r['tag']} s{r['pretrain_seed']}", r["ckpt"], "head.lift"))
-    stats, split = pretext_split(ckpts)
+    if recompute:
+        ckpts = [("L clean s0", "ckpt/L.npz", "head.lift"), ("LJ clean s0", "ckpt/LJ.npz", "head.lift")]
+        for r in sorted(load_rows(PRE_OUT), key=lambda r: (r["variant"], r["pretrain_seed"], r["tag"])):
+            if r["variant"] in ("L", "LJ"):
+                ckpts.append((f"{r['variant']} {r['tag']} s{r['pretrain_seed']}", r["ckpt"], "head.lift"))
+        stats, split = pretext_split(ckpts)
+    else:
+        d = json.load(open("results/exp1_stage2_diag.json"))
+        stats, split = d["pretext_stats"], d["pretext_split"]
     json.dump(dict(l_vs_n=out, pretext_stats=stats, pretext_split=split), open("results/exp1_stage2_diag.json", "w"), indent=1)
-    base = {r["name"].split(" ")[0]: r for r in split if r["name"].endswith("clean s0")}
+    base = {(r["name"].split(" ")[0], r["name"].split(" ")[-1]): r for r in split if " clean " in r["name"]}
     pl = [f"Validation samples: {stats['n_samples']}; wall-hitting particles {100 * stats['hit_fraction']:.1f}%, "
           f"near-body (|vd0| < {NEAR}) {100 * stats['near_fraction']:.1f}%; sticking signal = "
           f"{100 * stats['sticking_signal_share_of_t12_variance']:.2f}% of the t = 1,2 target variance.\n",
           "| checkpoint | MSE (all 6 outputs) | hit | free | hit share of error | near | far | "
-          "hit / clean hit | free / clean free |", "|---|---|---|---|---|---|---|---|---|"]
+          "hit / clean hit (same seed) | free / clean free (same seed) |", "|---|---|---|---|---|---|---|---|---|"]
     for r in split:
-        a, c = r["all"], base[r["name"].split(" ")[0]]["all"]
+        a, c = r["all"], base[(r["name"].split(" ")[0], r["name"].split(" ")[-1])]["all"]   # same variant and seed
         pl.append(f"| {r['name']} | {a['mse']:.5f} | {a['hit']:.5f} | {a['free']:.5f} | {100 * a['hit_share_of_error']:.0f}% | "
                   f"{a['near']:.5f} | {a['far']:.5f} | {a['hit'] / c['hit']:.2f} | {a['free'] / c['free']:.2f} |")
     text = "L and LJ against native geometry N (same pretraining seed; n = 64; mean over fine-tune seeds 0, 1; " \
@@ -428,10 +433,11 @@ def figure(R, meta, refs):
             for v, ls in (("S", ":"), ("N", "--")):
                 ax.axhline(refs[t][v], color=A.COL[v], ls=ls, lw=1.3, label=f"{A.NAME[v]} (noise-free reference)")
             ends = []
-            for v in ("L", "LT", "LJ"):
+            for v in (("L", "LT", "LJ") if fam == "label" else ("L", "LT")):
                 pts = []
                 for x, g in zip(xs, tags):
-                    e = [r["rel_l2"] for r in R if (r["variant"], r["tag"], r["task"], r["n"]) == (v, g, t, 64)]
+                    e = [r["rel_l2"] for r in R if (r["variant"], r["tag"], r["task"], r["n"], r["pretrain_seed"])
+                         == (v, g, t, 64, 0)]
                     if e:
                         pts.append((x, np.mean(e), np.min(e), np.max(e)))
                 if pts:
@@ -441,7 +447,8 @@ def figure(R, meta, refs):
                             label=A.NAME[v])
                     ends.append((m_[-1], x_[-1], v))
                 for g in [g for g in FRESH if CONDS[g][0] == fam]:              # fresh noise: open marker
-                    e = [r["rel_l2"] for r in R if (r["variant"], r["tag"], r["task"], r["n"]) == (v, g, t, 64)]
+                    e = [r["rel_l2"] for r in R if (r["variant"], r["tag"], r["task"], r["n"], r["pretrain_seed"])
+                         == (v, g, t, 64, 0)]
                     if e and v != "LT":
                         ax.plot([CONDS[g][1]], [np.mean(e)], marker=A.MRK[v], ms=9, ls="none", markerfacecolor="none",
                                 markeredgecolor=A.COL[v], mew=1.6, label=f"{A.NAME[v]}, fresh noise each batch")
@@ -453,11 +460,11 @@ def figure(R, meta, refs):
                 ax.annotate(A.NAME[v], (x, y), xytext=(x + 0.04 * max(xs), yy), fontsize=8.5, color=A.INK2,
                             va="center", arrowprops=dict(arrowstyle="-", color=A.GRID, lw=0.8),
                             bbox=dict(boxstyle="round,pad=0.15", fc=A.SURF, ec="none"))
-            ax.set_xlim(-0.05 * max(xs), max(xs) * 1.55)
+            ax.set_xlim(-0.05 * max(xs), max(xs) * (1.3 if fam == "label" else 1.55))
             ax.set_xlabel("measured target-space noise / clean target std")
             ax.set_ylabel("test relative L2 error, 64 labels")
-            note = " (LT never reads these targets: clean LT reused)" if fam == "label" else ""
-            ax.set_title(f"{A.TASK[t]}\n{fam} noise{note}", loc="left", fontsize=10)
+            note = " (clean LT reused)" if fam == "label" else ""
+            ax.set_title(f"{A.TASK[t]}\n{fam} noise{note}, pretraining seed 0", loc="left", fontsize=10)
     h, l = [], []
     for ax in (axes[0, 0], axes[1, 0]):
         for hh, ll in zip(*ax.get_legend_handles_labels()):
