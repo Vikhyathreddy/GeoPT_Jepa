@@ -257,6 +257,29 @@ def mse(pred, target):
     return _mk(np.asarray((diff * diff).mean(), DT), (pred,), back)
 
 
+def logsumexp(x, axis=-1):
+    m = x.data.max(axis, keepdims=True)
+    e = np.exp(x.data - m)
+    s = e.sum(axis, keepdims=True)
+    y = (np.log(s) + m).squeeze(axis)
+
+    def back(g):
+        _acc(x, np.expand_dims(g, axis) * e / s)
+    return _mk(y.astype(DT), (x,), back)
+
+
+def softmax_xent(logits, target):
+    """mean over rows of -sum_k target_k log softmax(logits)_k; target (constant) rows sum to 1."""
+    z = logits.data - logits.data.max(-1, keepdims=True)
+    lse = np.log(np.exp(z).sum(-1, keepdims=True))
+    p = np.exp(z - lse)
+    n = z.size // z.shape[-1]
+
+    def back(g):
+        _acc(logits, (g / n) * (p - target))
+    return _mk(np.asarray(-(target * (z - lse)).sum() / n, DT), (logits,), back)
+
+
 def total(*terms):
     out = terms[0]
     for t in terms[1:]:
