@@ -43,8 +43,9 @@ def paired(rows_a, rows_b, field="per_shape", mode="rel", higher_is_better=False
                 seeds_match=sorted(map(str, sa)) == sorted(map(str, sb)), sig=bool(lo > 0 or hi < 0))
 
 
-def fmt(r, pct=True):
+def fmt(r, pct=True, digits=None):
     s = 100 if pct else 1
     u = "%" if pct else ""
-    return (f"{s * r['mean']:+.1f}{u} [{s * r['lo']:+.1f}, {s * r['hi']:+.1f}]{'*' if r['sig'] else ' '} "
+    d = (1 if pct else 3) if digits is None else digits
+    return (f"{s * r['mean']:+.{d}f}{u} [{s * r['lo']:+.{d}f}, {s * r['hi']:+.{d}f}]{'*' if r['sig'] else ' '} "
             f"better on {100 * r['better']:.0f}% of bodies")

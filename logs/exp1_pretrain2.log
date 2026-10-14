@@ -10,3 +10,5 @@ LJ {'it': 1000, 'sec': 257.9, 'lift': 2.58743, 'jepa': 0.02382, 'tgt_std': 0.682
 LJ {'it': 1250, 'sec': 324.0, 'lift': 2.4718, 'jepa': 0.02178, 'tgt_std': 0.68346, 'loss': 2.47397, 'val_lift': 2.48054, 'val_jepa': 0.02482, 'val_tgt_std': 0.6979, 'val_loss': 2.48302, 'valclean_lift': 0.0086}
 LT {'it': 750, 'sec': 360.3, 'latent': 0.02486, 'tgt_std': 0.22176, 'anchor': 0.00131, 'loss': 0.0038, 'val_latent': 0.02469, 'val_tgt_std': 0.21926, 'val_anchor': 0.00138, 'val_loss': 0.00385}
 LJ {'it': 1500, 'sec': 383.5, 'lift': 2.44946, 'jepa': 0.02085, 'tgt_std': 0.68005, 'loss': 2.45154, 'val_lift': 2.47786, 'val_jepa': 0.02288, 'val_tgt_std': 0.69736, 'val_loss': 2.48015, 'valclean_lift': 0.0058}
+LJ {'it': 1750, 'sec': 431.7, 'lift': 2.47687, 'jepa': 0.0191, 'tgt_std': 0.68466, 'loss': 2.47878, 'val_lift': 2.47717, 'val_jepa': 0.0217, 'val_tgt_std': 0.70316, 'val_loss': 2.47934, 'valclean_lift': 0.00479}
+LT {'it': 1000, 'sec': 457.4, 'latent': 0.02251, 'tgt_std': 0.23179, 'anchor': 0.00102, 'loss': 0.00328, 'val_latent': 0.02158, 'val_tgt_std': 0.22688, 'val_anchor': 0.00111, 'val_loss': 0.00326}

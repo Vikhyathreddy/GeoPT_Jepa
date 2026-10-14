@@ -448,6 +448,63 @@ def report():
     text = "\n".join(L)
     open("results/exp3_gate1.md", "w").write(text + "\n")
     print(text)
+    figures(R, Pr)
+
+
+def figures(R, Pr):
+    import matplotlib.pyplot as plt
+    import analyze as A
+    import bootstrap as BS
+    groups = [("probe, decoder", lambda b, t: [dict(per_shape=x["dec_per_body_rho"]) for x in Pr if (x["backbone"], x["task"]) == (b, t)]),
+              ("probe, encoder", lambda b, t: [dict(per_shape=x["enc_per_body_rho"]) for x in Pr if (x["backbone"], x["task"]) == (b, t)]),
+              ("R1 field", lambda b, t: [dict(per_shape=x["per_body_rho"], seed=x["seed"]) for x in R if (x["regime"], x["backbone"], x["task"]) == ("R1", b, t)]),
+              ("R3 KPI only", lambda b, t: [dict(per_shape=x["per_body_rho"], seed=x["seed"]) for x in R if (x["regime"], x["backbone"], x["task"]) == ("R3", b, t)])]
+    fig, axes = plt.subplots(1, 2, figsize=(12, 4.6), sharey=False)
+    for ax, t in zip(axes, "AB"):
+        A.style(ax)
+        bbs = [b for b in BACKBONES]
+        w = 0.8 / len(bbs)
+        for gi, (gname, get) in enumerate(groups):
+            for bi, b in enumerate(bbs):
+                rows = get(b, t)
+                if not rows:
+                    continue
+                m, lo, hi = BS.boot_mean(BS.per_body(rows))
+                x = gi + (bi - (len(bbs) - 1) / 2) * w
+                ax.errorbar([x], [m], yerr=[[m - lo], [hi - m]], marker=A.MRK[b], ms=7, color=A.COL[b], ls="none",
+                            capsize=2, markeredgecolor=A.SURF, label=A.NAME[b] if gi == 0 or b in ("S", "L", "LT") else None)
+        ax.set_xticks(range(len(groups)))
+        ax.set_xticklabels([g for g, _ in groups])
+        ax.set_ylabel("within-body Spearman rho, 100 test bodies x 36 actions")
+        ax.set_title(A.TASK[t], loc="left", fontsize=11)
+    h, l = [], []
+    for hh, ll in zip(*axes[0].get_legend_handles_labels()):
+        if ll not in l:
+            h.append(hh)
+            l.append(ll)
+    fig.legend(h, l, frameon=False, fontsize=8.5, loc="lower center", ncol=7)
+    fig.tight_layout(rect=(0, 0.08, 1, 1))
+    fig.savefig("figs/exp3_ranking.png", dpi=130)
+    plt.close(fig)
+    fig, axes = plt.subplots(1, 2, figsize=(10, 4.2))
+    for ax, t in zip(axes, "AB"):
+        A.style(ax)
+        for b in ("S", "L", "LT"):
+            rr = [x for x in R if (x["regime"], x["backbone"], x["task"]) == ("R1", b, t)]
+            if not rr:
+                continue
+            ax.plot([x["field_rel_l2"] for x in rr], [x["rho"] for x in rr], marker=A.MRK[b], ms=7, ls="none",
+                    color=A.COL[b], alpha=0.5, markeredgecolor=A.SURF)
+            ax.plot([np.mean([x["field_rel_l2"] for x in rr])], [np.mean([x["rho"] for x in rr])], marker=A.MRK[b],
+                    ms=11, ls="none", color=A.COL[b], markeredgecolor=A.SURF, label=f"{A.NAME[b]} (R1; small = single seeds)")
+        ax.set_xlabel("field relative L2 error on the original single-action test set")
+        ax.set_ylabel("within-body Spearman rho")
+        ax.set_title(A.TASK[t], loc="left", fontsize=11)
+    h, l = axes[0].get_legend_handles_labels()
+    fig.legend(h, l, frameon=False, fontsize=8.5, loc="lower center", ncol=3)
+    fig.tight_layout(rect=(0, 0.08, 1, 1))
+    fig.savefig("figs/exp3_accuracy_vs_ranking.png", dpi=130)
+    plt.close(fig)
 
 
 if __name__ == "__main__":
