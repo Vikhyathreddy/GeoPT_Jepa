@@ -1,0 +1,6 @@
+A S scipy rho 0.7014 (argsort 0.7008)  norm. regret 0.2280  top1 0.500
+A L scipy rho 0.8411 (argsort 0.8406)  norm. regret 0.1706  top1 0.475
+A LT scipy rho 0.7682 (argsort 0.7677)  norm. regret 0.1858  top1 0.475
+B S scipy rho 0.8158 (argsort 0.8158)  norm. regret 0.2081  top1 0.500
+B L scipy rho 0.8472 (argsort 0.8472)  norm. regret 0.1750  top1 0.550
+B LT scipy rho 0.8573 (argsort 0.8573)  norm. regret 0.1172  top1 0.725

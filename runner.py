@@ -6,7 +6,7 @@ jobs is a list of dicts; work(job) -> dict runs one job in a worker process (it 
 module-level function so it can be pickled).  Each result is stored as one JSON line
 {**result, **job}, so the job's own fields always identify the row.  Jobs whose key already
 appears in `out` are skipped, so an interrupted grid resumes where it stopped.  Every row must
-carry per-body values (a list-valued field whose name starts with "per_"), for paired statistics
+carry per-body values (a list-valued field named per_* or *_per_*), for paired statistics
 (require_per=False for jobs without test bodies, such as pretraining).
 N_PROCS workers run in parallel.
 """
@@ -44,7 +44,8 @@ def _call(args):
     t0 = time.time()
     rec = {**work(job), **job}
     rec.setdefault("sec", round(time.time() - t0, 1))
-    if require_per and not any(k.startswith("per_") and isinstance(v, (list, np.ndarray)) for k, v in rec.items()):
+    if require_per and not any((k.startswith("per_") or "_per_" in k) and isinstance(v, (list, np.ndarray))
+                               for k, v in rec.items()):
         raise ValueError(f"job {job} returned no per-body field (per_*)")
     return rec
 
