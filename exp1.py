@@ -222,13 +222,16 @@ def figure(R, meta, refs):
     import matplotlib.pyplot as plt
     import analyze as A
     fams = ["label", "trajectory"]
-    fig, axes = plt.subplots(2, 2, figsize=(10.5, 7.8))
+    fig, axes = plt.subplots(2, 2, figsize=(10.5, 8.0))
     for c, t in enumerate("AB"):
         for r_, fam in enumerate(fams):
             ax = axes[r_, c]
             A.style(ax)
             tags = ["clean"] + [g for g, (f, _) in STAGE1.items() if f == fam]
             xs = [0.0] + [meta[g]["target_noise"] for g in tags[1:]]
+            for v, ls in (("S", ":"), ("N", "--")):
+                ax.axhline(refs[t][v], color=A.COL[v], ls=ls, lw=1.3, label=f"{A.NAME[v]} (noise-free reference)")
+            ends = []
             for v in ("L", "LT"):
                 pts = []
                 for x, g in zip(xs, tags):
@@ -239,19 +242,23 @@ def figure(R, meta, refs):
                     x_, m_, lo_, hi_ = map(np.array, zip(*pts))
                     ax.fill_between(x_, lo_, hi_, color=A.COL[v], alpha=0.12, lw=0)
                     ax.plot(x_, m_, "-", color=A.COL[v], marker=A.MRK[v], ms=8, lw=2, markeredgecolor=A.SURF,
-                            label=A.NAME[v] + (" (clean model reused)" if fam == "label" and v == "LT" else ""))
-                    ax.annotate(A.NAME[v], (x_[-1], m_[-1]), xytext=(6, 0), textcoords="offset points",
-                                fontsize=8.5, color=A.INK2, va="center")
-            for v, ls in (("S", ":"), ("N", "--")):
-                ax.axhline(refs[t][v], color=A.COL[v], ls=ls, lw=1.2)
-                ax.annotate(A.NAME[v], (0, refs[t][v]), xytext=(2, 3), textcoords="offset points", fontsize=8,
-                            color=A.INK2)
-            ax.set_xlim(-0.05, max(xs) * 1.3 + 0.05)
+                            label=A.NAME[v])
+                    ends.append((m_[-1], x_[-1], v))
+            lo_y, hi_y = ax.get_ylim()
+            gap, last = (hi_y - lo_y) * 0.06, None
+            for y, x, v in sorted(ends):                       # direct labels, pushed apart vertically
+                yy = y if last is None or y - last > gap else last + gap
+                last = yy
+                ax.annotate(A.NAME[v], (x, y), xytext=(x + 0.04 * max(xs), yy), fontsize=8.5, color=A.INK2,
+                            va="center", arrowprops=dict(arrowstyle="-", color=A.GRID, lw=0.8),
+                            bbox=dict(boxstyle="round,pad=0.15", fc=A.SURF, ec="none"))
+            ax.set_xlim(-0.05 * max(xs), max(xs) * 1.55)
             ax.set_xlabel("measured target-space noise / clean target std")
             ax.set_ylabel("test relative L2 error, 64 labels")
-            ax.set_title(f"{A.TASK[t]}\n{fam} noise", loc="left", fontsize=10)
-    h, l = axes[0, 0].get_legend_handles_labels()
-    fig.legend(h, l, frameon=False, fontsize=8.5, loc="lower center", ncol=3)
+            note = " (LT never reads these targets: clean LT reused)" if fam == "label" else ""
+            ax.set_title(f"{A.TASK[t]}\n{fam} noise{note}", loc="left", fontsize=10)
+    h, l = axes[1, 0].get_legend_handles_labels()
+    fig.legend(h, l, frameon=False, fontsize=8.5, loc="lower center", ncol=4)
     fig.tight_layout(rect=(0, 0.05, 1, 1))
     fig.savefig("figs/exp1_noise_curves.png", dpi=130)
     plt.close(fig)

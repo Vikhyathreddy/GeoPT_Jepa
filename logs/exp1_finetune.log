@@ -1,0 +1,26 @@
+results/exp1_finetune.jsonl: 24 jobs to run (0 of 24 already done)
+variant=L task=B n=64 seed=0 shift=0 frozen=False rel_l2=0.1121 final_train_loss=0.0034 sec=64.5 ckpt=ckpt/exp1/L_lblfrz05_s0.npz tag=lblfrz05 pretrain_seed=0 ft_seed=0
+variant=L task=B n=64 seed=1 shift=0 frozen=False rel_l2=0.1133 final_train_loss=0.0039 sec=71.0 ckpt=ckpt/exp1/L_lblfrz05_s0.npz tag=lblfrz05 pretrain_seed=0 ft_seed=1
+variant=L task=B n=64 seed=0 shift=0 frozen=False rel_l2=0.1175 final_train_loss=0.0039 sec=62.6 ckpt=ckpt/exp1/L_lblfrz2_s0.npz tag=lblfrz2 pretrain_seed=0 ft_seed=0
+variant=L task=B n=64 seed=1 shift=0 frozen=False rel_l2=0.1179 final_train_loss=0.0049 sec=68.7 ckpt=ckpt/exp1/L_lblfrz2_s0.npz tag=lblfrz2 pretrain_seed=0 ft_seed=1
+variant=LT task=B n=64 seed=0 shift=0 frozen=False rel_l2=0.1231 final_train_loss=0.0045 sec=61.9 ckpt=ckpt/exp1/LT_pos015_s0.npz tag=pos015 pretrain_seed=0 ft_seed=0
+variant=LT task=B n=64 seed=1 shift=0 frozen=False rel_l2=0.1167 final_train_loss=0.0046 sec=68.2 ckpt=ckpt/exp1/LT_pos015_s0.npz tag=pos015 pretrain_seed=0 ft_seed=1
+variant=L task=B n=64 seed=0 shift=0 frozen=False rel_l2=0.1125 final_train_loss=0.0033 sec=62.2 ckpt=ckpt/exp1/L_pos015_s0.npz tag=pos015 pretrain_seed=0 ft_seed=0
+variant=L task=B n=64 seed=1 shift=0 frozen=False rel_l2=0.1142 final_train_loss=0.0042 sec=68.2 ckpt=ckpt/exp1/L_pos015_s0.npz tag=pos015 pretrain_seed=0 ft_seed=1
+variant=LT task=B n=64 seed=0 shift=0 frozen=False rel_l2=0.1237 final_train_loss=0.0046 sec=61.4 ckpt=ckpt/exp1/LT_pos030_s0.npz tag=pos030 pretrain_seed=0 ft_seed=0
+variant=LT task=B n=64 seed=1 shift=0 frozen=False rel_l2=0.1197 final_train_loss=0.0049 sec=69.0 ckpt=ckpt/exp1/LT_pos030_s0.npz tag=pos030 pretrain_seed=0 ft_seed=1
+variant=L task=B n=64 seed=0 shift=0 frozen=False rel_l2=0.1156 final_train_loss=0.0034 sec=62.6 ckpt=ckpt/exp1/L_pos030_s0.npz tag=pos030 pretrain_seed=0 ft_seed=0
+variant=L task=A n=64 seed=0 shift=0 frozen=False rel_l2=0.1155 final_train_loss=0.0043 sec=29.8 ckpt=ckpt/exp1/L_lblfrz05_s0.npz tag=lblfrz05 pretrain_seed=0 ft_seed=0
+variant=L task=B n=64 seed=1 shift=0 frozen=False rel_l2=0.1147 final_train_loss=0.0047 sec=69.7 ckpt=ckpt/exp1/L_pos030_s0.npz tag=pos030 pretrain_seed=0 ft_seed=1
+variant=L task=A n=64 seed=1 shift=0 frozen=False rel_l2=0.1197 final_train_loss=0.0053 sec=31.0 ckpt=ckpt/exp1/L_lblfrz05_s0.npz tag=lblfrz05 pretrain_seed=0 ft_seed=1
+variant=L task=A n=64 seed=0 shift=0 frozen=False rel_l2=0.1207 final_train_loss=0.0051 sec=41.2 ckpt=ckpt/exp1/L_lblfrz2_s0.npz tag=lblfrz2 pretrain_seed=0 ft_seed=0
+variant=L task=A n=64 seed=1 shift=0 frozen=False rel_l2=0.1337 final_train_loss=0.0052 sec=30.4 ckpt=ckpt/exp1/L_lblfrz2_s0.npz tag=lblfrz2 pretrain_seed=0 ft_seed=1
+variant=LT task=A n=64 seed=1 shift=0 frozen=False rel_l2=0.1512 final_train_loss=0.0059 sec=31.1 ckpt=ckpt/exp1/LT_pos015_s0.npz tag=pos015 pretrain_seed=0 ft_seed=1
+variant=LT task=A n=64 seed=0 shift=0 frozen=False rel_l2=0.1415 final_train_loss=0.0074 sec=42.2 ckpt=ckpt/exp1/LT_pos015_s0.npz tag=pos015 pretrain_seed=0 ft_seed=0
+variant=L task=A n=64 seed=0 shift=0 frozen=False rel_l2=0.1153 final_train_loss=0.0051 sec=31.3 ckpt=ckpt/exp1/L_pos015_s0.npz tag=pos015 pretrain_seed=0 ft_seed=0
+variant=L task=A n=64 seed=1 shift=0 frozen=False rel_l2=0.1159 final_train_loss=0.0049 sec=40.5 ckpt=ckpt/exp1/L_pos015_s0.npz tag=pos015 pretrain_seed=0 ft_seed=1
+variant=LT task=A n=64 seed=0 shift=0 frozen=False rel_l2=0.1475 final_train_loss=0.0068 sec=29.6 ckpt=ckpt/exp1/LT_pos030_s0.npz tag=pos030 pretrain_seed=0 ft_seed=0
+variant=LT task=A n=64 seed=1 shift=0 frozen=False rel_l2=0.153 final_train_loss=0.0056 sec=40.8 ckpt=ckpt/exp1/LT_pos030_s0.npz tag=pos030 pretrain_seed=0 ft_seed=1
+variant=L task=A n=64 seed=0 shift=0 frozen=False rel_l2=0.1162 final_train_loss=0.0065 sec=30.1 ckpt=ckpt/exp1/L_pos030_s0.npz tag=pos030 pretrain_seed=0 ft_seed=0
+variant=L task=A n=64 seed=1 shift=0 frozen=False rel_l2=0.1203 final_train_loss=0.006 sec=40.0 ckpt=ckpt/exp1/L_pos030_s0.npz tag=pos030 pretrain_seed=0 ft_seed=1
+exit 0
