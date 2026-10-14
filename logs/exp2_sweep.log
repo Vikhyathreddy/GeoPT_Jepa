@@ -92,3 +92,5 @@ variant=Lc task=B n=16 seed=1 shift=90 frozen=False rel_l2=0.456 final_train_los
 variant=Lc task=B n=16 seed=2 shift=90 frozen=False rel_l2=0.349 final_train_loss=0.0018 sec=81.1 frame=absolute ckpt=ckpt/exp2/Lc_s0.npz data=canon30 prompt_mode=normal freeze=
 variant=Lc task=B n=16 seed=0 shift=180 frozen=False rel_l2=0.3188 final_train_loss=0.0016 sec=80.9 frame=absolute ckpt=ckpt/exp2/Lc_s0.npz data=canon30 prompt_mode=normal freeze=
 variant=Lc task=B n=16 seed=1 shift=180 frozen=False rel_l2=0.3489 final_train_loss=0.0018 sec=75.0 frame=absolute ckpt=ckpt/exp2/Lc_s0.npz data=canon30 prompt_mode=normal freeze=
+variant=Lc task=B n=16 seed=2 shift=180 frozen=False rel_l2=0.3079 final_train_loss=0.0018 sec=72.6 frame=absolute ckpt=ckpt/exp2/Lc_s0.npz data=canon30 prompt_mode=normal freeze=
+variant=S task=B n=64 seed=2 shift=0 frozen=False rel_l2=0.4523 final_train_loss=0.0062 sec=74.4 frame=absolute data=canon30 prompt_mode=normal freeze=
