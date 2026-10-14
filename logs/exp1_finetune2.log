@@ -11,3 +11,5 @@ variant=L task=B n=64 seed=0 shift=0 frozen=False rel_l2=0.1445 final_train_loss
 variant=L task=B n=64 seed=1 shift=0 frozen=False rel_l2=0.1408 final_train_loss=0.0064 sec=97.2 ckpt=ckpt/exp1/L_lblfrz8_s0.npz tag=lblfrz8 pretrain_seed=0 ft_seed=1
 variant=L task=B n=64 seed=0 shift=0 frozen=False rel_l2=0.1212 final_train_loss=0.0046 sec=80.7 ckpt=ckpt/exp1/L_lblfrs4_s0.npz tag=lblfrs4 pretrain_seed=0 ft_seed=0
 variant=L task=B n=64 seed=1 shift=0 frozen=False rel_l2=0.121 final_train_loss=0.0051 sec=82.0 ckpt=ckpt/exp1/L_lblfrs4_s0.npz tag=lblfrs4 pretrain_seed=0 ft_seed=1
+variant=L task=B n=64 seed=0 shift=0 frozen=False rel_l2=0.0991 final_train_loss=0.0033 sec=80.7 ckpt=ckpt/exp1/L_clean_s1.npz tag=clean pretrain_seed=1 ft_seed=0
+variant=L task=B n=64 seed=1 shift=0 frozen=False rel_l2=0.0992 final_train_loss=0.0033 sec=78.4 ckpt=ckpt/exp1/L_clean_s1.npz tag=clean pretrain_seed=1 ft_seed=1
