@@ -1,0 +1,25 @@
+results/exp3_probe.jsonl: 24 jobs to run (0 of 24 already done)
+dec_rho=0.8468 dec_regret=0.1618 dec_top1=0.49 dec_alpha=10.0 dec_cv_mse=0.1727 enc_rho=0.8273 enc_regret=0.1811 enc_top1=0.47 enc_alpha=10.0 enc_cv_mse=0.1865 backbone=LT@s1 task=A sec=10.7
+dec_rho=0.8483 dec_regret=0.1789 dec_top1=0.51 dec_alpha=31.6228 dec_cv_mse=0.1884 enc_rho=0.8474 enc_regret=0.173 enc_top1=0.51 enc_alpha=10.0 enc_cv_mse=0.1775 backbone=L@s1 task=A sec=6.9
+dec_rho=0.8457 dec_regret=0.1646 dec_top1=0.54 dec_alpha=10.0 dec_cv_mse=0.1859 enc_rho=0.824 enc_regret=0.1702 enc_top1=0.43 enc_alpha=3.1623 enc_cv_mse=0.184 backbone=N@s1 task=A sec=6.9
+dec_rho=0.945 dec_regret=0.0408 dec_top1=0.86 dec_alpha=10.0 dec_cv_mse=0.0591 enc_rho=0.4927 enc_regret=0.6116 enc_top1=0.22 enc_alpha=316.2278 enc_cv_mse=0.3004 backbone=N@s1 task=B sec=249.6
+dec_rho=0.9623 dec_regret=0.0348 dec_top1=0.9 dec_alpha=1.0 dec_cv_mse=0.0364 enc_rho=0.5034 enc_regret=0.565 enc_top1=0.27 enc_alpha=316.2278 enc_cv_mse=0.2901 backbone=L@s1 task=B sec=250.6
+dec_rho=0.9404 dec_regret=0.051 dec_top1=0.83 dec_alpha=1.0 dec_cv_mse=0.0599 enc_rho=0.4882 enc_regret=0.5842 enc_top1=0.21 enc_alpha=316.2278 enc_cv_mse=0.2937 backbone=LT@s1 task=B sec=253.3
+dec_rho=0.8332 dec_regret=0.175 dec_top1=0.48 dec_alpha=10.0 dec_cv_mse=0.1796 enc_rho=0.8441 enc_regret=0.1536 enc_top1=0.53 enc_alpha=3.1623 enc_cv_mse=0.1952 backbone=LT@s2 task=A sec=6.5
+dec_rho=0.842 dec_regret=0.1667 dec_top1=0.54 dec_alpha=31.6228 dec_cv_mse=0.1731 enc_rho=0.8417 enc_regret=0.1534 enc_top1=0.57 enc_alpha=3.1623 enc_cv_mse=0.1593 backbone=L@s2 task=A sec=6.4
+dec_rho=0.8202 dec_regret=0.1816 dec_top1=0.44 dec_alpha=31.6228 dec_cv_mse=0.1969 enc_rho=0.8339 enc_regret=0.1763 enc_top1=0.49 enc_alpha=3.1623 enc_cv_mse=0.1904 backbone=N@s2 task=A sec=6.2
+dec_rho=0.9577 dec_regret=0.0314 dec_top1=0.87 dec_alpha=1.0 dec_cv_mse=0.0423 enc_rho=0.489 enc_regret=0.5438 enc_top1=0.22 enc_alpha=316.2278 enc_cv_mse=0.3221 backbone=LT@s2 task=B sec=249.2
+dec_rho=0.9591 dec_regret=0.0439 dec_top1=0.85 dec_alpha=1.0 dec_cv_mse=0.0416 enc_rho=0.5065 enc_regret=0.4636 enc_top1=0.3 enc_alpha=316.2278 enc_cv_mse=0.3028 backbone=L@s2 task=B sec=255.2
+dec_rho=0.9589 dec_regret=0.0343 dec_top1=0.87 dec_alpha=1.0 dec_cv_mse=0.0342 enc_rho=0.4907 enc_regret=0.5209 enc_top1=0.27 enc_alpha=316.2278 enc_cv_mse=0.3236 backbone=N@s2 task=B sec=256.4
+dec_rho=0.8412 dec_regret=0.1725 dec_top1=0.54 dec_alpha=1.0 dec_cv_mse=0.189 enc_rho=0.8378 enc_regret=0.2023 enc_top1=0.47 enc_alpha=3.1623 enc_cv_mse=0.1879 backbone=LT@s3 task=A sec=6.8
+dec_rho=0.8537 dec_regret=0.1631 dec_top1=0.49 dec_alpha=10.0 dec_cv_mse=0.1633 enc_rho=0.8307 enc_regret=0.1855 enc_top1=0.52 enc_alpha=10.0 enc_cv_mse=0.1732 backbone=L@s3 task=A sec=6.3
+dec_rho=0.8218 dec_regret=0.1789 dec_top1=0.52 dec_alpha=3.1623 dec_cv_mse=0.1889 enc_rho=0.8326 enc_regret=0.2009 enc_top1=0.5 enc_alpha=3.1623 enc_cv_mse=0.1817 backbone=N@s3 task=A sec=6.5
+dec_rho=0.9612 dec_regret=0.0425 dec_top1=0.86 dec_alpha=3.1623 dec_cv_mse=0.0407 enc_rho=0.4991 enc_regret=0.6246 enc_top1=0.22 enc_alpha=316.2278 enc_cv_mse=0.3012 backbone=L@s3 task=B sec=254.5
+dec_rho=0.9556 dec_regret=0.0331 dec_top1=0.9 dec_alpha=3.1623 dec_cv_mse=0.0436 enc_rho=0.497 enc_regret=0.5026 enc_top1=0.35 enc_alpha=316.2278 enc_cv_mse=0.3049 backbone=LT@s3 task=B sec=256.9
+dec_rho=0.9487 dec_regret=0.044 dec_top1=0.83 dec_alpha=10.0 dec_cv_mse=0.0471 enc_rho=0.4929 enc_regret=0.5264 enc_top1=0.32 enc_alpha=316.2278 enc_cv_mse=0.3002 backbone=N@s3 task=B sec=252.6
+dec_rho=0.8529 dec_regret=0.1791 dec_top1=0.48 dec_alpha=31.6228 dec_cv_mse=0.1935 enc_rho=0.8618 enc_regret=0.1636 enc_top1=0.52 enc_alpha=31.6228 enc_cv_mse=0.199 backbone=LT@s4 task=A sec=6.7
+dec_rho=0.8368 dec_regret=0.1876 dec_top1=0.46 dec_alpha=1.0 dec_cv_mse=0.1479 enc_rho=0.8492 enc_regret=0.1683 enc_top1=0.52 enc_alpha=3.1623 enc_cv_mse=0.1589 backbone=L@s4 task=A sec=6.7
+dec_rho=0.8356 dec_regret=0.1762 dec_top1=0.54 dec_alpha=10.0 dec_cv_mse=0.1819 enc_rho=0.8478 enc_regret=0.1617 enc_top1=0.56 enc_alpha=31.6228 enc_cv_mse=0.1923 backbone=N@s4 task=A sec=6.6
+dec_rho=0.9553 dec_regret=0.041 dec_top1=0.85 dec_alpha=1.0 dec_cv_mse=0.051 enc_rho=0.4802 enc_regret=0.6121 enc_top1=0.25 enc_alpha=316.2278 enc_cv_mse=0.3062 backbone=LT@s4 task=B sec=252.2
+dec_rho=0.9633 dec_regret=0.0247 dec_top1=0.91 dec_alpha=3.1623 dec_cv_mse=0.0359 enc_rho=0.5047 enc_regret=0.5211 enc_top1=0.26 enc_alpha=1000.0 enc_cv_mse=0.3005 backbone=L@s4 task=B sec=251.2
+dec_rho=0.9592 dec_regret=0.033 dec_top1=0.9 dec_alpha=3.1623 dec_cv_mse=0.0439 enc_rho=0.4818 enc_regret=0.5621 enc_top1=0.26 enc_alpha=316.2278 enc_cv_mse=0.3121 backbone=N@s4 task=B sec=255.7
