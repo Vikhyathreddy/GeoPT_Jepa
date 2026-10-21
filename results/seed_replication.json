@@ -1,270 +1,437 @@
-[
- {
-  "id": "E1-a",
-  "task": "A",
-  "claim": "clean L beats clean LT: err(LT)/err(L) - 1",
-  "side": 1,
-  "n_seeds": 2,
-  "values": [
-   0.3151920667737787,
-   0.0907742966782267
-  ],
-  "mean": 0.20298318172600271,
-  "lo": -1.2227658849089305,
-  "hi": 1.6287322483609357,
-  "n_in_direction": 2,
-  "verdict": "incomplete"
- },
- {
-  "id": "E1-b",
-  "task": "A",
-  "claim": "clean L beats N: err(N)/err(L) - 1",
-  "side": 1,
-  "n_seeds": 2,
-  "values": [
-   0.2888802004413793,
-   0.18797813326718354
-  ],
-  "mean": 0.23842916685428142,
-  "lo": -0.4026119950550101,
-  "hi": 0.8794703287635729,
-  "n_in_direction": 2,
-  "verdict": "incomplete"
- },
- {
-  "id": "E1-c",
-  "task": "A",
-  "claim": "LT vs N: err(LT)/err(N) - 1 (reported)",
-  "side": 0,
-  "n_seeds": 2,
-  "values": [
-   0.03205516378213555,
-   -0.07715141624900626
-  ],
-  "mean": -0.022548126233435356,
-  "lo": -0.7163487084400028,
-  "hi": 0.671252455973132,
-  "verdict": "incomplete"
- },
- {
-  "id": "E1-d",
-  "task": "A",
-  "claim": "label sigma 2 degrades L: err(L,s2)/err(L) - 1",
-  "side": 1,
-  "n_seeds": 2,
-  "values": [
-   0.1230418432337689,
-   0.1108524524116336
-  ],
-  "mean": 0.11694714782270126,
-  "lo": 0.03950670012505132,
-  "hi": 0.19438759552035118,
-  "n_in_direction": 2,
-  "verdict": "incomplete"
- },
- {
-  "id": "E1-e",
-  "task": "A",
-  "claim": "at sigma 2 L beats clean LT: err(LT)/err(L,s2) - 1",
-  "side": 1,
-  "n_seeds": 2,
-  "values": [
-   0.18997267682092744,
-   -0.010424092958951652
-  ],
-  "mean": 0.08977429193098789,
-  "lo": -1.183366900714617,
-  "hi": 1.3629154845765927,
-  "n_in_direction": 1,
-  "verdict": "incomplete"
- },
- {
-  "id": "E1-f",
-  "task": "A",
-  "claim": "at sigma 4 L beats clean LT: err(LT)/err(L,s4) - 1",
-  "side": 1,
-  "n_seeds": 1,
-  "values": [
-   0.09594651752012615
-  ],
-  "verdict": "incomplete"
- },
- {
-  "id": "E1-a",
-  "task": "B",
-  "claim": "clean L beats clean LT: err(LT)/err(L) - 1",
-  "side": 1,
-  "n_seeds": 2,
-  "values": [
-   0.07304325792583312,
-   0.1499242824847561
-  ],
-  "mean": 0.1114837702052946,
-  "lo": -0.37694924898098037,
-  "hi": 0.5999167893915696,
-  "n_in_direction": 2,
-  "verdict": "incomplete"
- },
- {
-  "id": "E1-b",
-  "task": "B",
-  "claim": "clean L beats N: err(N)/err(L) - 1",
-  "side": 1,
-  "n_seeds": 2,
-  "values": [
-   0.0733907387778442,
-   0.2253178513083805
-  ],
-  "mean": 0.14935429504311235,
-  "lo": -0.8158542033513106,
-  "hi": 1.1145627934375353,
-  "n_in_direction": 2,
-  "verdict": "incomplete"
- },
- {
-  "id": "E1-c",
-  "task": "B",
-  "claim": "LT vs N: err(LT)/err(N) - 1 (reported)",
-  "side": 0,
-  "n_seeds": 2,
-  "values": [
-   0.006980538456166811,
-   -0.05212988544200292
-  ],
-  "mean": -0.022574673492918057,
-  "lo": -0.398109247539027,
-  "hi": 0.35295990055319093,
-  "verdict": "incomplete"
- },
- {
-  "id": "E1-d",
-  "task": "B",
-  "claim": "label sigma 2 degrades L: err(L,s2)/err(L) - 1",
-  "side": 1,
-  "n_seeds": 2,
-  "values": [
-   0.049356280660781834,
-   0.13225529265062227
-  ],
-  "mean": 0.09080578665570205,
-  "lo": -0.4358601227290547,
-  "hi": 0.6174716960404588,
-  "n_in_direction": 2,
-  "verdict": "incomplete"
- },
- {
-  "id": "E1-e",
-  "task": "B",
-  "claim": "at sigma 2 L beats clean LT: err(LT)/err(L,s2) - 1",
-  "side": 1,
-  "n_seeds": 2,
-  "values": [
-   0.02802387042865942,
-   0.024834547263016305
-  ],
-  "mean": 0.02642920884583786,
-  "lo": 0.006167112289594753,
-  "hi": 0.04669130540208097,
-  "n_in_direction": 2,
-  "verdict": "incomplete"
- },
- {
-  "id": "E2-a",
-  "task": "A",
-  "claim": "zero prompt hurts L: err(zero) - err(0)",
-  "side": 1,
-  "n_seeds": 0,
-  "values": [],
-  "verdict": "incomplete"
- },
- {
-  "id": "E2-d",
-  "task": "A",
-  "claim": "L loses more than scratch at 90: difference-in-differences",
-  "side": 1,
-  "n_seeds": 0,
-  "values": [],
-  "verdict": "incomplete"
- },
- {
-  "id": "E2-a",
-  "task": "B",
-  "claim": "zero prompt hurts L: err(zero) - err(0)",
-  "side": 1,
-  "n_seeds": 0,
-  "values": [],
-  "verdict": "incomplete"
- },
- {
-  "id": "E2-d",
-  "task": "B",
-  "claim": "L loses more than scratch at 90: difference-in-differences",
-  "side": 1,
-  "n_seeds": 0,
-  "values": [],
-  "verdict": "incomplete"
- },
- {
-  "id": "E2-b",
-  "task": "B",
-  "claim": "reversed prompt beats aligned for L: err(180) - err(0)",
-  "side": -1,
-  "n_seeds": 0,
-  "values": [],
-  "verdict": "incomplete"
- },
- {
-  "id": "E2-c",
-  "task": "A",
-  "claim": "180 costs about nothing for L: err(180) - err(0) (null-type)",
-  "side": null,
-  "n_seeds": 0,
-  "values": [],
-  "verdict": "incomplete",
-  "se_seed": 0.007648364448005187
- },
- {
-  "id": "E3-a",
-  "task": "A",
-  "claim": "L ranks better than LT, decoder probe: rho(L) - rho(LT)",
-  "side": 1,
-  "n_seeds": 1,
-  "values": [
-   -0.003235800000000233
-  ],
-  "verdict": "incomplete"
- },
- {
-  "id": "E3-b",
-  "task": "A",
-  "claim": "L ranks better than LT, R1 (ft seed 0): rho(L) - rho(LT)",
-  "side": 1,
-  "n_seeds": 1,
-  "values": [
-   0.03424629999999984
-  ],
-  "verdict": "incomplete"
- },
- {
-  "id": "E3-a",
-  "task": "B",
-  "claim": "L ranks better than LT, decoder probe: rho(L) - rho(LT)",
-  "side": 1,
-  "n_seeds": 1,
-  "values": [
-   0.014399200000000167
-  ],
-  "verdict": "incomplete"
- },
- {
-  "id": "E3-b",
-  "task": "B",
-  "claim": "L ranks better than LT, R1 (ft seed 0): rho(L) - rho(LT)",
-  "side": 1,
-  "n_seeds": 1,
-  "values": [
-   0.0034331000000001888
-  ],
-  "verdict": "incomplete"
- }
-]
+{
+ "q1_branch": "undecided (incomplete)",
+ "claims": [
+  {
+   "id": "E1-c'",
+   "task": "A",
+   "claim": "clean LT beats clean N: err(LT)/err(N) - 1 (decides Q1 branch)",
+   "side": -1,
+   "n_seeds": 2,
+   "values": [
+    0.03205516378213555,
+    -0.07715141624900626
+   ],
+   "mean": -0.022548126233435356,
+   "lo": -0.7163487084400028,
+   "hi": 0.671252455973132,
+   "n_in_direction": 1,
+   "verdict": "incomplete"
+  },
+  {
+   "id": "E1-c'",
+   "task": "B",
+   "claim": "clean LT beats clean N: err(LT)/err(N) - 1 (decides Q1 branch)",
+   "side": -1,
+   "n_seeds": 2,
+   "values": [
+    0.006980538456166811,
+    -0.05212988544200292
+   ],
+   "mean": -0.022574673492918057,
+   "lo": -0.398109247539027,
+   "hi": 0.35295990055319093,
+   "n_in_direction": 1,
+   "verdict": "incomplete"
+  },
+  {
+   "id": "E1-a",
+   "task": "A",
+   "claim": "clean L beats clean LT: err(LT)/err(L) - 1",
+   "side": 1,
+   "n_seeds": 2,
+   "values": [
+    0.3151920667737787,
+    0.0907742966782267
+   ],
+   "mean": 0.20298318172600271,
+   "lo": -1.2227658849089305,
+   "hi": 1.6287322483609357,
+   "n_in_direction": 2,
+   "verdict": "incomplete"
+  },
+  {
+   "id": "E1-b",
+   "task": "A",
+   "claim": "clean L beats N: err(N)/err(L) - 1",
+   "side": 1,
+   "n_seeds": 2,
+   "values": [
+    0.2888802004413793,
+    0.18797813326718354
+   ],
+   "mean": 0.23842916685428142,
+   "lo": -0.4026119950550101,
+   "hi": 0.8794703287635729,
+   "n_in_direction": 2,
+   "verdict": "incomplete"
+  },
+  {
+   "id": "E1-d",
+   "task": "A",
+   "claim": "label sigma 2 degrades L: err(L,s2)/err(L) - 1",
+   "side": 1,
+   "n_seeds": 2,
+   "values": [
+    0.1230418432337689,
+    0.1108524524116336
+   ],
+   "mean": 0.11694714782270126,
+   "lo": 0.03950670012505132,
+   "hi": 0.19438759552035118,
+   "n_in_direction": 2,
+   "verdict": "incomplete"
+  },
+  {
+   "id": "E1-e",
+   "task": "A",
+   "claim": "at sigma 2 L beats clean LT: err(LT)/err(L,s2) - 1",
+   "side": 1,
+   "n_seeds": 2,
+   "values": [
+    0.18997267682092744,
+    -0.010424092958951652
+   ],
+   "mean": 0.08977429193098789,
+   "lo": -1.183366900714617,
+   "hi": 1.3629154845765927,
+   "n_in_direction": 1,
+   "verdict": "incomplete"
+  },
+  {
+   "id": "E1-f",
+   "task": "A",
+   "claim": "at sigma 4 L beats clean LT: err(LT)/err(L,s4) - 1",
+   "side": 1,
+   "n_seeds": 1,
+   "values": [
+    0.09594651752012615
+   ],
+   "verdict": "incomplete"
+  },
+  {
+   "id": "E1-a",
+   "task": "B",
+   "claim": "clean L beats clean LT: err(LT)/err(L) - 1",
+   "side": 1,
+   "n_seeds": 2,
+   "values": [
+    0.07304325792583312,
+    0.1499242824847561
+   ],
+   "mean": 0.1114837702052946,
+   "lo": -0.37694924898098037,
+   "hi": 0.5999167893915696,
+   "n_in_direction": 2,
+   "verdict": "incomplete"
+  },
+  {
+   "id": "E1-b",
+   "task": "B",
+   "claim": "clean L beats N: err(N)/err(L) - 1",
+   "side": 1,
+   "n_seeds": 2,
+   "values": [
+    0.0733907387778442,
+    0.2253178513083805
+   ],
+   "mean": 0.14935429504311235,
+   "lo": -0.8158542033513106,
+   "hi": 1.1145627934375353,
+   "n_in_direction": 2,
+   "verdict": "incomplete"
+  },
+  {
+   "id": "E1-d",
+   "task": "B",
+   "claim": "label sigma 2 degrades L: err(L,s2)/err(L) - 1",
+   "side": 1,
+   "n_seeds": 2,
+   "values": [
+    0.049356280660781834,
+    0.13225529265062227
+   ],
+   "mean": 0.09080578665570205,
+   "lo": -0.4358601227290547,
+   "hi": 0.6174716960404588,
+   "n_in_direction": 2,
+   "verdict": "incomplete"
+  },
+  {
+   "id": "E1-e",
+   "task": "B",
+   "claim": "at sigma 2 L beats clean LT: err(LT)/err(L,s2) - 1",
+   "side": 1,
+   "n_seeds": 2,
+   "values": [
+    0.02802387042865942,
+    0.024834547263016305
+   ],
+   "mean": 0.02642920884583786,
+   "lo": 0.006167112289594753,
+   "hi": 0.04669130540208097,
+   "n_in_direction": 2,
+   "verdict": "incomplete"
+  },
+  {
+   "id": "E2-a",
+   "task": "A n=64",
+   "claim": "zero prompt hurts L: err(zero) - err(0)",
+   "side": 1,
+   "n_seeds": 2,
+   "values": [
+    0.1925912333333333,
+    0.18862743333333332
+   ],
+   "mean": 0.1906093333333333,
+   "lo": 0.16542690616670874,
+   "hi": 0.21579176049995785,
+   "n_in_direction": 2,
+   "verdict": "incomplete"
+  },
+  {
+   "id": "E2-d",
+   "task": "A n=64",
+   "claim": "L loses more than scratch at 90: diff-in-diff",
+   "side": 1,
+   "n_seeds": 2,
+   "values": [
+    -0.03199449999999999,
+    -0.02143503333333333
+   ],
+   "mean": -0.02671476666666666,
+   "lo": -0.09380013935240603,
+   "hi": 0.0403706060190727,
+   "n_in_direction": 0,
+   "verdict": "incomplete"
+  },
+  {
+   "id": "E2-g",
+   "task": "A n=64",
+   "claim": "90 helps L (own delta): err(90) - err(0)",
+   "side": -1,
+   "n_seeds": 2,
+   "values": [
+    -0.029334866666666667,
+    -0.018775400000000008
+   ],
+   "mean": -0.02405513333333334,
+   "lo": -0.0911405060190727,
+   "hi": 0.04303023935240602,
+   "n_in_direction": 2,
+   "verdict": "incomplete"
+  },
+  {
+   "id": "E2-a",
+   "task": "B n=64",
+   "claim": "zero prompt hurts L: err(zero) - err(0)",
+   "side": 1,
+   "n_seeds": 2,
+   "values": [
+    0.2816315666666666,
+    0.27283579999999996
+   ],
+   "mean": 0.2772336833333333,
+   "lo": 0.2213532772941897,
+   "hi": 0.33311408937247694,
+   "n_in_direction": 2,
+   "verdict": "incomplete"
+  },
+  {
+   "id": "E2-d",
+   "task": "B n=64",
+   "claim": "L loses more than scratch at 90: diff-in-diff",
+   "side": 1,
+   "n_seeds": 2,
+   "values": [
+    -0.0326665,
+    -0.02811873333333334
+   ],
+   "mean": -0.03039261666666667,
+   "lo": -0.059285043846175334,
+   "hi": -0.0015001894871580074,
+   "n_in_direction": 0,
+   "verdict": "incomplete"
+  },
+  {
+   "id": "E2-g",
+   "task": "B n=64",
+   "claim": "90 helps L (own delta): err(90) - err(0)",
+   "side": -1,
+   "n_seeds": 2,
+   "values": [
+    -0.0328548,
+    -0.028307033333333332
+   ],
+   "mean": -0.030580916666666666,
+   "lo": -0.05947334384617539,
+   "hi": -0.0016884894871579403,
+   "n_in_direction": 2,
+   "verdict": "incomplete"
+  },
+  {
+   "id": "E2-b",
+   "task": "B n=64",
+   "claim": "reversed prompt beats aligned for L: err(180) - err(0)",
+   "side": -1,
+   "n_seeds": 2,
+   "values": [
+    -0.02023873333333334,
+    -0.034889
+   ],
+   "mean": -0.027563866666666673,
+   "lo": -0.12063851051977777,
+   "hi": 0.06551077718644442,
+   "n_in_direction": 2,
+   "verdict": "incomplete"
+  },
+  {
+   "id": "E2-c",
+   "task": "A n=64",
+   "claim": "180 costs about nothing for L (null-type)",
+   "side": null,
+   "n_seeds": 2,
+   "values": [
+    -0.0023509333333333335,
+    -0.006778166666666669
+   ],
+   "mean": -0.004564550000000001,
+   "lo": -0.032691216574075255,
+   "hi": 0.02356211657407525,
+   "verdict": "incomplete",
+   "se_seed": 0.010776765498532839
+  },
+  {
+   "id": "E2-a",
+   "task": "A n=16",
+   "claim": "zero prompt hurts L: err(zero) - err(0)",
+   "side": 1,
+   "n_seeds": 1,
+   "values": [
+    0.12351366666666666
+   ],
+   "verdict": "incomplete"
+  },
+  {
+   "id": "E2-d",
+   "task": "A n=16",
+   "claim": "L loses more than scratch at 90: diff-in-diff",
+   "side": 1,
+   "n_seeds": 1,
+   "values": [
+    0.016365333333333343
+   ],
+   "verdict": "incomplete"
+  },
+  {
+   "id": "E2-g",
+   "task": "A n=16",
+   "claim": "90 helps L (own delta): err(90) - err(0)",
+   "side": -1,
+   "n_seeds": 1,
+   "values": [
+    0.016313766666666667
+   ],
+   "verdict": "incomplete"
+  },
+  {
+   "id": "E2-a",
+   "task": "B n=16",
+   "claim": "zero prompt hurts L: err(zero) - err(0)",
+   "side": 1,
+   "n_seeds": 1,
+   "values": [
+    0.012638633333333323
+   ],
+   "verdict": "incomplete"
+  },
+  {
+   "id": "E2-d",
+   "task": "B n=16",
+   "claim": "L loses more than scratch at 90: diff-in-diff",
+   "side": 1,
+   "n_seeds": 1,
+   "values": [
+    -0.052126766666666685
+   ],
+   "verdict": "incomplete"
+  },
+  {
+   "id": "E2-g",
+   "task": "B n=16",
+   "claim": "90 helps L (own delta): err(90) - err(0)",
+   "side": -1,
+   "n_seeds": 1,
+   "values": [
+    -0.05383240000000001
+   ],
+   "verdict": "incomplete"
+  },
+  {
+   "id": "E2-b",
+   "task": "B n=16",
+   "claim": "reversed prompt beats aligned for L: err(180) - err(0)",
+   "side": -1,
+   "n_seeds": 1,
+   "values": [
+    -0.10199946666666664
+   ],
+   "verdict": "incomplete"
+  },
+  {
+   "id": "E2-c",
+   "task": "A n=16",
+   "claim": "180 costs about nothing for L (null-type)",
+   "side": null,
+   "n_seeds": 1,
+   "values": [
+    0.009941733333333336
+   ],
+   "verdict": "incomplete",
+   "se_seed": 0.016611621895435667
+  },
+  {
+   "id": "E3-a",
+   "task": "A",
+   "claim": "L ranks better than LT, decoder probe: rho(L) - rho(LT)",
+   "side": 1,
+   "n_seeds": 1,
+   "values": [
+    -0.003235800000000233
+   ],
+   "verdict": "incomplete"
+  },
+  {
+   "id": "E3-b",
+   "task": "A",
+   "claim": "L ranks better than LT, R1 (ft seed 0): rho(L) - rho(LT)",
+   "side": 1,
+   "n_seeds": 1,
+   "values": [
+    0.03424629999999984
+   ],
+   "verdict": "single-seed (R1 not replicated by design, 2026-10-21)"
+  },
+  {
+   "id": "E3-a",
+   "task": "B",
+   "claim": "L ranks better than LT, decoder probe: rho(L) - rho(LT)",
+   "side": 1,
+   "n_seeds": 1,
+   "values": [
+    0.014399200000000167
+   ],
+   "verdict": "incomplete"
+  },
+  {
+   "id": "E3-b",
+   "task": "B",
+   "claim": "L ranks better than LT, R1 (ft seed 0): rho(L) - rho(LT)",
+   "side": 1,
+   "n_seeds": 1,
+   "values": [
+    0.0034331000000001888
+   ],
+   "verdict": "single-seed (R1 not replicated by design, 2026-10-21)"
+  }
+ ]
+}

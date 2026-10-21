@@ -253,12 +253,14 @@ def step3_jobs():
     return n64 + ls1 + [j for j in J if prio(j)[0] > 0]
 
 
-def seed_jobs(seeds=(2, 3, 4)):
-    """step 4: L pretraining seeds 2-4 at n = 64, shifts 0/90/180 + zero prompt, ft seeds 0-2."""
-    job = lambda v, t, s, sh, m="normal": dict(variant=v, data="canon30", task=t, n=64, seed=s, shift=sh,
-                                               prompt_mode=m, freeze="")
-    return [job(f"Ls{k}", t, s, sh) for k in seeds for t in "BA" for sh in (0, 90, 180) for s in SEEDS] + \
-           [job(f"Ls{k}", t, s, 0, "zero") for k in seeds for t in "BA" for s in SEEDS]
+def seed_jobs(seeds=(1, 2, 3, 4)):
+    """step 4 (SEED_REPLICATION.md, amended 2026-10-21): L pretraining seeds 1-4 at n = 16 and 64,
+    shifts 0/90/180 + zero prompt, tasks A and B, ft seeds 0-2 (seed 1's n = 64 rows already exist)."""
+    job = lambda v, t, n, s, sh, m="normal": dict(variant=v, data="canon30", task=t, n=n, seed=s, shift=sh,
+                                                  prompt_mode=m, freeze="")
+    return [job(f"Ls{k}", t, n, s, sh) for n in (64, 16) for k in seeds for t in "BA" for sh in (0, 90, 180)
+            for s in SEEDS] + \
+           [job(f"Ls{k}", t, n, s, 0, "zero") for n in (64, 16) for k in seeds for t in "BA" for s in SEEDS]
 
 
 def report2():
