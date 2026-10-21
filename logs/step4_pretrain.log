@@ -1,0 +1,5 @@
+results/exp1_pretrain.jsonl: 16 jobs to run (0 of 16 already done)
+N {'it': 0, 'sec': 1.1, 'nat': 1.32842, 'loss': 1.32842, 'val_nat': 1.28207, 'val_loss': 1.28207}
+LT {'it': 0, 'sec': 1.5, 'latent': 1.36873, 'tgt_std': 0.74541, 'anchor': 0.93541, 'loss': 1.07228, 'val_latent': 1.34677, 'val_tgt_std': 0.7413, 'val_anchor': 0.9313, 'val_loss': 1.06598}
+LT {'it': 0, 'sec': 1.7, 'latent': 1.47786, 'tgt_std': 0.78431, 'anchor': 1.32842, 'loss': 1.47621, 'val_latent': 1.47563, 'val_tgt_std': 0.792, 'val_anchor': 1.28206, 'val_loss': 1.42962}
+LT {'it': 0, 'sec': 1.7, 'latent': 1.36925, 'tgt_std': 0.77106, 'anchor': 0.85616, 'loss': 0.99309, 'val_latent': 1.34769, 'val_tgt_std': 0.75763, 'val_anchor': 0.69718, 'val_loss': 0.83195}
