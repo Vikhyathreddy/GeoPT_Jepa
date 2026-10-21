@@ -44,3 +44,28 @@ For each claim and pretraining seed k:
 | E3-c A, B | LT ranks better than L anywhere (support for Q3) | the opposite sign of E3-a/b |
 
 Scratch (Experiment 2 difference-in-differences) has no pretraining seed: the same scratch runs (fine-tuning seeds 0-2) serve every L seed.
+
+## Amendment (2026-10-21, before any step-4 run)
+User decision. The runs and rule above are otherwise unchanged.
+
+### Scope changes
+- **Experiment 2:** L at 0°, 90°, 180° and zero prompt, on tasks A and B, at **both n = 16 and n = 64**, fine-tuning seeds 0-2. This applies to pretraining seeds 1-4; seed 1 previously had n = 64 only, so its n = 16 runs are added. The reason: the task-A penalty and the large task-B reversed-prompt gain appeared only at n = 16. Claims E2-a to E2-d are evaluated at each n separately.
+- **Experiment 3:** the R1 runs for new seeds are dropped. The decoder probes for N, L and LT at seeds 1-4 stay. E3-b (R1) is reported as **single-seed** (pretraining seed 0 only).
+
+### Conditional plan for question 1, fixed now
+**The deciding claim, reported first in `results/seed_replication.md`:**
+- **E1-c': clean LT beats clean N.**
+- d_k = err(LT_k) / err(N_k) - 1, claimed direction < 0, on each task. Same fine-tuning protocol as Experiment 1 (n = 64, fine-tuning seeds 0-1).
+- "LT beats N robustly" means **robust under the seed rule on both tasks A and B**. Both tasks are required because the Goals-and-Validation support rule for question 1 requires both tasks.
+
+**Branch 1: LT beats N robustly. Then the latent part does add dynamics information, and the fair test is run:**
+- Trajectory-noise corpora pos060 and pos100 (sigma_pos = 0.6 and 1.0; built as pos015/pos030, with seed 124's draw scaled).
+- L and LT pretrained on each, at all five pretraining seeds. Fine-tuning as in Experiment 1.
+- Judged by the amended rule:
+  - **Support:** LT beats L on both tasks, CI excluding 0, robust under the seed rule.
+  - **Refutation:** L >= LT at every trajectory level up to the level where L's advantage over N (same seed) has halved, robust across seeds.
+  - **Otherwise unresolved.**
+
+**Branch 2: otherwise (not robust on both tasks, single-seed or contradicted). Question 1 is closed:**
+- Verdict: "not testable with this latent design: its latent part doesn't reliably add dynamics information over its own explicit anchor".
+- No stronger noise is run.
