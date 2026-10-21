@@ -368,3 +368,20 @@ Three agents recomputed every number, checked the code and challenged the claims
 - **Stage 3a freezes only `q.1`.** `q.2` and the decoder blocks still train, so the frozen runs show that a model with a fixed first prompt layer still prefers rotated or reversed prompts on task B. They do not isolate the pretrained semantics.
 - **G1 caveat, with all 3 seeds:** scratch on task A is still worse than the per-surface-point mean profile (+7.3% [+3.6, +11.1]). The task-A scratch control is valid through the symmetry argument, not through its fit.
 - **Statistics:** intervals cover the 100 test bodies only. Pretraining seeds: L 2 (seed 1 at n = 64 only), Lc 1.
+
+## Stage 3a in one place: what freezing the prompt layer (`q.1`) showed
+**Setup:** n = 64; S, L and Lc; shifts 0°, 45° and 180°; fine-tuning seeds 0-2; only `q.1` frozen at its pretrained (or, for S, random) values. Table in `results/exp2_stage2.md`.
+
+**Findings.**
+1. **Freezing `q.1` costs accuracy everywhere, at the aligned prompt.**
+   - Task A: S +5.6%, L +8.3%, Lc +7.0%.
+   - Task B: L +51% (0.275 vs 0.186), Lc +55%.
+   - So fine-tuning normally re-maps the pretrained prompt layer substantially, especially for the plume task.
+2. **Even with `q.1` frozen, misalignment never hurts. It helps.**
+   - Task B: L -0.043 at 45° and -0.084 at 180°; Lc -0.050 and -0.086.
+   - Task A: L -0.015 at 45° and -0.007 at 180°; Lc -0.013 at 45° and ~0 at 180°.
+   - Scratch is flat (all CIs include 0).
+3. **The spec's diagnostic pattern ("a penalty only when `q.1` is frozen") does not occur.** There is no alignment penalty for fine-tuning to absorb.
+   - Instead, with the first prompt layer fixed, a reversed prompt on task B recovers much of what freezing lost: L goes from 0.275 to 0.191, close to the unfrozen aligned 0.186.
+
+**Caveat (from the audit):** `q.2` and the decoder blocks still train. So these runs show only that a model with a fixed first prompt layer prefers a rotated or reversed prompt; they do not isolate the pretrained prompt semantics. CIs cover the 100 test bodies only; one checkpoint each for L and Lc.

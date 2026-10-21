@@ -41,6 +41,11 @@ Repository: `Vikhyathreddy/GeoPT_Jepa`, branch `claude/followup-experiments`. De
   - **Verdict: unresolved.** A penalty appears only at n = 16 on task A. At n = 64, only a 90° shift consistently *helps*. On task A that gain grows with body elongation (exploratory).
   - **Lc's 180° penalty at n = 16 was investigated:** no bug. The likely cause is checkpoint-level.
   - **P4 is recorded as you decided** (failed on A, passed on B). Neither gap is significant.
+- **Stage 3a, with the prompt-reading layer `q.1` frozen (n = 64):**
+  - Freezing costs accuracy at the aligned prompt: task A +6-8%; task B +51% (L) and +55% (Lc).
+  - Even frozen, misalignment never hurts. On task B the reversed prompt helps a lot (L 0.275 → 0.191, close to the unfrozen aligned 0.186).
+  - The spec's "penalty only when frozen" pattern doesn't occur.
+  - Caveat: `q.2` and the decoder still train, so this doesn't isolate the pretrained prompt semantics.
 
 ### 4. Experiment 3: do latent-transport features rank designs better?
 - **Gate 1:** linear probes for all 7 backbones, plus R1 and R3 for S, L and LT (3 fine-tuning seeds).
@@ -66,7 +71,8 @@ Repository: `Vikhyathreddy/GeoPT_Jepa`, branch `claude/followup-experiments`. De
 
 ## What I'll do next
 
-### Step 4: pretraining seeds 2–4 (waiting for your go-ahead)
+### Step 4: pretraining seeds 2–4 (approved 2026-10-21; running)
+- Changes you approved: Experiment 2 seed runs at n = 16 and 64; Experiment 3 R1 dropped (single-seed); a conditional question-1 plan committed before the runs (branch 1 = trajectory noise 0.6/1.0 on all five seeds if clean LT robustly beats N on both tasks; otherwise close question 1 as not testable with this latent design).
 - **Rule already committed** (`SEED_REPLICATION.md`). A claim is robust if it holds in at least 4 of 5 pretraining seeds and the across-seed 95% interval excludes zero. Otherwise it's single-seed; it's contradicted if the interval excludes zero the other way.
 - **Runs:**
   - pretraining: N, L and LT at seeds 2–4, plus L at σ = 2 and 4 for the new seeds;
