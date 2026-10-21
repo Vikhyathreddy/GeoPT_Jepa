@@ -69,29 +69,17 @@ Repository: `Vikhyathreddy/GeoPT_Jepa`, branch `claude/followup-experiments`. De
 | 2. Misaligned prompt hurts? | Unresolved (penalty only at n = 16, task A; 90° helps at n = 64) |
 | 3. LT ranks designs better? | Refuted at pretraining seed 0; probe replicates at seed 1 |
 
-## What I'll do next
+## Step 4 and the write-up (done, 2026-10-21)
+- **Five pretraining seeds:**
+  - 16 new pretraining runs;
+  - Experiment 1: 64 fine-tuning runs;
+  - Experiment 2: 168 runs at n = 16 and 64;
+  - Experiment 3: 24 probes.
+- **Audited by a subagent:** all numbers reproduce, and the pre-registration order is confirmed.
+- **Question 1 took branch 2.** Clean LT beating N is single-seed (A 3/5, B 4/5), so question 1 is closed as not testable with this latent design. No stronger noise was run.
+- **Final verdicts and robust / single-seed labels:** see `FINAL_REPORT.md`.
 
-### Step 4: pretraining seeds 2–4 (approved 2026-10-21; running)
-- Changes you approved: Experiment 2 seed runs at n = 16 and 64; Experiment 3 R1 dropped (single-seed); a conditional question-1 plan committed before the runs (branch 1 = trajectory noise 0.6/1.0 on all five seeds if clean LT robustly beats N on both tasks; otherwise close question 1 as not testable with this latent design).
-- **Rule already committed** (`SEED_REPLICATION.md`). A claim is robust if it holds in at least 4 of 5 pretraining seeds and the across-seed 95% interval excludes zero. Otherwise it's single-seed; it's contradicted if the interval excludes zero the other way.
-- **Runs:**
-  - pretraining: N, L and LT at seeds 2–4, plus L at σ = 2 and 4 for the new seeds;
-  - Experiment 1 fine-tuning;
-  - Experiment 2: L at shifts 0/90/180 and no prompt;
-  - Experiment 3: probes and R1.
-- **Cost:** about 6 core-hours, roughly 1.5 hours on 4 cores. Dropping Experiment 3's R1 runs saves about 65 core-minutes.
-- **It will settle three things:**
-  - whether L ≥ LT survives the seeds where LT beats N;
-  - whether the 90° gain and the reversed-prompt effect replicate;
-  - whether L ≥ LT in ranking holds beyond seed 0.
-- **Output:** each claim labelled robust, single-seed or contradicted in `results/seed_replication.md`.
-
-### Then
-- **Audit step 4's results** in the same way.
-- **Step 7, write-up:** one summary across the three questions. Every claim will be labelled robust or single-seed, and every prediction marked held or failed.
-
-### Optional (not planned unless you ask)
-- **Step 6:** an equal-budget test for Experiment 3 (more shapes vs more conditions per shape).
-- **A second Lc pretraining seed,** to test the n = 16 180° penalty.
-- **Experiment 3 Stage 2** (R2 with a ranking loss).
-- **Stronger trajectory noise:** the only route to a clean verdict on question 1.
+## Remaining (optional, only if you ask)
+- Equal-budget test for Experiment 3 (step 6).
+- A second Lc pretraining seed.
+- Experiment 3 Stage 2 (R2).

@@ -69,3 +69,13 @@ User decision. The runs and rule above are otherwise unchanged.
 **Branch 2: otherwise (not robust on both tasks, single-seed or contradicted). Question 1 is closed:**
 - Verdict: "not testable with this latent design: its latent part doesn't reliably add dynamics information over its own explicit anchor".
 - No stronger noise is run.
+
+## Outcome (2026-10-21)
+- **Results:** `results/seed_replication.md`.
+- **E1-c' (clean LT beats N) is single-seed on both tasks** (A 3/5, B 4/5; both intervals include 0). So **branch 2** applies: question 1 is closed as not testable with this latent design, and no stronger noise is run.
+- **Audit (subagent, read-only):** all values and verdicts reproduce, the pre-registration order is confirmed, and the checkpoints are correct. Notes:
+  - E2-g ("90° helps L") was added after the seed-0/1 results and is not in the pre-registered claims table, so it is exploratory.
+  - E2-d's scratch control is shared across L seeds.
+  - E1-f on task B (not pre-registered) goes the other way in all 5 seeds.
+  - E3-a on task B is robust only by a +0.0002 lower bound.
+  - E2-c's SE_seed measures fine-tuning-seed noise.
